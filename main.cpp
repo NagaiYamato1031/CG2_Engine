@@ -27,7 +27,8 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 #include "MyConst.h"
 #include "Mymath.h"
 
-struct Transform {
+struct Transform
+{
 	Vector3 scale;
 	Vector3 rotate;
 	Vector3 translate;
@@ -44,9 +45,12 @@ struct Material
 {
 	Vector4 color;
 	int32_t enableLighting;
+	float padding[3];
+	Matrix4x4 uvTransfrom;
 };
 
-struct TransformationMatrix {
+struct TransformationMatrix
+{
 	Matrix4x4 WVP;
 	Matrix4x4 World;
 };
@@ -1004,34 +1008,6 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 #pragma region VertexResource を生成する
 
-
-#pragma region CreateBufferResource関数内にまとめた処理
-
-	//// 頂点リソース用のヒープの設定
-	//D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	//// UploadHeap を使う
-	//uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
-	//// 頂点リソースの設定
-	//D3D12_RESOURCE_DESC vertexResourceDesc{};
-	//// バッファリソース。テクスチャの場合はまた別の設定をする
-	//vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	//// リソースのサイズ。今回は Vector4 を 3 頂点分
-	//vertexResourceDesc.Width = sizeof(VertexData) * 3;
-	//// バッファの場合はこれらは 1 にする決まり
-	//vertexResourceDesc.Height = 1;
-	//vertexResourceDesc.DepthOrArraySize = 1;
-	//vertexResourceDesc.MipLevels = 1;
-	//vertexResourceDesc.SampleDesc.Count = 1;
-	//// バッファの場合はこれにする決まり
-	//vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	//// 実際に頂点リソースを作る
-	//ID3D12Resource* vertexResource = nullptr;
-	//hr = device->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE,
-	//	&vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertexResource));
-	//assert(SUCCEEDED(hr));
-
-#pragma endregion
-
 	// DepthStencilTexture をウィンドウサイズで作成
 	ID3D12Resource* depthStencilResource = CreateDepthStencilTextureResource(device, kClientWidth, kClientHeight);
 	//depthStencilResource;
@@ -1067,7 +1043,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	// リソースの先頭のアドレスから使う
 	vertexBufferViewSprite.BufferLocation = vertexResourceSprite->GetGPUVirtualAddress();
 	// 使用するリソースのサイズは頂点 6 つ分のサイズ
-	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData) * 6;
+	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData) * 4;
 	// 1 頂点当たりのサイズ
 	vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
 
@@ -1160,6 +1136,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	// 今回は白を書き込んでみる
 	materialData->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	materialData->enableLighting = true;
+	materialData->uvTransfrom = Mymath::MakeIdentity4x4();
 
 	// Sprite 用のマテリアルリソースを作る。
 	ID3D12Resource* materialResourceSprite = CreateBufferResource(device, sizeof(Material));
@@ -1171,6 +1148,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	// 今回は白を書き込んでみる
 	materialDataSprite->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	materialDataSprite->enableLighting = false;
+	materialDataSprite->uvTransfrom = Mymath::MakeIdentity4x4();
 
 #pragma endregion
 
@@ -1383,6 +1361,13 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	bool useMonsterBall = true;
 
+	Transform uvTransformSprite{
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f},
+	};
+
+
 	MSG msg{};
 	// ウィンドウの×ボタンが押されるまでループ
 	while (msg.message != WM_QUIT) {
@@ -1422,6 +1407,10 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 			}
 
 			ImGui::DragFloat3("DirectionalLight", &directionalLightData->direction.x, 0.01f);
+			ImGui::DragFloat2("UVTransrate", &uvTransformSprite.translate.x, 0.01f, -10.0f, 10.0f);
+			ImGui::DragFloat2("UVScale", &uvTransformSprite.scale.x, 0.01f, -10.0f, 10.0f);
+			ImGui::SliderAngle("UVRotate", &uvTransformSprite.rotate.z);
+
 			directionalLightData->direction = Mymath::Normalize(directionalLightData->direction);
 
 			ImGui::End();
@@ -1448,6 +1437,11 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 			Matrix4x4 worldViewProjectionMatrixSprite = Mymath::Multiply(Mymath::Multiply(worldMatrixSprite, viewMatrixSprite), projectionMatrixSprite);
 			transformationMatrixDataSprite->WVP = worldViewProjectionMatrixSprite;
 			transformationMatrixDataSprite->World = worldMatrixSprite;
+			// uvTransform の行列作成
+			Matrix4x4 uvTransformMatrix = Mymath::MakeScaleMatrix(uvTransformSprite.scale);
+			uvTransformMatrix = Mymath::Multiply(uvTransformMatrix, Mymath::MakeRotateZMatrix(uvTransformSprite.rotate.z));
+			uvTransformMatrix = Mymath::Multiply(uvTransformMatrix, Mymath::MakeTranslateMatrix(uvTransformSprite.translate));
+			materialDataSprite->uvTransfrom = uvTransformMatrix;
 
 			// ImGui の内部コマンドを生成する
 			ImGui::Render();
@@ -1640,6 +1634,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	directionalLightResource->Release();
 	materialResourceSprite->Release();
 	materialResource->Release();
+	indexResourceSprite->Release();
 	vertexResourceSprite->Release();
 	vertexResource->Release();
 	depthStencilResource->Release();
