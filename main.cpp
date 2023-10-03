@@ -65,8 +65,15 @@ struct DirectionalLight
 	float intensity;	// 輝度
 };
 
-struct ModelData {
+struct MaterialData
+{
+	std::string textureFilePath;
+};
+
+struct ModelData
+{
 	std::vector<VertexData> vertices;
+	MaterialData material;
 };
 
 #pragma region 関数
@@ -481,6 +488,30 @@ D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descrip
 	return handleCPU;
 }
 
+MaterialData LoadMaterialTemplateFile(const std::string& directotyPath, const std::string& filename) {
+	// 必要な変数
+	MaterialData materialData;
+	std::string line;
+	// ファイルを開く
+	std::ifstream file(directotyPath + "/" + filename);
+	assert(file.is_open());
+	// ファイルを読んで、MaterialData を構築
+	while (std::getline(file, line)) {
+		std::string identifer;
+		std::istringstream s(line);
+		s >> identifer;
+
+		// identifer に応じた処理
+		if (identifer == "map_Kd") {
+			std::string textureFilename;
+			s >> textureFilename;
+			// 連結してファイルパスにする
+			materialData.textureFilePath = directotyPath + "/" + textureFilename;
+		}
+	}
+	return materialData;
+}
+
 ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename) {
 	// 使う変数の宣言
 	ModelData modelData;
@@ -500,6 +531,8 @@ ModelData LoadObjFile(const std::string& directoryPath, const std::string& filen
 		// 先頭の識別子を読む
 		s >> identifier;
 
+		// identifer に応じた処理
+		// 頂点
 		if (identifier == "v") {
 			Vector4 position;
 			s >> position.x >> position.y >> position.z;
@@ -507,18 +540,21 @@ ModelData LoadObjFile(const std::string& directoryPath, const std::string& filen
 			position.x *= -1;
 			positions.push_back(position);
 		}
+		// テクスチャ
 		else if (identifier == "vt") {
 			Vector2 texcoord;
 			s >> texcoord.x >> texcoord.y;
 			texcoord.y = 1.0f - texcoord.y;
 			texcoords.push_back(texcoord);
 		}
+		// 法線
 		else if (identifier == "vn") {
 			Vector3 normal;
 			s >> normal.x >> normal.y >> normal.z;
 			normal.x *= -1;
 			normals.push_back(normal);
 		}
+		// 面
 		else if (identifier == "f") {
 			VertexData triangle[3];
 			// 面は三角形限定。その他は未対応
@@ -547,11 +583,19 @@ ModelData LoadObjFile(const std::string& directoryPath, const std::string& filen
 			modelData.vertices.push_back(triangle[1]);
 			modelData.vertices.push_back(triangle[0]);
 		}
-
+		else if (identifier == "mtllib") {
+			// MaterialTemplateLibraty ファイルの名前を取得する
+			std::string materialFilename;
+			s >> materialFilename;
+			// 基本的に obj ファイルと同一階層に mtl は存在させるので、ディレクトリ名とファイル名を渡す
+			modelData.material = LoadMaterialTemplateFile(directoryPath, materialFilename);
+		}
 	}
 	return modelData;
 }
 
+
+// 関数 の終わり
 #pragma endregion
 
 
@@ -1094,7 +1138,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	//depthStencilResource;
 
 	// モデル読み込み
-	ModelData modelData = LoadObjFile("resources", "plane.obj");
+	ModelData modelData = LoadObjFile("resources", "axis.obj");
 	// 頂点リソース作成
 	ID3D12Resource* vertexResource = CreateBufferResource(device, sizeof(VertexData) * modelData.vertices.size());
 
@@ -1329,7 +1373,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	ID3D12Resource* intermediateResource = UploadTextureData(textureResource, mipImages, device, commandList);
 
 	// モンスターボールを読み込む
-	DirectX::ScratchImage mipImages2 = LoadTexture("resources/monsterBall.png");
+	DirectX::ScratchImage mipImages2 = LoadTexture(modelData.material.textureFilePath);
 	const DirectX::TexMetadata& metadata2 = mipImages2.GetMetadata();
 	ID3D12Resource* textureResource2 = CreateTextureResource(device, metadata2);
 	ID3D12Resource* intermediateResource2 = UploadTextureData(textureResource2, mipImages2, device, commandList);
@@ -1491,7 +1535,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 				ImGui::TreePop();
 			}
 
-			if (ImGui::TreeNode("Sphere")) {
+			if (ImGui::TreeNode("Model")) {
 				ImGui::DragFloat3("translate", &transformSphere.translate.x, 0.01f);
 				ImGui::DragFloat3("rotate", &transformSphere.rotate.x, 0.01f);
 
