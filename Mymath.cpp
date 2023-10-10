@@ -209,7 +209,7 @@ Vector3 Mymath::Project(const Vector3& v1, const Vector3& v2) {
 	return Dot(v1, normalV2) * normalV2;
 }
 
-Vector3 Mymath::CrossPoint(const Vector3& point, const Segment& segment) {
+Vector3 Mymath::CrossestPoint(const Vector3& point, const Segment& segment) {
 	return segment.origin + Project(point - segment.origin, segment.diff);
 }
 

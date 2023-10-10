@@ -200,7 +200,7 @@ namespace Mymath {
 	/// <param name="point">始点</param>
 	/// <param name="segment">線分</param>
 	/// <returns>始点に最も近い線分 t の座標</returns>
-	Vector3 CrossPoint(const Vector3& point, const Segment& segment);
+	Vector3 CrossestPoint(const Vector3& point, const Segment& segment);
 
 	/// <summary>
 	/// 垂直を求める
