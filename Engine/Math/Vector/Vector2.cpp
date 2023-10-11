@@ -2,10 +2,8 @@
 
 #include <cmath>
 #include <cassert>
-#include "Vector3.h"
-#include "Vector4.h"
-#include "Matrix3x3.h"
-#include "Matrix4x4.h"
+
+#include "../Math.h"
 
 Vector2 Vector2::operator+(const Vector2& obj) const {
 	Vector2 result = { this->x + obj.x, this->y + obj.y };

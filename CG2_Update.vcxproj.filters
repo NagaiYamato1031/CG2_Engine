@@ -28,6 +28,12 @@
     <Filter Include="Engine\Utility">
       <UniqueIdentifier>{701a2eae-3594-43a2-9220-b29c3e62a389}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Math\Matrix">
+      <UniqueIdentifier>{19c04e67-de8b-49f5-aaf5-240a23698dce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Math\Vector">
+      <UniqueIdentifier>{6f4301ab-b403-446b-97fe-70df93f808e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -63,23 +69,23 @@
     <ClCompile Include="Engine\base\WinApp.cpp">
       <Filter>Engine\Base</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Math\Matrix4x4.cpp">
-      <Filter>Engine\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Math\Vector3.cpp">
-      <Filter>Engine\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Math\Matrix3x3.cpp">
-      <Filter>Engine\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Math\Vector2.cpp">
-      <Filter>Engine\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Math\Vector4.cpp">
-      <Filter>Engine\Math</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Utility\MyUtility.cpp">
       <Filter>Engine\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Math\Matrix\Matrix3x3.cpp">
+      <Filter>Engine\Math\Matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Math\Matrix\Matrix4x4.cpp">
+      <Filter>Engine\Math\Matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Math\Vector\Vector2.cpp">
+      <Filter>Engine\Math\Vector</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Math\Vector\Vector3.cpp">
+      <Filter>Engine\Math\Vector</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Math\Vector\Vector4.cpp">
+      <Filter>Engine\Math\Vector</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -119,26 +125,26 @@
     <ClInclude Include="Engine\base\WinApp.h">
       <Filter>Engine\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Math\Matrix4x4.h">
-      <Filter>Engine\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Math\Vector2.h">
-      <Filter>Engine\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Math\Vector3.h">
-      <Filter>Engine\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Math\Vector4.h">
-      <Filter>Engine\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Math\Matrix3x3.h">
-      <Filter>Engine\Math</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Math\Math.h">
       <Filter>Engine\Math</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Utility\MyUtility.h">
       <Filter>Engine\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Matrix\Matrix3x3.h">
+      <Filter>Engine\Math\Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Matrix\Matrix4x4.h">
+      <Filter>Engine\Math\Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Vector\Vector2.h">
+      <Filter>Engine\Math\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Vector\Vector3.h">
+      <Filter>Engine\Math\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Vector\Vector4.h">
+      <Filter>Engine\Math\Vector</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

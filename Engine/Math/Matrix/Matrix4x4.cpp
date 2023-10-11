@@ -2,9 +2,8 @@
 
 #include <cmath>
 #include <cassert>
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
+
+#include "../Math.h"
 
 Matrix4x4 Matrix4x4::operator+(const Matrix4x4& obj) const {
 	Matrix4x4 result;
