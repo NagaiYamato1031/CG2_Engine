@@ -611,9 +611,30 @@ ModelData LoadObjFile(const std::string& directoryPath, const std::string& filen
 #pragma endregion
 
 
+#include "Engine/Base/WinApp.h"
+#include "Engine/Base/DirectXCommon.h"
+
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
+	WinApp* sWinApp = WinApp::GetInstance();
+	sWinApp->Initialize("CG2", 800, 800);
+
+	DirectXCommon* sDXCommon = DirectXCommon::GetInstance();
+	sDXCommon->Initialize(sWinApp, 800, 800);
+
+	while (!sWinApp->ProcessMessage())
+	{
+		sDXCommon->PreDraw();
+
+
+		sDXCommon->PostDraw();
+	}
+
+	CloseWindow(sWinApp->GetHWND());
+}
+
+int A() {
 	// メモリリークチェック
 	D3DResourceLeakChecker leakCheck;
 
