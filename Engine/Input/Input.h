@@ -7,6 +7,8 @@
 #include <dinput.h>
 #include <wrl.h>
 
+class WinApp;
+
 class Input final {
 public: // メンバ関数
 
@@ -19,7 +21,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(HINSTANCE hInstance, HWND hwnd);
+	void Initialize(WinApp* winapp);
 
 	/// <summary>
 	/// 更新
@@ -66,4 +68,5 @@ private: // メンバ変数
 	BYTE key[256] = {};
 	BYTE preKey[256] = {};
 
+	WinApp* winApp_ = nullptr;
 };

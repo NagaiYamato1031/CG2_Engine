@@ -22,8 +22,13 @@ public: // メンバ関数
 	/// <returns>true : メッセージが来ていた場合, false : メッセージが来ていない場合</returns>
 	bool ProcessMessage();
 
+	/// <summary>
+	/// 終了処理
+	/// </summary>
+	void Finalize();
 
-	// ゲッター
+public: // ゲッター
+
 	int32_t GetClientWidth() const { return clientWidth_; }
 	int32_t GetClientHeight() const { return clientHeight_; }
 	HWND GetHWND() const { return hwnd_; }

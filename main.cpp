@@ -628,7 +628,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	dxCommon_->Initialize(winApp_);
 
 	Input* input_ = Input::GetInstance();
-	input_->Initialize(winApp_->GetHInstance(), winApp_->GetHWND());
+	input_->Initialize(winApp_);
 
 	//CanvasTool* sCanvasTool = CanvasTool::GetInstance();
 	//sCanvasTool->Initialize(sDXCommon);
@@ -643,7 +643,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		dxCommon_->PostDraw();
 	}
 
-	CloseWindow(winApp_->GetHWND());
+	winApp_->Finalize();
 }
 /*
 

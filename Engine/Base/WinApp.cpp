@@ -7,8 +7,10 @@ WinApp* WinApp::GetInstance() {
 	return &instance;
 }
 
-void WinApp::Initialize(const char* title, int width, int height) {
-
+void WinApp::Initialize(const char* title, int width, int height)
+{
+	CoInitializeEx(0, COINIT_MULTITHREADED);
+	
 	// 初期化
 	wc_ = {};
 	// ウィンドウプロシージャ
@@ -71,6 +73,12 @@ bool WinApp::ProcessMessage() {
 	}
 
 	return false;
+}
+
+void WinApp::Finalize()
+{
+	CloseWindow(hwnd_);
+	UnregisterClass(wc_.lpszClassName, wc_.hInstance);
 }
 
 LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {

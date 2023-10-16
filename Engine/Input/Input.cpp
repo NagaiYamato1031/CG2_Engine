@@ -3,17 +3,21 @@
 #pragma comment(lib,"dinput8.lib")
 #pragma comment(lib,"dxguid.lib")
 
+#include "../Base/WinApp.h"
+
 Input* Input::GetInstance() {
 	static Input instance;
 	return &instance;
 }
 
-void Input::Initialize(HINSTANCE hInstance, HWND hwnd)
+void Input::Initialize(WinApp* winapp)
 {
+	winApp_ = winapp;
+
 	HRESULT hr;
 	// DirectInput のインスタンス作成
 	//ComPtr<IDirectInput8> directInput = nullptr;
-	hr = DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput, nullptr);
+	hr = DirectInput8Create(winApp_->GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput, nullptr);
 	assert(SUCCEEDED(hr));
 	// キーボードデバイス生成
 	//ComPtr<IDirectInputDevice8> keyboard;
@@ -23,13 +27,13 @@ void Input::Initialize(HINSTANCE hInstance, HWND hwnd)
 	hr = keyboard->SetDataFormat(&c_dfDIKeyboard);
 	assert(SUCCEEDED(hr));
 	// 排他制御レベルのセット
-	hr = keyboard->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	hr = keyboard->SetCooperativeLevel(winApp_->GetHWND() , DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(hr));
 }
 
 void Input::Update()
 {
-	HRESULT hr;
+	//HRESULT hr;
 
 	// 前回のキー入力を保存
 	memcpy(preKey, key, sizeof(key));
