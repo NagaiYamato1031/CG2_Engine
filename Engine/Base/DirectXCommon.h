@@ -21,7 +21,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(WinApp* winApp, int32_t backBufferWidth, int32_t backBufferHeight);
+	void Initialize(WinApp* winApp);
 
 	/// <summary>
 	/// 描画前処理
@@ -42,6 +42,9 @@ public: // メンバ関数
 	ID3D12Device* GetDevice() const { return device_.Get(); }
 	ID3D12GraphicsCommandList* GetCommandList() const { return commandList_.Get(); }
 	size_t GetBackBufferCount() const { return backBuffers_.size(); }
+
+	
+	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
 
 private: // メンバ変数
 	// ウィンドウズアプリケーション管理

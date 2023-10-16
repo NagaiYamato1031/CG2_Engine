@@ -34,12 +34,21 @@
     <Filter Include="Engine\Math\Vector">
       <UniqueIdentifier>{6f4301ab-b403-446b-97fe-70df93f808e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Object">
+      <UniqueIdentifier>{4136f617-5b24-4452-ab9d-5bbb230b0b90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Object\2D">
+      <UniqueIdentifier>{1ca546b7-44f3-4ed4-993d-d07f0f62f1a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Object\3D">
+      <UniqueIdentifier>{e423413f-b2e5-4a10-a398-dfbbe3b499d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Input">
+      <UniqueIdentifier>{3e56b8f9-a00b-48db-a7e1-fdbaad4b0308}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Mymath.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -87,11 +96,17 @@
     <ClCompile Include="Engine\Math\Vector\Vector4.cpp">
       <Filter>Engine\Math\Vector</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Object\3D\WorldTransform.cpp">
+      <Filter>Engine\Object\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Object\CanvasTool.cpp">
+      <Filter>Engine\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Input\Input.cpp">
+      <Filter>Engine\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Mymath.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="externals\imgui\imconfig.h">
       <Filter>imgui</Filter>
     </ClInclude>
@@ -115,9 +130,6 @@
     </ClInclude>
     <ClInclude Include="externals\imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="MyConst.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\DirectXCommon.h">
       <Filter>Engine\Base</Filter>
@@ -145,6 +157,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Math\Vector\Vector4.h">
       <Filter>Engine\Math\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\MyConst.h">
+      <Filter>Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Object\3D\WorldTransform.h">
+      <Filter>Engine\Object\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Object\CanvasTool.h">
+      <Filter>Engine\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Input\Input.h">
+      <Filter>Engine\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -5,7 +5,7 @@ class Vector4;
 class Matrix3x3;
 class Matrix4x4;
 
-class Segment;
+//struct Segment;
 
 /// <summary>
 /// Vector3

@@ -11,11 +11,11 @@ DirectXCommon* DirectXCommon::GetInstance() {
 	return &instance;
 }
 
-void DirectXCommon::Initialize(WinApp* winApp, int32_t backBufferWidth, int32_t backBufferHeight) {
+void DirectXCommon::Initialize(WinApp* winApp) {
 
 	winApp_ = winApp;
-	backBufferWidth_ = backBufferWidth;
-	backBufferHeight_ = backBufferHeight;
+	backBufferWidth_ = winApp->GetClientWidth();
+	backBufferHeight_ = winApp->GetClientHeight();
 
 	// DXGIデバイス初期化
 	InitializeDXGIDevice();
@@ -236,6 +236,36 @@ void DirectXCommon::InitializeDXGIDevice() {
 
 #endif // _DEBUG
 }
+
+ID3D12Resource* DirectXCommon::CreateBufferResource(size_t sizeInBytes) {
+	HRESULT hr = S_FALSE;
+
+	ID3D12Resource* resultResource;
+
+	// リソース用のヒープの設定
+	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
+	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;	// UploadHeapを使う
+	// リソースの設定
+	D3D12_RESOURCE_DESC resultResourceDesc{};
+	// バッファリソース。テクスチャの場合はまた別の設定をする
+	resultResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	resultResourceDesc.Width = sizeInBytes; // リソースのサイズ
+	// バッファの場合はこれらは1にする決まり
+	resultResourceDesc.Height = 1;
+	resultResourceDesc.DepthOrArraySize = 1;
+	resultResourceDesc.MipLevels = 1;
+	resultResourceDesc.SampleDesc.Count = 1;
+	// バッファの場合はこれにする決まり
+	resultResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	// 実際にリソースを作る
+	hr = device_->CreateCommittedResource(
+		&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &resultResourceDesc,
+		D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&resultResource));
+	assert(SUCCEEDED(hr));
+
+	return resultResource;
+}
+
 
 void DirectXCommon::InitializeCommand() {
 	HRESULT hr = S_FALSE;

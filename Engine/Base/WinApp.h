@@ -19,14 +19,16 @@ public: // メンバ関数
 	/// <summary>
 	/// ウィンドウからのイベントをチェックする関数
 	/// </summary>
-	/// <returns>true ... メッセージが来ていた場合、false ... メッセージが来ていない場合</returns>
+	/// <returns>true : メッセージが来ていた場合, false : メッセージが来ていない場合</returns>
 	bool ProcessMessage();
 
 
-	// アクセサ
+	// ゲッター
 	int32_t GetClientWidth() const { return clientWidth_; }
 	int32_t GetClientHeight() const { return clientHeight_; }
 	HWND GetHWND() const { return hwnd_; }
+	HINSTANCE GetHInstance() const { return wc_.hInstance; }
+	WNDCLASS GetWNDCLASS() const { return wc_; }
 
 private: // メンバ変数
 

@@ -1,3 +1,4 @@
+/*
 #include <Windows.h>
 #include <cstdint>
 #include <string>
@@ -610,29 +611,41 @@ ModelData LoadObjFile(const std::string& directoryPath, const std::string& filen
 // 関数 の終わり
 #pragma endregion
 
+*/
 
 #include "Engine/Base/WinApp.h"
 #include "Engine/Base/DirectXCommon.h"
+#include "Engine/Input/Input.h"
+#include "Engine/Object/CanvasTool.h"
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
-	WinApp* sWinApp = WinApp::GetInstance();
-	sWinApp->Initialize("CG2", 800, 800);
+	WinApp* winApp_ = WinApp::GetInstance();
+	winApp_->Initialize("Engine", 1280, 720);
 
-	DirectXCommon* sDXCommon = DirectXCommon::GetInstance();
-	sDXCommon->Initialize(sWinApp, 800, 800);
+	DirectXCommon* dxCommon_ = DirectXCommon::GetInstance();
+	dxCommon_->Initialize(winApp_);
 
-	while (!sWinApp->ProcessMessage())
+	Input* input_ = Input::GetInstance();
+	input_->Initialize(winApp_->GetHInstance(), winApp_->GetHWND());
+
+	//CanvasTool* sCanvasTool = CanvasTool::GetInstance();
+	//sCanvasTool->Initialize(sDXCommon);
+
+	while (!winApp_->ProcessMessage())
 	{
-		sDXCommon->PreDraw();
+		input_->Update();
+
+		dxCommon_->PreDraw();
 
 
-		sDXCommon->PostDraw();
+		dxCommon_->PostDraw();
 	}
 
-	CloseWindow(sWinApp->GetHWND());
+	CloseWindow(winApp_->GetHWND());
 }
+/*
 
 int A() {
 	// メモリリークチェック
@@ -1683,6 +1696,7 @@ int A() {
 			commandList->RSSetViewports(1, &viewport);
 			// Scisoor を設定
 			commandList->RSSetScissorRects(1, &scissorRect);
+
 			// RootSignature を設定。PSO に設定しているけど別途設定が必要
 			commandList->SetGraphicsRootSignature(rootSignature.Get());
 			// PSO を設定
@@ -1861,3 +1875,4 @@ int A() {
 	return 0;
 }
 
+*/
