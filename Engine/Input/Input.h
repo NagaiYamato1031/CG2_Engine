@@ -26,6 +26,29 @@ public: // メンバ関数
 	/// </summary>
 	void Update();
 
+public: // キー入力取得
+
+	/// <summary>
+	/// キーの押下をチェック
+	/// </summary>
+	/// <param name="keyNumber">キー番号</param>
+	/// <returns>押されているか</returns>
+	bool PushKey(BYTE keyNumber);
+
+	/// <summary>
+	/// キーのトリガーをチェック
+	/// </summary>
+	/// <param name="keyNumber">キー番号</param>
+	/// <returns>押した瞬間か</returns>
+	bool TriggerKey(BYTE keyNumber);
+	
+	/// <summary>
+	/// キーのリリースをチェック
+	/// </summary>
+	/// <param name="keyNumber">キー番号</param>
+	/// <returns>離した瞬間か</returns>
+	bool ReleaseKey(BYTE keyNumber);
+
 private: // コピー禁止
 	Input() = default;
 	~Input() = default;
@@ -40,5 +63,7 @@ private: // メンバ変数
 
 	ComPtr<IDirectInput8> directInput;
 	ComPtr<IDirectInputDevice8> keyboard;
+	BYTE key[256] = {};
+	BYTE preKey[256] = {};
 
 };
