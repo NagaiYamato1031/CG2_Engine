@@ -38,7 +38,7 @@ public:	///	演算子オーバーロード
 	/// <param name="v">ベクトル</param>
 	/// <param name="matrix">行列</param>
 	/// <returns>乗算されたベクトル</returns>
-	Vector3 Multiply(const Vector3& v, const Matrix3x3& matrix);
+	static Vector3 Multiply(const Vector3& v, const Matrix3x3& matrix);
 
 	/// <summary>
 	/// ベクトルの内積
@@ -46,7 +46,7 @@ public:	///	演算子オーバーロード
 	/// <param name="v1">ベクトル１</param>
 	/// <param name="v2">ベクトル２</param>
 	/// <returns>内積</returns>
-	float Dot(const Vector3& v1, const Vector3& v2);
+	static float Dot(const Vector3& v1, const Vector3& v2);
 
 	/// <summary>
 	/// ベクトルのクロス積
@@ -54,21 +54,21 @@ public:	///	演算子オーバーロード
 	/// <param name="v1">ベクトル１</param>
 	/// <param name="v2">ベクトル２</param>
 	/// <returns>クロス積</returns>
-	Vector3 Cross(const Vector3& v1, const Vector3& v2);
+	static Vector3 Cross(const Vector3& v1, const Vector3& v2);
 
 	/// <summary>
 	/// ベクトルの長さ
 	/// </summary>
 	/// <param name="v">ベクトル</param>
 	/// <returns>ベクトルの長さ</returns>
-	float Length(const Vector3& v);
+	static float Length(const Vector3& v);
 
 	/// <summary>
 	/// ベクトルの正規化
 	/// </summary>
 	/// <param name="v">ベクトル</param>
 	/// <returns>正規化されたベクトル</returns>
-	Vector3 Normalize(const Vector3& v);
+	static Vector3 Normalize(const Vector3& v);
 
 	/// <summary>
 	/// 座標変換
@@ -76,7 +76,7 @@ public:	///	演算子オーバーロード
 	/// <param name="vector">座標</param>
 	/// <param name="matrix">行列</param>
 	/// <returns>変換座標</returns>
-	Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix);
+	static Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix);
 
 	/// <summary>
 	///	ベクトル変換
@@ -84,7 +84,7 @@ public:	///	演算子オーバーロード
 	/// <param name="v">ベクトル</param>
 	/// <param name="m">行列</param>
 	/// <returns>変換ベクトル</returns>
-	Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
+	static Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 
 	/// <summary>
 	/// ベクトル射影
@@ -92,7 +92,7 @@ public:	///	演算子オーバーロード
 	/// <param name="v1">ベクトル１</param>
 	/// <param name="v2">ベクトル２</param>
 	/// <returns>正射影ベクトル</returns>
-	Vector3 Project(const Vector3& v1, const Vector3& v2);
+	static Vector3 Project(const Vector3& v1, const Vector3& v2);
 
 	/// <summary>
 	/// 最近接点を求める
@@ -100,13 +100,13 @@ public:	///	演算子オーバーロード
 	/// <param name="point">始点</param>
 	/// <param name="segment">線分</param>
 	/// <returns>始点に最も近い線分 t の座標</returns>
-	//Vector3 CrossestPoint(const Vector3& point, const Segment& segment);
+	//static Vector3 CrossestPoint(const Vector3& point, const Segment& segment);
 
 	/// <summary>
 	/// 垂直を求める
 	/// </summary>
 	/// <param name="vector">ベクトル</param>
 	/// <returns>垂直なベクトル</returns>
-	Vector3 Perpendicular(const Vector3& vector);
+	static Vector3 Perpendicular(const Vector3& vector);
 
 };

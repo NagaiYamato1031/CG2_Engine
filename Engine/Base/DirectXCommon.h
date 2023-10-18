@@ -1,9 +1,10 @@
 #pragma once
-#include <vector>
 #include <d3d12.h>
 #include <dxgi1_6.h>
 
 #include <wrl.h>
+#include <chrono>
+#include <vector>
 #include "./WinApp.h"
 
 class DirectXCommon
@@ -43,8 +44,10 @@ public: // メンバ関数
 	// アクセサ
 	ID3D12Device* GetDevice() const { return device_.Get(); }
 	ID3D12GraphicsCommandList* GetCommandList() const { return commandList_.Get(); }
+	ID3D12CommandQueue* GetCommandQueue() const { return commandQueue_.Get(); }
+	ID3D12CommandAllocator* GetCommandAllocator() const { return commandAllocateor_.Get(); }
 	size_t GetBackBufferCount() const { return backBuffers_.size(); }
-
+	ID3D12Fence* GetFence() const { return fence_.Get(); }
 	
 	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
 
@@ -77,6 +80,10 @@ private: // メンバ変数
 	int32_t backBufferWidth_ = 0;
 	int32_t backBufferHeight_ = 0;
 
+private:
+
+	// 記録時間(FPS 固定)
+	std::chrono::steady_clock::time_point reference_;
 
 private: // 非公開のメンバ関数
 	DirectXCommon() = default;
@@ -124,6 +131,14 @@ private: // 非公開のメンバ関数
 	/// </summary>
 	D3D12_RESOURCE_BARRIER MakeResourceBarrier(ID3D12Resource*, D3D12_RESOURCE_STATES, D3D12_RESOURCE_STATES);
 
+	/// <summary>
+	/// FPS 固定初期化
+	/// </summary>
+	void InitializeFixFPS();
 
+	/// <summary>
+	/// FPS 固定更新
+	/// </summary>
+	void UpdateFixFPS();
 };
 
