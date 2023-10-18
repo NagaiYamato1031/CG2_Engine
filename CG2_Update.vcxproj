@@ -99,6 +99,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
     <ClCompile Include="Engine\Math\Vector\Vector4.cpp" />
     <ClCompile Include="Engine\Object\3D\WorldTransform.cpp" />
     <ClCompile Include="Engine\Object\CanvasTool.cpp" />
+    <ClCompile Include="Engine\Sprite\Sprite.cpp" />
+    <ClCompile Include="Engine\Sprite\SpriteCommon.cpp" />
     <ClCompile Include="Engine\Utility\MyUtility.cpp" />
     <ClCompile Include="externals\imgui\imgui.cpp" />
     <ClCompile Include="externals\imgui\imgui_demo.cpp" />
@@ -122,6 +124,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
     <ClInclude Include="Engine\Math\Vector\Vector4.h" />
     <ClInclude Include="Engine\Object\3D\WorldTransform.h" />
     <ClInclude Include="Engine\Object\CanvasTool.h" />
+    <ClInclude Include="Engine\Sprite\Sprite.h" />
+    <ClInclude Include="Engine\Sprite\SpriteCommon.h" />
     <ClInclude Include="Engine\Utility\MyUtility.h" />
     <ClInclude Include="externals\imgui\imconfig.h" />
     <ClInclude Include="externals\imgui\imgui.h" />
