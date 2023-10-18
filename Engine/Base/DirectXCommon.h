@@ -1,10 +1,7 @@
 #pragma once
-#include <string>
 #include <vector>
 #include <d3d12.h>
 #include <dxgi1_6.h>
-#pragma comment(lib, "d3d12.lib")
-#pragma comment(lib, "dxgi.lib")
 
 #include <wrl.h>
 #include "./WinApp.h"
@@ -38,6 +35,11 @@ public: // メンバ関数
 	/// </summary>
 	void ClearRenderTarget();
 
+	/// <summary>
+	/// 深度バッファのクリア
+	/// </summary>
+	void ClearDepthBuffer();
+
 	// アクセサ
 	ID3D12Device* GetDevice() const { return device_.Get(); }
 	ID3D12GraphicsCommandList* GetCommandList() const { return commandList_.Get(); }
@@ -45,6 +47,15 @@ public: // メンバ関数
 
 	
 	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
+
+	/// <summary>
+	/// ディスクリプタヒープの作成
+	/// </summary>
+	/// <param name="heapType">ヒープのタイプ</param>
+	/// <param name="numDescrioptors">作るディスクリプタの数</param>
+	/// <param name="shaderVisible">シェーダーで触れるか</param>
+	/// <returns></returns>
+	ID3D12DescriptorHeap* CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescrioptors, bool shaderVisible);
 
 private: // メンバ変数
 	// ウィンドウズアプリケーション管理
@@ -58,7 +69,9 @@ private: // メンバ変数
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue_;
 	Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain_;
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> backBuffers_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> depthBuffer_;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap_;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap_;
 	Microsoft::WRL::ComPtr<ID3D12Fence> fence_;
 	UINT64 fenceVal_ = 0;
 	int32_t backBufferWidth_ = 0;
@@ -92,6 +105,11 @@ private: // 非公開のメンバ関数
 	void CreateFinalRenderTargets();
 
 	/// <summary>
+	/// 深度バッファ初期化
+	/// </summary>
+	void CreateDepthBuffer();
+
+	/// <summary>
 	/// フェンス生成
 	/// </summary>
 	void CreateFence();
@@ -105,5 +123,7 @@ private: // 非公開のメンバ関数
 	/// リソースバリアの実態を作る関数
 	/// </summary>
 	D3D12_RESOURCE_BARRIER MakeResourceBarrier(ID3D12Resource*, D3D12_RESOURCE_STATES, D3D12_RESOURCE_STATES);
+
+
 };
 

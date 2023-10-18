@@ -1,4 +1,38 @@
-/*
+
+
+#include "Engine/Base/WinApp.h"
+#include "Engine/Base/DirectXCommon.h"
+#include "Engine/Input/Input.h"
+#include "Engine/Object/CanvasTool.h"
+
+// Windowsアプリでのエントリーポイント(main関数)
+int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
+
+	WinApp* winApp_ = WinApp::GetInstance();
+	winApp_->Initialize("Engine", 1280, 720);
+
+	DirectXCommon* dxCommon_ = DirectXCommon::GetInstance();
+	dxCommon_->Initialize(winApp_);
+
+	Input* input_ = Input::GetInstance();
+	input_->Initialize(winApp_);
+
+	//CanvasTool* sCanvasTool = CanvasTool::GetInstance();
+	//sCanvasTool->Initialize(sDXCommon);
+
+	while (!winApp_->ProcessMessage())
+	{
+		input_->Update();
+
+		dxCommon_->PreDraw();
+
+
+		dxCommon_->PostDraw();
+	}
+
+	winApp_->Finalize();
+}
+//*
 #include <Windows.h>
 #include <cstdint>
 #include <string>
@@ -27,9 +61,6 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 
 #include <fstream>
 #include <sstream>
-
-#include "MyConst.h"
-#include "Mymath.h"
 
 struct Transform
 {
@@ -610,42 +641,6 @@ ModelData LoadObjFile(const std::string& directoryPath, const std::string& filen
 
 // 関数 の終わり
 #pragma endregion
-
-*/
-
-#include "Engine/Base/WinApp.h"
-#include "Engine/Base/DirectXCommon.h"
-#include "Engine/Input/Input.h"
-#include "Engine/Object/CanvasTool.h"
-
-// Windowsアプリでのエントリーポイント(main関数)
-int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
-
-	WinApp* winApp_ = WinApp::GetInstance();
-	winApp_->Initialize("Engine", 1280, 720);
-
-	DirectXCommon* dxCommon_ = DirectXCommon::GetInstance();
-	dxCommon_->Initialize(winApp_);
-
-	Input* input_ = Input::GetInstance();
-	input_->Initialize(winApp_);
-
-	//CanvasTool* sCanvasTool = CanvasTool::GetInstance();
-	//sCanvasTool->Initialize(sDXCommon);
-
-	while (!winApp_->ProcessMessage())
-	{
-		input_->Update();
-
-		dxCommon_->PreDraw();
-
-
-		dxCommon_->PostDraw();
-	}
-
-	winApp_->Finalize();
-}
-/*
 
 int A() {
 	// メモリリークチェック
@@ -1875,4 +1870,4 @@ int A() {
 	return 0;
 }
 
-*/
+//*/
