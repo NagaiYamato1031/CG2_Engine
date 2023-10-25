@@ -106,29 +106,14 @@
     <ClCompile Include="Engine\Object\3D\WorldTransform.cpp">
       <Filter>Engine\Object\3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Object\CanvasTool.cpp">
-      <Filter>Engine\Object</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Input\Input.cpp">
       <Filter>Engine\Input</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\PSO\PSO.cpp">
-      <Filter>Engine\PSO</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Base\DXC\DXC.cpp">
       <Filter>Engine\Base\DXC</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Model\Model.cpp">
-      <Filter>Engine\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Resource\Texture\TextureManager.cpp">
-      <Filter>Engine\Resource\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Model\ModelManager.cpp">
-      <Filter>Engine\Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -189,26 +174,11 @@
     <ClInclude Include="Engine\Object\3D\WorldTransform.h">
       <Filter>Engine\Object\3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Object\CanvasTool.h">
-      <Filter>Engine\Object</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Input\Input.h">
       <Filter>Engine\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\PSO\PSO.h">
-      <Filter>Engine\PSO</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Base\DXC\DXC.h">
       <Filter>Engine\Base\DXC</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Model\Model.h">
-      <Filter>Engine\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Resource\Texture\TextureManager.h">
-      <Filter>Engine\Resource\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Model\ModelManager.h">
-      <Filter>Engine\Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
