@@ -34,12 +34,27 @@
     <Filter Include="Engine\Input">
       <UniqueIdentifier>{3e56b8f9-a00b-48db-a7e1-fdbaad4b0308}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Sprite">
-      <UniqueIdentifier>{3221616f-85c7-4332-8fbe-ad22e792ab00}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\resource">
+    <Filter Include="Engine\Resource">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Engine\Resource\Shader">
+      <UniqueIdentifier>{5dac0653-9de2-4c94-9a9b-085fe81edfc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\PSO">
+      <UniqueIdentifier>{1cf5afa7-82b3-4c74-b4fa-810d14f31921}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base\DXC">
+      <UniqueIdentifier>{15cc69d5-aaca-48b9-a3b3-d44b4c3c21a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Resource\Shader\Object3d">
+      <UniqueIdentifier>{bc5d5a4c-401a-403d-9d30-46be0c386d27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Model">
+      <UniqueIdentifier>{121f4272-1b8d-4009-a3ba-163591650b28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Resource\Texture">
+      <UniqueIdentifier>{448c0ea0-da40-4971-9084-3bfc615e740f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -97,14 +112,23 @@
     <ClCompile Include="Engine\Input\Input.cpp">
       <Filter>Engine\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Sprite\SpriteCommon.cpp">
-      <Filter>Engine\Sprite</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Sprite\Sprite.cpp">
-      <Filter>Engine\Sprite</Filter>
+    <ClCompile Include="Engine\PSO\PSO.cpp">
+      <Filter>Engine\PSO</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Base\DXC\DXC.cpp">
+      <Filter>Engine\Base\DXC</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Model\Model.cpp">
+      <Filter>Engine\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\Texture\TextureManager.cpp">
+      <Filter>Engine\Resource\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Model\ModelManager.cpp">
+      <Filter>Engine\Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -171,11 +195,20 @@
     <ClInclude Include="Engine\Input\Input.h">
       <Filter>Engine\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Sprite\SpriteCommon.h">
-      <Filter>Engine\Sprite</Filter>
+    <ClInclude Include="Engine\PSO\PSO.h">
+      <Filter>Engine\PSO</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Sprite\Sprite.h">
-      <Filter>Engine\Sprite</Filter>
+    <ClInclude Include="Engine\Base\DXC\DXC.h">
+      <Filter>Engine\Base\DXC</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\Model.h">
+      <Filter>Engine\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\Texture\TextureManager.h">
+      <Filter>Engine\Resource\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\ModelManager.h">
+      <Filter>Engine\Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -184,14 +217,14 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\shaders\Object3d.hlsli">
-      <Filter>Engine\resource</Filter>
-    </None>
     <None Include="resources\shaders\Object3d.VS.hlsl">
-      <Filter>Engine\resource</Filter>
+      <Filter>Engine\Resource\Shader\Object3d</Filter>
+    </None>
+    <None Include="resources\shaders\Object3d.hlsli">
+      <Filter>Engine\Resource\Shader\Object3d</Filter>
     </None>
     <None Include="resources\shaders\Object3d.PS.hlsl">
-      <Filter>Engine\resource</Filter>
+      <Filter>Engine\Resource\Shader\Object3d</Filter>
     </None>
   </ItemGroup>
 </Project>

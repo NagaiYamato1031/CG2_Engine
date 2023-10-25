@@ -41,7 +41,7 @@ public:
 private:
 
 	// DirectXCommon管理
-	DirectXCommon* dxCommon_ = nullptr;
+	DirectXCommon* sDxCommon_ = nullptr;
 
 #pragma region 構造体宣言
 

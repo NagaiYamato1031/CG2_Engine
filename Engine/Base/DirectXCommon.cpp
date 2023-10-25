@@ -1,5 +1,6 @@
 #include "./DirectXCommon.h"
 #include "../Utility/MyUtility.h"
+#include "./DXC/DXC.h"
 
 #include <string>
 #include <cassert>
@@ -43,6 +44,9 @@ void DirectXCommon::Initialize(WinApp* winApp) {
 
 	// フェンス生成
 	CreateFence();
+
+	dxc_.reset(new DXC);
+	dxc_->Initialize();
 }
 
 void DirectXCommon::PreDraw() {
@@ -70,26 +74,26 @@ void DirectXCommon::PreDraw() {
 	CreateDepthBuffer();
 
 	// ビューポート
-	D3D12_VIEWPORT viewport = {};
+	viewport_ = {};
 	// クライアント領域のサイズと一緒にして画面全体に表示
-	viewport.Width = (float)winApp_->GetClientWidth();
-	viewport.Height = (float)winApp_->GetClientHeight();
-	viewport.TopLeftX = 0;
-	viewport.TopLeftY = 0;
-	viewport.MinDepth = 0.0f;
-	viewport.MaxDepth = 1.0f;
+	viewport_.Width = (float)winApp_->GetClientWidth();
+	viewport_.Height = (float)winApp_->GetClientHeight();
+	viewport_.TopLeftX = 0;
+	viewport_.TopLeftY = 0;
+	viewport_.MinDepth = 0.0f;
+	viewport_.MaxDepth = 1.0f;
 	// viewportを設定
-	commandList_->RSSetViewports(1, &viewport);
+	commandList_->RSSetViewports(1, &viewport_);
 
 	// シザー矩形
-	D3D12_RECT scissorRect = {};
+	scissorRect_ = {};
 	// 基本的にビューポートと同じ矩形が構成されるようにする
-	scissorRect.left = 0;
-	scissorRect.right = winApp_->GetClientWidth();
-	scissorRect.top = 0;
-	scissorRect.bottom = winApp_->GetClientHeight();
+	scissorRect_.left = 0;
+	scissorRect_.right = winApp_->GetClientWidth();
+	scissorRect_.top = 0;
+	scissorRect_.bottom = winApp_->GetClientHeight();
 	// Scirssorを設定
-	commandList_->RSSetScissorRects(1, &scissorRect);
+	commandList_->RSSetScissorRects(1, &scissorRect_);
 }
 
 void DirectXCommon::PostDraw() {

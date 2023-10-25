@@ -11,7 +11,7 @@ CanvasTool* CanvasTool::GetInstance() {
 }
 
 void CanvasTool::Initialize(DirectXCommon* directXCommon) {
-	dxCommon_ = directXCommon;
+	sDxCommon_ = directXCommon;
 
 	InitializeDXC();
 	CreateGraphicsPipeLineState();
@@ -43,7 +43,7 @@ ID3D12Resource* CanvasTool::CreateBufferResource(size_t sizeInBytes) {
 	// バッファの場合はこれにする決まり
 	resultResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 	// 実際にリソースを作る
-	hr = dxCommon_->GetDevice()->CreateCommittedResource(
+	hr = sDxCommon_->GetDevice()->CreateCommittedResource(
 		&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &resultResourceDesc,
 		D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&resultResource));
 	assert(SUCCEEDED(hr));
@@ -111,7 +111,7 @@ void CanvasTool::CreateRootSignature() {
 		assert(false);
 	}
 	// バイナリを元に生成
-	result = dxCommon_->GetDevice()->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&pipelineSet_->rootSignature_));
+	result = sDxCommon_->GetDevice()->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&pipelineSet_->rootSignature_));
 	assert(SUCCEEDED(result));
 
 	signatureBlob->Release();
@@ -198,7 +198,7 @@ void CanvasTool::CreateGraphicsPipeLineState() {
 	graphicsPipelineStateDesc.SampleDesc.Count = 1;
 	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
 	// 実際に生成
-	hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&pipelineSet_->graphicsPipelineState_));
+	hr = sDxCommon_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&pipelineSet_->graphicsPipelineState_));
 	assert(SUCCEEDED(hr));
 
 	vertexShader->Release();

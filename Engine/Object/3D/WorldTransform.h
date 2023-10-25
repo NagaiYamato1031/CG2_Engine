@@ -46,7 +46,7 @@ public:
 	/// 行列取得
 	/// </summary>
 	/// <returns>ワールド行列</returns>
-	const Matrix4x4& GetMatrix() { return *matWorld_; }
+	const Matrix4x4& GetMatrix();
 
 	void SetParent(WorldTransform* parent) { parent_ = parent; };
 	WorldTransform* GetParent() { return parent_; };

@@ -6,6 +6,7 @@
 #include <chrono>
 #include <vector>
 #include "./WinApp.h"
+#include "DXC/DXC.h"
 
 class DirectXCommon
 {
@@ -48,7 +49,10 @@ public: // メンバ関数
 	ID3D12CommandAllocator* GetCommandAllocator() const { return commandAllocateor_.Get(); }
 	size_t GetBackBufferCount() const { return backBuffers_.size(); }
 	ID3D12Fence* GetFence() const { return fence_.Get(); }
-	
+	D3D12_VIEWPORT* GetViewPort() { return &viewport_; }
+	D3D12_RECT* GetScissorRect() { return &scissorRect_; }
+	DXC* GetDXC() { return dxc_.get(); }
+
 	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
 
 	/// <summary>
@@ -79,6 +83,12 @@ private: // メンバ変数
 	UINT64 fenceVal_ = 0;
 	int32_t backBufferWidth_ = 0;
 	int32_t backBufferHeight_ = 0;
+
+	D3D12_VIEWPORT viewport_;
+	D3D12_RECT scissorRect_;
+
+	// DXC
+	std::unique_ptr<DXC> dxc_;
 
 private:
 
