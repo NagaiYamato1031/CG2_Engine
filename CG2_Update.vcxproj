@@ -44,6 +44,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)ImGui</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)ImGui</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
@@ -53,6 +59,8 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -75,6 +83,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -91,14 +100,18 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
   <ItemGroup>
     <ClCompile Include="Engine\base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\Base\DXC\DXC.cpp" />
+    <ClCompile Include="Engine\Base\PSO\PSO.cpp" />
     <ClCompile Include="Engine\base\WinApp.cpp" />
+    <ClCompile Include="Engine\ImGui\ImGuiManager.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
     <ClCompile Include="Engine\Math\Matrix\Matrix3x3.cpp" />
     <ClCompile Include="Engine\Math\Matrix\Matrix4x4.cpp" />
     <ClCompile Include="Engine\Math\Vector\Vector2.cpp" />
     <ClCompile Include="Engine\Math\Vector\Vector3.cpp" />
     <ClCompile Include="Engine\Math\Vector\Vector4.cpp" />
+    <ClCompile Include="Engine\Model\Model.cpp" />
     <ClCompile Include="Engine\Object\3D\WorldTransform.cpp" />
+    <ClCompile Include="Engine\Resource\Texture\TextureManager.cpp" />
     <ClCompile Include="Engine\Utility\MyUtility.cpp" />
     <ClCompile Include="externals\imgui\imgui.cpp" />
     <ClCompile Include="externals\imgui\imgui_demo.cpp" />
@@ -112,7 +125,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
   <ItemGroup>
     <ClInclude Include="Engine\base\DirectXCommon.h" />
     <ClInclude Include="Engine\Base\DXC\DXC.h" />
+    <ClInclude Include="Engine\Base\PSO\PSO.h" />
     <ClInclude Include="Engine\base\WinApp.h" />
+    <ClInclude Include="Engine\ImGui\ImGuiManager.h" />
     <ClInclude Include="Engine\Input\Input.h" />
     <ClInclude Include="Engine\Math\Math.h" />
     <ClInclude Include="Engine\Math\Matrix\Matrix3x3.h" />
@@ -121,7 +136,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
     <ClInclude Include="Engine\Math\Vector\Vector2.h" />
     <ClInclude Include="Engine\Math\Vector\Vector3.h" />
     <ClInclude Include="Engine\Math\Vector\Vector4.h" />
+    <ClInclude Include="Engine\Model\Model.h" />
     <ClInclude Include="Engine\Object\3D\WorldTransform.h" />
+    <ClInclude Include="Engine\Resource\Texture\TextureManager.h" />
     <ClInclude Include="Engine\Utility\MyUtility.h" />
     <ClInclude Include="externals\imgui\imconfig.h" />
     <ClInclude Include="externals\imgui\imgui.h" />

@@ -35,15 +35,17 @@ void DXC::Initialize()
 	assert(SUCCEEDED(hr));
 }
 
-Microsoft::WRL::ComPtr<IDxcBlob> DXC::CompileShader(const std::wstring& filePath, const wchar_t* profile)
+IDxcBlob* DXC::CompileShader(const std::wstring& filePath, const wchar_t* profile)
 {
 #pragma region hlsl ファイルを読む
 
+	std::wstring fullPath = kDirectoryPath + filePath;
+
 	// これからシェーダーをコンパイルする旨をログに出す
-	MyUtility::Log(MyUtility::ConvertString(std::format(L"Begin CompileShader, path:{}, profile:{}\n", filePath, profile)));
+	MyUtility::Log(MyUtility::ConvertString(std::format(L"Begin CompileShader, path:{}, profile:{}\n", fullPath, profile)));
 	// hlsl ファイルを読む
 	Microsoft::WRL::ComPtr<IDxcBlobEncoding> shaderSource = nullptr;
-	HRESULT hr = dxcUtils_->LoadFile(filePath.c_str(), nullptr, shaderSource.GetAddressOf());
+	HRESULT hr = dxcUtils_->LoadFile(fullPath.c_str(), nullptr, shaderSource.GetAddressOf());
 	// 読めなかったら止める
 	assert(SUCCEEDED(hr));
 	// 読み込んだファイルの内容を設定する
@@ -58,7 +60,7 @@ Microsoft::WRL::ComPtr<IDxcBlob> DXC::CompileShader(const std::wstring& filePath
 #pragma region Compile する
 
 	LPCWSTR arguments[] = {
-		filePath.c_str(),			// コンパイル対象の hlsl ファイル名
+		fullPath.c_str(),			// コンパイル対象の hlsl ファイル名
 		L"-E",L"main",				// エントリーポイントの指定。基本的に main 以外にはしない
 		L"-T", profile,				// ShaderProfile の設定
 		L"-Zi", L"-Qembed_debug",	// デバッグ用の情報を埋め込む
@@ -95,11 +97,11 @@ Microsoft::WRL::ComPtr<IDxcBlob> DXC::CompileShader(const std::wstring& filePath
 #pragma region Compile 結果を受け取って返す
 
 	// コンパイル結果から実行用のバイナリ部分を取得
-	Microsoft::WRL::ComPtr<IDxcBlob> shaderBlob = nullptr;
+	IDxcBlob* shaderBlob = nullptr;
 	hr = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
 	assert(SUCCEEDED(hr));
 	// 成功したログを出す
-	MyUtility::Log(MyUtility::ConvertString(std::format(L"Compile Succeeded, path:{}, profile:{}\n", filePath, profile)));
+	MyUtility::Log(MyUtility::ConvertString(std::format(L"Compile Succeeded, path:{}, profile:{}\n", fullPath, profile)));
 	// もう使わないリソースを解放
 	//shaderSource->Release();
 	//shaderResult->Release();

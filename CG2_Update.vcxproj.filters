@@ -41,9 +41,6 @@
     <Filter Include="Engine\Resource\Shader">
       <UniqueIdentifier>{5dac0653-9de2-4c94-9a9b-085fe81edfc3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\PSO">
-      <UniqueIdentifier>{1cf5afa7-82b3-4c74-b4fa-810d14f31921}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Base\DXC">
       <UniqueIdentifier>{15cc69d5-aaca-48b9-a3b3-d44b4c3c21a5}</UniqueIdentifier>
     </Filter>
@@ -53,8 +50,17 @@
     <Filter Include="Engine\Model">
       <UniqueIdentifier>{121f4272-1b8d-4009-a3ba-163591650b28}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Resource\Texture">
+    <Filter Include="Engine\Texture">
       <UniqueIdentifier>{448c0ea0-da40-4971-9084-3bfc615e740f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base\PSO">
+      <UniqueIdentifier>{1cf5afa7-82b3-4c74-b4fa-810d14f31921}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NewFilter1">
+      <UniqueIdentifier>{a6801150-8545-4961-9464-0cdb28167ffb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\ImGui">
+      <UniqueIdentifier>{691b02ba-10e6-4ed4-a660-3c8724ea9b54}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +120,18 @@
     </ClCompile>
     <ClCompile Include="Engine\Base\DXC\DXC.cpp">
       <Filter>Engine\Base\DXC</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Model\Model.cpp">
+      <Filter>Engine\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Resource\Texture\TextureManager.cpp">
+      <Filter>Engine\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Base\PSO\PSO.cpp">
+      <Filter>Engine\Base\PSO</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\ImGui\ImGuiManager.cpp">
+      <Filter>Engine\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -179,6 +197,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Base\DXC\DXC.h">
       <Filter>Engine\Base\DXC</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Model\Model.h">
+      <Filter>Engine\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Resource\Texture\TextureManager.h">
+      <Filter>Engine\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\PSO\PSO.h">
+      <Filter>Engine\Base\PSO</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ImGui\ImGuiManager.h">
+      <Filter>Engine\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

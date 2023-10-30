@@ -21,7 +21,7 @@ public: // メンバ関数
 
 public: // メンバ関数
 
-	Microsoft::WRL::ComPtr<IDxcBlob> CompileShader(const std::wstring& filePath, const wchar_t* profile);
+	IDxcBlob* CompileShader(const std::wstring& filePath, const wchar_t* profile);
 
 private: // メンバ変数
 
@@ -30,6 +30,8 @@ private: // メンバ変数
 	Microsoft::WRL::ComPtr<IDxcIncludeHandler> dxcIncludeHandler_;
 
 private: // 非公開のメンバ関数
+	const std::wstring kDirectoryPath = L"./resources/shaders/";
+
 	DXC(const DXC&) = delete;
 	const DXC& operator=(const DXC&) = delete;
 

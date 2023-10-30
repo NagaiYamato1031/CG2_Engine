@@ -10,7 +10,7 @@ WinApp* WinApp::GetInstance() {
 void WinApp::Initialize(const char* title, int width, int height)
 {
 	CoInitializeEx(0, COINIT_MULTITHREADED);
-	
+
 	// 初期化
 	wc_ = {};
 	// ウィンドウプロシージャ
@@ -82,6 +82,11 @@ void WinApp::Finalize()
 }
 
 LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+
+	// ImGui 用ウィンドウプロシージャ呼び出し
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam))
+		return true;
+
 	// メッセージに応じてゲーム固有の処理を行う
 	switch (msg)
 	{
