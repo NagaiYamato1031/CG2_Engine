@@ -31,12 +31,10 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	textureManager_ = TextureManager::GetInstance();
 	textureManager_->Initialize(dxCommon_);
 
-	//Model::StaticInitialize(dxCommon_);
+	Model::StaticInitialize(dxCommon_);
 
-	//Model* model = Model::CreateOBJ("resources","axis.obj");
-	//delete model;
+	Model* model = Model::CreateOBJ("resources","axis.obj");
 
-	textureManager_->Load("uvChecker.png");
 
 	while (!winApp_->ProcessMessage())
 	{
@@ -46,7 +44,6 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 		// ここにゲーム内の処理を書く
 
-		ImGui::ShowDemoWindow();
 
 
 		//////////
@@ -62,6 +59,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 		dxCommon_->PostDraw();
 	}
+
+	delete model;
 
 	imguiManager_->Finalize();
 

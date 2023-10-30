@@ -27,6 +27,7 @@ public:
 	struct MaterialData
 	{
 		std::string textureFilePath;
+		uint32_t textureHandle_;
 	};
 
 	struct ModelData
@@ -53,7 +54,7 @@ private:
 
 	static void CreateRootSignature();
 
-	static D3D12_INPUT_LAYOUT_DESC CreateInputLayoutDesc();
+	//static D3D12_INPUT_LAYOUT_DESC CreateInputLayoutDesc();
 
 	static D3D12_BLEND_DESC CreateBlendDesc();
 
