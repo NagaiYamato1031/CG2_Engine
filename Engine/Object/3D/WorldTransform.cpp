@@ -12,6 +12,8 @@ void WorldTransform::Initialize() {
 	translate_ = { 0.0f,0.0f,0.0f };
 	//cBuff_.Reset();
 	matWorld_ = Matrix4x4::MakeIdentity4x4();
+	parent_ = nullptr;
+	parentFlag_ = 0b111;
 	//MapData();
 }
 
@@ -28,7 +30,15 @@ const Matrix4x4& WorldTransform::GetMatrix()
 	matWorld_ = Matrix4x4::MakeAffineMatrix(scale_, rotate_, translate_);
 
 	if (parent_) {
-		matWorld_ = parent_->GetMatrix() * matWorld_;
+		Matrix4x4 matParent = Matrix4x4::MakeIdentity4x4();
+		if (parentFlag_ & 0b100) {
+			matParent = matParent * Matrix4x4::MakeScaleMatrix(parent_->scale_);
+		}if (parentFlag_ & 0b010) {
+			matParent = matParent * Matrix4x4::MakeRotateXYZMatrix(parent_->rotate_);
+		}if (parentFlag_ & 0b001) {
+			matParent = matParent * Matrix4x4::MakeTranslateMatrix(parent_->translate_);
+		}
+		matWorld_ = matParent * matWorld_;
 	}
 
 	return matWorld_;
