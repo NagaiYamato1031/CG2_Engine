@@ -56,11 +56,20 @@
     <Filter Include="Engine\Base\PSO">
       <UniqueIdentifier>{1cf5afa7-82b3-4c74-b4fa-810d14f31921}</UniqueIdentifier>
     </Filter>
-    <Filter Include="NewFilter1">
-      <UniqueIdentifier>{a6801150-8545-4961-9464-0cdb28167ffb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\ImGui">
       <UniqueIdentifier>{691b02ba-10e6-4ed4-a660-3c8724ea9b54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Object\3D\Player">
+      <UniqueIdentifier>{0ea88dc8-d5b7-4846-a598-666870d2d347}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Object\3D\Enemy">
+      <UniqueIdentifier>{e29731cb-7025-45e1-87da-566868488f2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Object\3D\Plane">
+      <UniqueIdentifier>{ae38bb94-d5dc-4cda-9916-e29721f363ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Shape">
+      <UniqueIdentifier>{65b5b352-ecb3-417f-943a-8c17baf8e107}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -109,9 +118,6 @@
     <ClCompile Include="Engine\Math\Vector\Vector4.cpp">
       <Filter>Engine\Math\Vector</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Object\3D\WorldTransform.cpp">
-      <Filter>Engine\Object\3D</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Input\Input.cpp">
       <Filter>Engine\Input</Filter>
     </ClCompile>
@@ -135,6 +141,18 @@
     </ClCompile>
     <ClCompile Include="Engine\Object\ViewProjection.cpp">
       <Filter>Engine\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Object\IObject.cpp">
+      <Filter>Engine\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Object\3D\Player\Player.cpp">
+      <Filter>Engine\Object\3D\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Object\WorldTransform.cpp">
+      <Filter>Engine\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Object\3D\BaseCharacter.cpp">
+      <Filter>Engine\Object\3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -192,9 +210,6 @@
     <ClInclude Include="Engine\Math\MyConst.h">
       <Filter>Engine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Object\3D\WorldTransform.h">
-      <Filter>Engine\Object\3D</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Input\Input.h">
       <Filter>Engine\Input</Filter>
     </ClInclude>
@@ -215,6 +230,21 @@
     </ClInclude>
     <ClInclude Include="Engine\Object\ViewProjection.h">
       <Filter>Engine\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Object\IObject.h">
+      <Filter>Engine\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Shape\AABB.h">
+      <Filter>Engine\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Object\3D\Player\Player.h">
+      <Filter>Engine\Object\3D\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Object\WorldTransform.h">
+      <Filter>Engine\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Object\3D\BaseCharacter.h">
+      <Filter>Engine\Object\3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

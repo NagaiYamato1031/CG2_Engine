@@ -110,8 +110,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
     <ClCompile Include="Engine\Math\Vector\Vector3.cpp" />
     <ClCompile Include="Engine\Math\Vector\Vector4.cpp" />
     <ClCompile Include="Engine\Model\Model.cpp" />
-    <ClCompile Include="Engine\Object\3D\WorldTransform.cpp" />
+    <ClCompile Include="Engine\Object\3D\BaseCharacter.cpp" />
+    <ClCompile Include="Engine\Object\3D\Player\Player.cpp" />
+    <ClCompile Include="Engine\Object\IObject.cpp" />
     <ClCompile Include="Engine\Object\ViewProjection.cpp" />
+    <ClCompile Include="Engine\Object\WorldTransform.cpp" />
     <ClCompile Include="Engine\Resource\Texture\TextureManager.cpp" />
     <ClCompile Include="Engine\Utility\MyUtility.cpp" />
     <ClCompile Include="externals\imgui\imgui.cpp" />
@@ -138,9 +141,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
     <ClInclude Include="Engine\Math\Vector\Vector3.h" />
     <ClInclude Include="Engine\Math\Vector\Vector4.h" />
     <ClInclude Include="Engine\Model\Model.h" />
-    <ClInclude Include="Engine\Object\3D\WorldTransform.h" />
+    <ClInclude Include="Engine\Object\3D\BaseCharacter.h" />
+    <ClInclude Include="Engine\Object\3D\Player\Player.h" />
+    <ClInclude Include="Engine\Object\IObject.h" />
     <ClInclude Include="Engine\Object\ViewProjection.h" />
+    <ClInclude Include="Engine\Object\WorldTransform.h" />
     <ClInclude Include="Engine\Resource\Texture\TextureManager.h" />
+    <ClInclude Include="Engine\Shape\AABB.h" />
     <ClInclude Include="Engine\Utility\MyUtility.h" />
     <ClInclude Include="externals\imgui\imconfig.h" />
     <ClInclude Include="externals\imgui\imgui.h" />

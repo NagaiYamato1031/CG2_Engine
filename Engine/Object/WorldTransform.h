@@ -4,7 +4,7 @@
 #include <wrl.h>
 #include <cassert>
 #include <cstdint>
-#include "../../Math/Math.h"
+#include "../Math/Math.h"
 
 class WorldTransform
 {
@@ -45,28 +45,13 @@ public:
 	/// </summary>
 	void Initialize();
 	/// <summary>
-	/// 定数バッファ生成
-	/// </summary>
-	void CreateConstBuffer();
-	/// <summary>
 	/// 行列取得
 	/// </summary>
 	/// <returns>ワールド行列</returns>
 	const Matrix4x4& GetMatrix();
 
-	void SetParent(WorldTransform* parent) { parent_ = parent; };
+	void SetParent(WorldTransform* parent, uint8_t flag = 0b111) { parent_ = parent; parentFlag_ = flag; };
 	WorldTransform* GetParent() { return parent_; };
 	void SetBitFlag(uint8_t flag) { parentFlag_ = flag; }
-	//ID3D12Resource* GetResource() { return cBuff_.Get(); }
-	//D3D12_GPU_VIRTUAL_ADDRESS GetGPUVirtualAddress() { return cBuff_->GetGPUVirtualAddress(); }
-
-private:
-
-	/// <summary>
-	/// マッピングする
-	/// </summary>
-	void MapData();
-
-
 
 };

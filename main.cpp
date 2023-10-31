@@ -7,6 +7,8 @@
 
 #include "Engine/Object/ViewProjection.h"
 
+#include "Engine/Object/3D/Player/Player.h"
+
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
@@ -35,17 +37,43 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	Model::StaticInitialize(dxCommon_);
 
-	Model* md1 = Model::CreateOBJ("resources", "axis.obj");
-	Model* md2 = Model::CreateOBJ("resources", "plane.obj");
+	/*////////////////////
+	//	ゲームで使う変数	//
+	//------------------*/
 
 	ViewProjection vp;
 	vp.Initialize();
 
-	WorldTransform axisWT;
-	axisWT.Initialize();
+	std::unique_ptr<Model> modelPlayerBody_;
+	std::unique_ptr<Model> modelPlayerHead_;
+	std::unique_ptr<Model> modelPlayerL_arm_;
+	std::unique_ptr<Model> modelPlayerR_arm_;
+
+	modelPlayerBody_.reset(Model::CreateOBJ("resources", "player_Body.obj"));
+	modelPlayerHead_.reset(Model::CreateOBJ("resources", "player_Head.obj"));
+	modelPlayerL_arm_.reset(Model::CreateOBJ("resources", "player_L_arm.obj"));
+	modelPlayerR_arm_.reset(Model::CreateOBJ("resources", "player_R_arm.obj"));
+
+	std::vector<Model*> playerModels = {
+		modelPlayerBody_.get(),modelPlayerHead_.get(),
+		modelPlayerL_arm_.get(),modelPlayerR_arm_.get()
+	};
+
+	std::unique_ptr<Player> player_;
+	player_.reset(new Player);
+	player_->Initialize(playerModels);
+
+	player_->SetViewProjection(&vp);
+
+	Model* md2 = Model::CreateOBJ("resources", "plane.obj");
 
 	WorldTransform planeWT;
 	planeWT.Initialize();
+
+	/*------------------//
+	//	ゲームで使う変数	//
+	////////////////////*/
+
 
 	while (!winApp_->ProcessMessage())
 	{
@@ -61,15 +89,6 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		//	ImGui	//
 		//----------*/
 
-		ImGui::Begin("Axis");
-
-		ImGui::DragFloat3("scale", &axisWT.scale_.x, 0.01f);
-		ImGui::DragFloat3("rotate", &axisWT.rotate_.x, 0.01f);
-		ImGui::DragFloat3("translate", &axisWT.translate_.x, 0.01f);
-
-		ImGui::End();
-
-		
 
 		ImGui::Begin("Plane");
 
@@ -92,6 +111,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		////////////*/
 
 
+		player_->Update();
 
 
 
@@ -118,7 +138,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		//	モデル描画	//
 		//--------------*/
 
-		md1->Draw(&axisWT,&vp);
+		player_->Draw();
 
 		md2->Draw(&planeWT, &vp);
 
@@ -140,8 +160,6 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 		dxCommon_->PostDraw();
 	}
-
-	delete md1;
 
 	imguiManager_->Finalize();
 

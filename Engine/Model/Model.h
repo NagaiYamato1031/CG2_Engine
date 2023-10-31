@@ -7,7 +7,7 @@
 #include <d3d12.h>
 
 #include "../Math/Math.h"
-#include "../Object/3D/WorldTransform.h"
+#include "../Object/WorldTransform.h"
 #include "../Object/ViewProjection.h"
 
 class DirectXCommon;
