@@ -5,7 +5,7 @@
 
 #include "../Math.h"
 
-Vector3 Vector3::operator+(const Vector3& obj) {
+Vector3 Vector3::operator+(const Vector3& obj) const {
 	Vector3 result = { this->x + obj.x, this->y + obj.y, this->z + obj.z };
 	return result;
 }

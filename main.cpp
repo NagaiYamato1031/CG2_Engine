@@ -7,7 +7,7 @@
 
 #include "Engine/Object/ViewProjection.h"
 
-#include "Engine/Object/3D/Player/Player.h"
+#include "Engine/Object/3D/3dObjectList.h"
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
@@ -41,18 +41,28 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	//	ゲームで使う変数	//
 	//------------------*/
 
-	ViewProjection vp;
-	vp.Initialize();
+	std::unique_ptr<FollowCamera> followCamera_;
+	followCamera_.reset(new FollowCamera);
+	followCamera_->Initialize();
+
+	ViewProjection* vp = followCamera_->GetViewProjection();
+
+	std::unique_ptr<Model> modelSkydome_;
+	modelSkydome_.reset(Model::CreateOBJ("resources/skydome", "skydome.obj"));
+
+	std::unique_ptr<Skydome> skydome_;
+	skydome_.reset(new Skydome());
+	skydome_->Initialize(modelSkydome_.get());
 
 	std::unique_ptr<Model> modelPlayerBody_;
 	std::unique_ptr<Model> modelPlayerHead_;
 	std::unique_ptr<Model> modelPlayerL_arm_;
 	std::unique_ptr<Model> modelPlayerR_arm_;
 
-	modelPlayerBody_.reset(Model::CreateOBJ("resources", "player_Body.obj"));
-	modelPlayerHead_.reset(Model::CreateOBJ("resources", "player_Head.obj"));
-	modelPlayerL_arm_.reset(Model::CreateOBJ("resources", "player_L_arm.obj"));
-	modelPlayerR_arm_.reset(Model::CreateOBJ("resources", "player_R_arm.obj"));
+	modelPlayerBody_.reset(Model::CreateOBJ("resources/player", "player_Body.obj"));
+	modelPlayerHead_.reset(Model::CreateOBJ("resources/player", "player_Head.obj"));
+	modelPlayerL_arm_.reset(Model::CreateOBJ("resources/player", "player_L_arm.obj"));
+	modelPlayerR_arm_.reset(Model::CreateOBJ("resources/player", "player_R_arm.obj"));
 
 	std::vector<Model*> playerModels = {
 		modelPlayerBody_.get(),modelPlayerHead_.get(),
@@ -63,7 +73,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	player_.reset(new Player);
 	player_->Initialize(playerModels);
 
-	player_->SetViewProjection(&vp);
+	player_->SetViewProjection(vp);
+	followCamera_->SetTarget(&player_->GetWorldTransform());
 
 	Model* md2 = Model::CreateOBJ("resources", "plane.obj");
 
@@ -99,22 +110,16 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		ImGui::End();
 
 
-		ImGui::Begin("ViewProjection");
-
-		ImGui::DragFloat3("rotate", &vp.rotate_.x, 0.01f);
-		ImGui::DragFloat3("translate", &vp.translate_.x, 0.01f);
-
-		ImGui::End();
-
 		/*----------//
 		//	ImGui	//
 		////////////*/
 
+		skydome_->Update();
 
 		player_->Update();
 
 
-
+		followCamera_->Update();
 
 
 
@@ -138,9 +143,11 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		//	モデル描画	//
 		//--------------*/
 
+		skydome_->Draw(vp);
+
 		player_->Draw();
 
-		md2->Draw(&planeWT, &vp);
+		md2->Draw(&planeWT, vp);
 
 		/*--------------//
 		//	モデル描画	//

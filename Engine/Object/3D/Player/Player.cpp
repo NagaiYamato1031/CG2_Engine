@@ -17,6 +17,8 @@ void Player::Update()
 {
 	DebugGUI();
 
+	GetOperate();
+
 	UpdateFloatingGimmick();
 	UpdateTransform();
 }
@@ -52,7 +54,7 @@ void Player::InitializeWorldTransforms()
 
 	// プレイヤー自身のワールド変換データ
 	transformBase_.Initialize();
-	transformBase_.scale_ = { 0.3f,0.3f,0.3f };
+	transformBase_.scale_ = { 0.5f,0.5f,0.5f };
 	transformBase_.translate_ = { 0.0f, 0.0f, 0.0f };
 
 	// Body のワールド変換データ
@@ -80,17 +82,32 @@ void Player::InitializeWorldTransforms()
 
 void Player::GetOperate()
 {
-	if (input_->PushKey(DIK_A)) {
-		transformBase_.translate_.x -= 1.0f;
-	}
-	if (input_->PushKey(DIK_D)) {
-		transformBase_.translate_.x += 1.0f;
-	}
+	// 速さ
+	const float kSpeed = 0.3f;
+	// 移動成分
+	Vector3 move = { 0.0f, 0.0f, 0.0f };
 	if (input_->PushKey(DIK_W)) {
-		transformBase_.translate_.z += 1.0f;
+		move.z = kSpeed;
 	}
 	if (input_->PushKey(DIK_S)) {
-		transformBase_.translate_.z -= 1.0f;
+		move.z = -kSpeed;
+	}
+	if (input_->PushKey(DIK_D)) {
+		move.x = kSpeed;
+	}
+	if (input_->PushKey(DIK_A)) {
+		move.x = -kSpeed;
+	}
+	if (move.x != 0.0f || move.y != 0.0f || move.z != 0.0f) {
+		// 回転方向に合わせる
+		Matrix4x4 matRotate = Matrix4x4::MakeRotateYMatrix(viewProjection_->rotate_.y);
+
+		move = Vector3::TransformNormal(move, matRotate);
+		// 移動
+		transformBase_.translate_ += move;
+
+		// 進行方向に向けて回転する
+		transformBase_.rotate_.y = std::atan2(move.x, move.z);
 	}
 }
 

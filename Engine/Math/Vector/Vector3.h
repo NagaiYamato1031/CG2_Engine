@@ -19,7 +19,7 @@ public:	///	メンバ変数
 
 public:	///	演算子オーバーロード
 
-	Vector3 operator+(const Vector3& obj);
+	Vector3 operator+(const Vector3& obj) const;
 	Vector3 operator-(const Vector3& obj);
 	Vector3 operator*(float scalar);
 	friend Vector3 operator*(float scalar , const Vector3& obj);
