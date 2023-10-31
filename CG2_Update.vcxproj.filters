@@ -133,6 +133,9 @@
     <ClCompile Include="Engine\ImGui\ImGuiManager.cpp">
       <Filter>Engine\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Object\ViewProjection.cpp">
+      <Filter>Engine\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -209,6 +212,9 @@
     </ClInclude>
     <ClInclude Include="Engine\ImGui\ImGuiManager.h">
       <Filter>Engine\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Object\ViewProjection.h">
+      <Filter>Engine\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

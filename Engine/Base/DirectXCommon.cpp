@@ -62,16 +62,18 @@ void DirectXCommon::PreDraw() {
 	commandList_->ResourceBarrier(1, &barrier);
 
 	// レンダーターゲットビュー用ディスクリプタヒープのハンドルを取得
-	D3D12_CPU_DESCRIPTOR_HANDLE handle = GetDescriptorHandleIncrementSize(
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = GetDescriptorHandleIncrementSize(
 		rtvHeap_->GetCPUDescriptorHandleForHeapStart(), backBufferIndex,
 		device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
+
+	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = dsvHeap_->GetCPUDescriptorHandleForHeapStart();
 	// 描画先のRTVを設定する
-	commandList_->OMSetRenderTargets(1, &handle, false, nullptr);
+	commandList_->OMSetRenderTargets(1, &rtvHandle, false, &dsvHandle);
 
 	// 全画面クリア
 	ClearRenderTarget();
 	// 深度バッファクリア
-	CreateDepthBuffer();
+	ClearDepthBuffer();
 
 	// ビューポート
 	viewport_ = {};

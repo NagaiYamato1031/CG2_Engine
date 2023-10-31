@@ -5,6 +5,8 @@
 #include "Engine/Resource/Texture/TextureManager.h"
 #include "Engine/Model/Model.h"
 
+#include "Engine/Object/ViewProjection.h"
+
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
@@ -33,8 +35,17 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	Model::StaticInitialize(dxCommon_);
 
-	Model* model = Model::CreateOBJ("resources","axis.obj");
+	Model* md1 = Model::CreateOBJ("resources", "axis.obj");
+	Model* md2 = Model::CreateOBJ("resources", "plane.obj");
 
+	ViewProjection vp;
+	vp.Initialize();
+
+	WorldTransform axisWT;
+	axisWT.Initialize();
+
+	WorldTransform planeWT;
+	planeWT.Initialize();
 
 	while (!winApp_->ProcessMessage())
 	{
@@ -42,25 +53,95 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 		input_->Update();
 
-		// ここにゲーム内の処理を書く
+		/*////////////////////
+		//	ゲーム内の処理		//
+		//------------------*/
+
+		/*////////////
+		//	ImGui	//
+		//----------*/
+
+		ImGui::Begin("Axis");
+
+		ImGui::DragFloat3("scale", &axisWT.scale_.x, 0.01f);
+		ImGui::DragFloat3("rotate", &axisWT.rotate_.x, 0.01f);
+		ImGui::DragFloat3("translate", &axisWT.translate_.x, 0.01f);
+
+		ImGui::End();
+
+		
+
+		ImGui::Begin("Plane");
+
+		ImGui::DragFloat3("scale", &planeWT.scale_.x, 0.01f);
+		ImGui::DragFloat3("rotate", &planeWT.rotate_.x, 0.01f);
+		ImGui::DragFloat3("translate", &planeWT.translate_.x, 0.01f);
+
+		ImGui::End();
+
+
+		ImGui::Begin("ViewProjection");
+
+		ImGui::DragFloat3("rotate", &vp.rotate_.x, 0.01f);
+		ImGui::DragFloat3("translate", &vp.translate_.x, 0.01f);
+
+		ImGui::End();
+
+		/*----------//
+		//	ImGui	//
+		////////////*/
 
 
 
-		//////////
+
+
+
+
+
+
+
+		/*------------------//
+		//	ゲーム内の処理		//
+		////////////////////*/
+
 		imguiManager_->End();
 
 		dxCommon_->PreDraw();
 
-		// ここから描画を書く
+		/*////////////////
+		//	描画の処理	//
+		//--------------*/
+
+		Model::PreDraw();
+
+		/*////////////////
+		//	モデル描画	//
+		//--------------*/
+
+		md1->Draw(&axisWT,&vp);
+
+		md2->Draw(&planeWT, &vp);
+
+		/*--------------//
+		//	モデル描画	//
+		////////////////*/
+
+		Model::PostDraw();
 
 
-		//////////
+
+
+
+		/*--------------//
+		//	描画の処理	//
+		////////////////*/
+
 		imguiManager_->Draw();
 
 		dxCommon_->PostDraw();
 	}
 
-	delete model;
+	delete md1;
 
 	imguiManager_->Finalize();
 

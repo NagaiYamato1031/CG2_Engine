@@ -8,6 +8,7 @@
 
 #include "../Math/Math.h"
 #include "../Object/3D/WorldTransform.h"
+#include "../Object/ViewProjection.h"
 
 class DirectXCommon;
 class PSO;
@@ -36,11 +37,21 @@ public:
 		MaterialData material;
 	};
 
+	struct TransformaionMatrix
+	{
+		Matrix4x4 matWVP_;
+		Matrix4x4 matWorld_;
+	};
+
 public:
 
 	static void StaticInitialize(DirectXCommon* dxCommon);
 
 	static Model* CreateOBJ(const std::string& directoryPath, const std::string& fileName);
+
+	static void PreDraw();
+
+	static void PostDraw();
 
 private:
 
@@ -67,6 +78,7 @@ public:
 	void Initialize();
 
 	void Draw(WorldTransform* worldTransform);
+	void Draw(WorldTransform* worldTransform, ViewProjection* viewProjection);
 	void Draw(uint32_t textureHandle);
 
 
@@ -85,11 +97,15 @@ private:
 
 	//Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;
 
+	Microsoft::WRL::ComPtr<ID3D12Resource> transformResource_;
+
 	D3D12_VERTEX_BUFFER_VIEW vbView_;
 
 	//D3D12_INDEX_BUFFER_VIEW ibView_;
 
 	VertexData* vertexData_ = nullptr;
+
+	TransformaionMatrix* transformData_ = nullptr;
 
 	ModelData modelData_;
 

@@ -132,11 +132,21 @@ void Model::CreatePSO()
 	inputLayoutDesc.pInputElementDescs = inputElementDescs;
 	inputLayoutDesc.NumElements = _countof(inputElementDescs);
 
+	// DepthStencilState の設定
+	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
+	// Depth の機能を有効化する
+	depthStencilDesc.DepthEnable = true;
+	// 書き込みする
+	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	// 比較関数は LessEqual。つまり、近ければ描画される
+	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = CreatePipelineStateDesc();
 
 	// 生成時に存在させておく
 	psoDesc.InputLayout = inputLayoutDesc;
+	psoDesc.DepthStencilState = depthStencilDesc;
+	psoDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
 	HRESULT hr = S_FALSE;
 	hr = sDXCommon_->GetDevice()->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&sPSO_->state_));
@@ -194,11 +204,15 @@ void Model::CreateRootSignature()
 	descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 	// ルートパラメータ
-	D3D12_ROOT_PARAMETER rootParameters[1] = {};
+	D3D12_ROOT_PARAMETER rootParameters[2] = {};
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameters[0].DescriptorTable.pDescriptorRanges = descriptorRange;
 	rootParameters[0].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
+	
+	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+	rootParameters[1].Descriptor.ShaderRegister = 0;
 
 	descriptionRootSignature.pParameters = rootParameters;
 	descriptionRootSignature.NumParameters = _countof(rootParameters);
@@ -332,21 +346,69 @@ Model* Model::CreateOBJ(const std::string& directoryPath, const std::string& fil
 	return model;
 }
 
+void Model::PreDraw()
+{
+	ID3D12GraphicsCommandList* cmdList = sDXCommon_->GetCommandList();
+
+	cmdList->RSSetViewports(1, sDXCommon_->GetViewPort());
+	cmdList->RSSetScissorRects(1, sDXCommon_->GetScissorRect());
+
+	cmdList->SetGraphicsRootSignature(sPSO_->rootSignature_.Get());
+	cmdList->SetPipelineState(sPSO_->state_.Get());
+
+	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}
+
+void Model::PostDraw()
+{
+}
+
 void Model::Draw(WorldTransform* worldTransform)
 {
 	ID3D12GraphicsCommandList* cmdList = DirectXCommon::GetInstance()->GetCommandList();
+	TextureManager* textureManager = TextureManager::GetInstance();
 
-	worldTransform;
-	cmdList;
+	transformData_->matWorld_ = worldTransform->GetMatrix();
 
+	cmdList->IASetVertexBuffers(0, 1, &vbView_);
+	textureManager->SetGraphicsDescriptorTable(0, modelData_.material.textureHandle_);
+	// ルートパラメータ二番目
+	cmdList->SetGraphicsRootConstantBufferView(1, transformResource_->GetGPUVirtualAddress());
+
+
+	cmdList->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+
+}
+
+void Model::Draw(WorldTransform* worldTransform, ViewProjection* viewProjection)
+{
+	ID3D12GraphicsCommandList* cmdList = DirectXCommon::GetInstance()->GetCommandList();
+	TextureManager* textureManager = TextureManager::GetInstance();
+
+	
+	transformData_->matWorld_ = worldTransform->GetMatrix();
+	transformData_->matWVP_ = worldTransform->GetMatrix() * viewProjection->GetViewProjectionMatrix();
+
+	cmdList->IASetVertexBuffers(0, 1, &vbView_);
+	textureManager->SetGraphicsDescriptorTable(0, modelData_.material.textureHandle_);
+	// ルートパラメータ二番目
+	cmdList->SetGraphicsRootConstantBufferView(1, transformResource_->GetGPUVirtualAddress());
+
+	cmdList->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 }
 
 void Model::Draw(uint32_t textureHandle)
 {
 	ID3D12GraphicsCommandList* cmdList = DirectXCommon::GetInstance()->GetCommandList();
+	TextureManager* textureManager = TextureManager::GetInstance();
 
-	textureHandle;
-	cmdList;
+	cmdList->IASetVertexBuffers(0, 1, &vbView_);
+	textureManager->SetGraphicsDescriptorTable(0, textureHandle);
+	// ルートパラメータ二番目
+	cmdList->SetGraphicsRootConstantBufferView(1, transformResource_->GetGPUVirtualAddress());
+
+
+	cmdList->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 
 }
 
@@ -361,4 +423,10 @@ void Model::CreateResource()
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
 	// 頂点データをリソースにコピー
 	std::memcpy(vertexData_, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
+
+	transformResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(TransformaionMatrix));
+	transformData_ = nullptr;
+	transformResource_->Map(0, nullptr, reinterpret_cast<void**>(&transformData_));
+	transformData_->matWorld_ = Matrix4x4::MakeIdentity4x4();
+	transformData_->matWVP_ = Matrix4x4::MakeIdentity4x4();
 }

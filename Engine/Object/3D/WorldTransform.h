@@ -17,9 +17,9 @@ public: // パブリック変数
 
 private: // プライベート変数
 	// コンスタントバッファ
-	Microsoft::WRL::ComPtr<ID3D12Resource> cBuff_;
+	//Microsoft::WRL::ComPtr<ID3D12Resource> cBuff_;
 	// ワールド行列
-	Matrix4x4* matWorld_ = nullptr;
+	Matrix4x4 matWorld_;
 
 	// 親
 	WorldTransform* parent_ = nullptr;
@@ -50,6 +50,8 @@ public:
 
 	void SetParent(WorldTransform* parent) { parent_ = parent; };
 	WorldTransform* GetParent() { return parent_; };
+	//ID3D12Resource* GetResource() { return cBuff_.Get(); }
+	//D3D12_GPU_VIRTUAL_ADDRESS GetGPUVirtualAddress() { return cBuff_->GetGPUVirtualAddress(); }
 
 private:
 
