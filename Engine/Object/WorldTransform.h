@@ -12,9 +12,9 @@ class WorldTransform
 	/// メンバ変数
 	/// </summary>
 public: // パブリック変数
-	Vector3 scale_;
-	Vector3 rotate_;
-	Vector3 translate_;
+	Vector3 scale_ = { 1.0f,1.0f,1.0f };
+	Vector3 rotate_ = { 0.0f,0.0f,0.0f };
+	Vector3 translate_{ 0.0f,0.0f,0.0f };
 
 
 private: // プライベート変数
@@ -49,9 +49,11 @@ public:
 	/// </summary>
 	/// <returns>ワールド行列</returns>
 	const Matrix4x4& GetMatrix();
+	Matrix4x4 GetMatrix(uint8_t flag);
 
 	void SetParent(WorldTransform* parent, uint8_t flag = 0b111) { parent_ = parent; parentFlag_ = flag; };
 	WorldTransform* GetParent() { return parent_; };
-	void SetBitFlag(uint8_t flag) { parentFlag_ = flag; }
-
+	void SetParentFlag(uint8_t flag) { parentFlag_ = flag; }
+	Vector3 GetWorldPos();
+	Vector3 GetScale();
 };

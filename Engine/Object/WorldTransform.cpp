@@ -16,50 +16,41 @@ void WorldTransform::Initialize() {
 	parentFlag_ = 0b111;
 }
 
-//const Matrix4x4& WorldTransform::GetMatrix()
-//{
-//	matWorld_ = Matrix4x4::MakeAffineMatrix(scale_, rotate_, translate_);
-//
-//	if (parent_) {
-//		Matrix4x4 matParent = Matrix4x4::MakeIdentity4x4();
-//		if (parentFlag_ & 0b100) {
-//			matParent = matParent * Matrix4x4::MakeScaleMatrix(parent_->scale_);
-//		}if (parentFlag_ & 0b010) {
-//			matParent = matParent * Matrix4x4::MakeRotateXYZMatrix(parent_->rotate_);
-//		}if (parentFlag_ & 0b001) {
-//			matParent = matParent * Matrix4x4::MakeTranslateMatrix(parent_->translate_);
-//		}
-//		matWorld_ = matParent * matWorld_;
-//	}
-//
-//	return matWorld_;
-//}
-
 const Matrix4x4& WorldTransform::GetMatrix()
 {
 	matWorld_ = Matrix4x4::MakeAffineMatrix(scale_, rotate_, translate_);
-	//Matrix4x4 matParent = Matrix4x4::MakeAffineMatrix(wt->scale_, wt->rotate_, wt->translate_);
-
 	if (parent_) {
-		Matrix4x4 matParent = Matrix4x4::MakeIdentity4x4();
-		if (parentFlag_ != 0b111) {
-			WorldTransform* grandParent = parent_->parent_;
-			if (grandParent) {
-				matParent = grandParent->GetMatrix();
-			}
-			if (parentFlag_ & 0b100) {
-				matParent = matParent * Matrix4x4::MakeScaleMatrix(parent_->scale_);
-			}if (parentFlag_ & 0b010) {
-				matParent = matParent * Matrix4x4::MakeRotateXYZMatrix(parent_->rotate_);
-			}if (parentFlag_ & 0b001) {
-				matParent = matParent * Matrix4x4::MakeTranslateMatrix(parent_->translate_);
-			}
-		}
-		else {
-			matParent = parent_->GetMatrix();
-		}
-		matWorld_ =matWorld_ * matParent;
+		matWorld_ = matWorld_ * parent_->GetMatrix(parentFlag_);
+	}
+	return matWorld_;
+}
+
+Matrix4x4 WorldTransform::GetMatrix(uint8_t flag)
+{
+	Matrix4x4 matFlags = Matrix4x4::MakeIdentity4x4();
+	if (flag & 0b100) {
+		matFlags = matFlags * Matrix4x4::MakeScaleMatrix(scale_);
+	}if (flag & 0b010) {
+		matFlags = matFlags * Matrix4x4::MakeRotateXYZMatrix(rotate_);
+	}if (flag & 0b001) {
+		matFlags = matFlags * Matrix4x4::MakeTranslateMatrix(translate_);
+	}
+	// 親がある場合
+	if (parent_) {
+		matFlags =matFlags * parent_->GetMatrix(flag);
 	}
 
-	return matWorld_;
+	return matFlags;
+}
+
+Vector3 WorldTransform::GetWorldPos()
+{
+	Matrix4x4 matWorld = GetMatrix();
+	return { matWorld.m[3][0],matWorld.m[3][1],matWorld.m[3][2] };
+}
+
+Vector3 WorldTransform::GetScale()
+{
+	Matrix4x4 matScale = GetMatrix(0b100);
+	return { matScale.m[0][0],matScale.m[1][1],matScale.m[2][2] };
 }

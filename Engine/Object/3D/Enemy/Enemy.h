@@ -4,7 +4,7 @@
 #include "../../../Input/Input.h"
 #include "../../../Shape/AABB.h"
 
-class Player final : public IObject
+class Enemy final : public IObject
 {
 /// <summary>
 /// サブクラス

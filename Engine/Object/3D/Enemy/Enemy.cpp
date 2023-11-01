@@ -1,9 +1,9 @@
-#include "Player.h"
+#include "Enemy.h"
 
 #include <numbers>
 #include <cmath>
 
-void Player::Initialize(const std::vector<Model*>& models)
+void Enemy::Initialize(const std::vector<Model*>& models)
 {
 	models_ = models;
 	transformBase_.Initialize();
@@ -20,7 +20,7 @@ void Player::Initialize(const std::vector<Model*>& models)
 	isCollision_ = false;
 }
 
-void Player::Update()
+void Enemy::Update()
 {
 	DebugGUI();
 
@@ -30,7 +30,7 @@ void Player::Update()
 	UpdateTransform();
 }
 
-void Player::Update(std::vector<AABB*>& floors)
+void Enemy::Update(std::vector<AABB*>& floors)
 {
 	DebugGUI();
 
@@ -65,16 +65,16 @@ void Player::Update(std::vector<AABB*>& floors)
 	}
 }
 
-void Player::Draw()
+void Enemy::Draw()
 {
 	DrawAllModel();
 }
 
-void Player::DebugGUI()
+void Enemy::DebugGUI()
 {
 #ifdef _DEBUG
 
-	ImGui::Begin("Player");
+	ImGui::Begin("Enemy");
 
 	ImGui::DragFloat3("scale", &transformBase_.scale_.x, 0.01f);
 	ImGui::DragFloat3("rotate", &transformBase_.rotate_.x, 0.01f);
@@ -88,7 +88,7 @@ void Player::DebugGUI()
 
 }
 
-void Player::InitializeWorldTransforms()
+void Enemy::InitializeWorldTransforms()
 {
 	for (size_t i = 0; i < kPlayerCount; i++) {
 		WorldTransform wt = WorldTransform();
@@ -123,7 +123,7 @@ void Player::InitializeWorldTransforms()
 	transforms_[kPlayerR_arm].translate_.y = 2.7f;
 }
 
-void Player::OnCollisionEnter()
+void Enemy::OnCollisionEnter()
 {
 	Vector3 temp = transformBase_.GetWorldPos() - collisionAABB_->transform_.GetWorldPos();
 	transformBase_.translate_ = temp;
@@ -136,13 +136,13 @@ void Player::OnCollisionEnter()
 	isJumpEnable_ = true;
 }
 
-void Player::OnCollision()
+void Enemy::OnCollision()
 {
 	isCollision_ = true;
 	isJumpEnable_ = true;
 }
 
-void Player::OnCollisionExit()
+void Enemy::OnCollisionExit()
 {
 	transformBase_.translate_ = transformBase_.GetWorldPos();
 	transformBase_.SetParent(nullptr);
@@ -151,13 +151,13 @@ void Player::OnCollisionExit()
 	isJumpEnable_ = false;
 }
 
-void Player::TranslateReset()
+void Enemy::TranslateReset()
 {
 	transformBase_.translate_ = { 0.0f,10.0f,0.0f };
 	velocity = { 0.0f,0.0f,0.0f };
 }
 
-void Player::GetOperate()
+void Enemy::GetOperate()
 {
 	// 速さ
 	const float kSpeed = 0.3f;
@@ -197,12 +197,12 @@ void Player::GetOperate()
 
 }
 
-void Player::InitializeFloatingGimmick()
+void Enemy::InitializeFloatingGimmick()
 {
 	floatingParameter_ = 0.0f;
 }
 
-void Player::UpdateFloatingGimmick()
+void Enemy::UpdateFloatingGimmick()
 {
 	// 浮遊移動のサイクル<frame>
 	// static int floatingCycle = 60;

@@ -30,14 +30,14 @@ void FollowCamera::Update() {
 
 	if (target_) {
 		// 追従対象からカメラまでのオフセット
-		Vector3 offset{ 0.0f, 4.0f, -20.0f };
+		Vector3 offset{ 0.0f, 2.0f, -30.0f };
 
 		Matrix4x4 matRotate = Matrix4x4::MakeRotateXYZMatrix(viewProjection_.rotate_);
 
 		offset = Vector3::TransformNormal(offset, matRotate);
 
 		// 座標をコピーしてオフセット分ずらす
-		viewProjection_.translate_ = target_->translate_ + offset;
+		viewProjection_.translate_ = target_->GetWorldPos() + offset;
 	}
 	// ビュー行列の更新
 	//viewProjection_.UpdateMatrix();

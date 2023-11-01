@@ -9,7 +9,7 @@ public:
 
 	void Update();
 
-	void SetTarget(const WorldTransform* target) { target_ = target; }
+	void SetTarget(WorldTransform* target) { target_ = target; }
 
 	ViewProjection* GetViewProjection() { return &viewProjection_; }
 
@@ -17,5 +17,5 @@ private:
 	// カメラ
 	ViewProjection viewProjection_;
 	// 追従対象
-	const WorldTransform* target_ = nullptr;
+	WorldTransform* target_ = nullptr;
 };

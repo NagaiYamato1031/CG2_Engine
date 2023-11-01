@@ -74,12 +74,48 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	player_->Initialize(playerModels);
 
 	player_->SetViewProjection(vp);
-	followCamera_->SetTarget(&player_->GetWorldTransform());
+	followCamera_->SetTarget(player_->GetWorldTransform());
 
-	Model* md2 = Model::CreateOBJ("resources", "plane.obj");
 
-	WorldTransform planeWT;
-	planeWT.Initialize();
+	std::unique_ptr<Model> modelFloor0;
+	modelFloor0.reset(Model::CreateOBJ("resources/plane", "plane.obj"));
+	std::unique_ptr<Floor> floor0;
+	floor0.reset(new Floor);
+	floor0->Initialize(modelFloor0.get(), false);
+	floor0->start_ = { 0.0f,0.0f,0.0f };
+	floor0->end_ = { 0.0f,0.0f,0.0f };
+	floor0->isMove_ = false;
+
+	std::unique_ptr<Model> modelFloor1;
+	modelFloor1.reset(Model::CreateOBJ("resources/plane", "plane.obj"));
+	std::unique_ptr<Floor> floor1;
+	floor1.reset(new Floor);
+	floor1->Initialize(modelFloor1.get(), false);
+	floor1->start_ = { 13.0f,0.0f,24.0f };
+	floor1->end_ = { 4.0f,0.0f,57.0f };
+	floor1->isMove_ = true;
+
+	std::unique_ptr<Model> modelFloor2;
+	modelFloor2.reset(Model::CreateOBJ("resources/plane", "plane.obj"));
+	std::unique_ptr<Floor> floor2;
+	floor2.reset(new Floor);
+	floor2->Initialize(modelFloor2.get(), false);
+	floor2->start_ = { -20.0f,0.0f,60.0f };
+	floor2->end_ = { 0.0f,0.0f,0.0f };
+	floor2->isMove_ = false;
+
+
+	// 床をまとめる
+	std::vector<Floor*> floors_;
+	floors_.push_back(floor0.get());
+	floors_.push_back(floor1.get());
+	floors_.push_back(floor2.get());
+	std::vector<AABB*> aabbs_;
+
+	for (Floor*& floor : floors_) {
+		floor->SetViewProjection(vp);
+		aabbs_.push_back(&floor->aabb);
+	}
 
 	/*------------------//
 	//	ゲームで使う変数	//
@@ -101,14 +137,6 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		//----------*/
 
 
-		ImGui::Begin("Plane");
-
-		ImGui::DragFloat3("scale", &planeWT.scale_.x, 0.01f);
-		ImGui::DragFloat3("rotate", &planeWT.rotate_.x, 0.01f);
-		ImGui::DragFloat3("translate", &planeWT.translate_.x, 0.01f);
-
-		ImGui::End();
-
 
 		/*----------//
 		//	ImGui	//
@@ -116,13 +144,17 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 		skydome_->Update();
 
-		player_->Update();
+		for (Floor* floor : floors_) {
+			floor->Update();
+		}
+
+		player_->Update(aabbs_);
 
 
 		followCamera_->Update();
 
 
-
+		// 当たり判定
 
 
 		/*------------------//
@@ -145,9 +177,12 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 		skydome_->Draw(vp);
 
+		for (Floor* floor : floors_) {
+			floor->Draw();
+		}
+
 		player_->Draw();
 
-		md2->Draw(&planeWT, vp);
 
 		/*--------------//
 		//	モデル描画	//
@@ -167,6 +202,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 		dxCommon_->PostDraw();
 	}
+	aabbs_.clear();
+	floors_.clear();
 
 	imguiManager_->Finalize();
 

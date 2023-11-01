@@ -10,7 +10,7 @@
 #include "../Model/Model.h"
 #include "../ImGui/ImGuiManager.h"
 
-class IObject 
+class IObject
 {
 protected:
 
@@ -35,7 +35,7 @@ public:
 
 	void SetParent(WorldTransform* parent) { transformBase_.SetParent(parent); }
 
-	const WorldTransform& GetWorldTransform() const { return transformBase_; }
+	WorldTransform* GetWorldTransform() { return &transformBase_; }
 
 	Vector3 GetWorldPosition() const;
 

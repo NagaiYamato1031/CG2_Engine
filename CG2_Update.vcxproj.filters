@@ -65,9 +65,6 @@
     <Filter Include="Engine\Object\3D\Enemy">
       <UniqueIdentifier>{e29731cb-7025-45e1-87da-566868488f2f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Object\3D\Plane">
-      <UniqueIdentifier>{ae38bb94-d5dc-4cda-9916-e29721f363ea}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Shape">
       <UniqueIdentifier>{65b5b352-ecb3-417f-943a-8c17baf8e107}</UniqueIdentifier>
     </Filter>
@@ -76,6 +73,9 @@
     </Filter>
     <Filter Include="Engine\Object\3D\Skydome">
       <UniqueIdentifier>{07149d7d-e728-4b0d-bfa6-7e7334235088}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Object\3D\Floor">
+      <UniqueIdentifier>{ae38bb94-d5dc-4cda-9916-e29721f363ea}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +165,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Object\3D\Skydome\Skydome.cpp">
       <Filter>Engine\Object\3D\Skydome</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Object\3D\Floor\Floor.cpp">
+      <Filter>Engine\Object\3D\Floor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Object\3D\Enemy\Enemy.cpp">
+      <Filter>Engine\Object\3D\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -266,6 +272,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Object\3D\3dObjectList.h">
       <Filter>Engine\Object\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Object\3D\Floor\Floor.h">
+      <Filter>Engine\Object\3D\Floor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Object\3D\Enemy\Enemy.h">
+      <Filter>Engine\Object\3D\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

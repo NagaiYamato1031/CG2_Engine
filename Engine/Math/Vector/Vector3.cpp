@@ -10,7 +10,7 @@ Vector3 Vector3::operator+(const Vector3& obj) const {
 	return result;
 }
 Vector3 Vector3::operator-(const Vector3& obj) {
-	Vector3 result = { this->x - obj.x,this->y - obj.y, this->z + obj.z };
+	Vector3 result = { this->x - obj.x,this->y - obj.y, this->z - obj.z };
 	return result;
 }
 Vector3 Vector3::operator*(float scalar) {
