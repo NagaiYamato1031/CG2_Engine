@@ -58,15 +58,19 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	std::unique_ptr<Model> modelPlayerHead_;
 	std::unique_ptr<Model> modelPlayerL_arm_;
 	std::unique_ptr<Model> modelPlayerR_arm_;
+	std::unique_ptr<Model> modelGoal_;
 
 	modelPlayerBody_.reset(Model::CreateOBJ("resources/player", "player_Body.obj"));
 	modelPlayerHead_.reset(Model::CreateOBJ("resources/player", "player_Head.obj"));
 	modelPlayerL_arm_.reset(Model::CreateOBJ("resources/player", "player_L_arm.obj"));
 	modelPlayerR_arm_.reset(Model::CreateOBJ("resources/player", "player_R_arm.obj"));
 
+	modelGoal_.reset(Model::CreateOBJ("resources/player", "goal.obj"));
+
 	std::vector<Model*> playerModels = {
 		modelPlayerBody_.get(),modelPlayerHead_.get(),
-		modelPlayerL_arm_.get(),modelPlayerR_arm_.get()
+		modelPlayerL_arm_.get(),modelPlayerR_arm_.get(),
+		modelGoal_.get()
 	};
 
 	std::unique_ptr<Player> player_;
@@ -75,6 +79,22 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	player_->SetViewProjection(vp);
 	followCamera_->SetTarget(player_->GetWorldTransform());
+	
+	std::unique_ptr<Model> modelEnemyBody_;
+	std::unique_ptr<Model> modelEnemyHead_;
+
+	modelEnemyBody_.reset(Model::CreateOBJ("resources/enemy", "enemy_Body.obj"));
+	modelEnemyHead_.reset(Model::CreateOBJ("resources/enemy", "enemy_Head.obj"));
+
+	std::vector<Model*> enemyModels = {
+		modelEnemyBody_.get(),modelEnemyHead_.get(),
+	};
+
+	std::unique_ptr<Enemy> enemy_;
+	enemy_.reset(new Enemy);
+	enemy_->Initialize(enemyModels);
+
+	enemy_->SetViewProjection(vp);
 
 
 	std::unique_ptr<Model> modelFloor0;
@@ -112,10 +132,13 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	floors_.push_back(floor2.get());
 	std::vector<AABB*> aabbs_;
 
+	aabbs_.push_back(enemy_->GetAABB());
+
 	for (Floor*& floor : floors_) {
 		floor->SetViewProjection(vp);
 		aabbs_.push_back(&floor->aabb);
 	}
+
 
 	/*------------------//
 	//	ゲームで使う変数	//
@@ -148,8 +171,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 			floor->Update();
 		}
 
+		enemy_->Update();
 		player_->Update(aabbs_);
-
 
 		followCamera_->Update();
 
@@ -181,6 +204,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 			floor->Draw();
 		}
 
+		enemy_->Draw();
 		player_->Draw();
 
 

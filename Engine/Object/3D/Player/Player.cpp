@@ -15,6 +15,10 @@ void Player::Initialize(const std::vector<Model*>& models)
 	colliderAABB_.transform_.SetParent(&transformBase_);
 	colliderAABB_.min_ = { -0.5f,0.0f,-0.5f };
 	colliderAABB_.max_ = { 0.5f,0.7f,0.5f };
+	goalAABB_.transform_.Initialize();
+	goalAABB_.transform_.translate_ = { -20.0f,4.0f,60.0f };
+	goalAABB_.min_ = { -0.5f,-0.7f,-0.5f };
+	goalAABB_.max_ = { 0.5f,0.7f,0.5f };
 	velocity = { 0.0f,0.0f,0.0f, };
 	isJumpEnable_ = true;
 	isCollision_ = false;
@@ -30,7 +34,7 @@ void Player::Update()
 	UpdateTransform();
 }
 
-void Player::Update(std::vector<AABB*>& floors)
+void Player::Update(std::vector<AABB*>& aabbs_)
 {
 	DebugGUI();
 
@@ -42,8 +46,14 @@ void Player::Update(std::vector<AABB*>& floors)
 
 
 	// 当たり判定
+	if (colliderAABB_.IsCollision(aabbs_[0])) {
+		TranslateReset();
+	}
+	if (colliderAABB_.IsCollision(&goalAABB_)) {
+		TranslateReset();
+	}
 	preCollisionAABB_ = collisionAABB_;
-	collisionAABB_ = colliderAABB_.IsCollision(floors.data(), floors.size());
+	collisionAABB_ = colliderAABB_.IsCollision(aabbs_.data(), aabbs_.size());
 	if (collisionAABB_) {
 		if (!preCollisionAABB_) {
 			OnCollisionEnter();
@@ -67,7 +77,11 @@ void Player::Update(std::vector<AABB*>& floors)
 
 void Player::Draw()
 {
-	DrawAllModel();
+	for (size_t i = 0; i < transforms_.size(); i++)
+	{
+		models_[i]->Draw(&transforms_[i], viewProjection_);
+	}
+	models_.back()->Draw(&goalAABB_.transform_, viewProjection_);
 }
 
 void Player::DebugGUI()
@@ -153,7 +167,7 @@ void Player::OnCollisionExit()
 
 void Player::TranslateReset()
 {
-	transformBase_.translate_ = { 0.0f,10.0f,0.0f };
+	transformBase_.translate_ = { 0.0f,5.0f,0.0f };
 	velocity = { 0.0f,0.0f,0.0f };
 }
 
@@ -175,6 +189,14 @@ void Player::GetOperate()
 	if (input_->PushKey(DIK_A)) {
 		move.x = -kSpeed;
 	}
+
+	XINPUT_STATE joyState;
+	if (input_->GetJoystickState(0, joyState)) {
+		move.x = static_cast<float>(joyState.Gamepad.sThumbLX) / SHRT_MAX * kSpeed;
+		move.z = static_cast<float>(joyState.Gamepad.sThumbLY) / SHRT_MAX * kSpeed;
+	}
+
+
 	if (move.x != 0.0f || move.z != 0.0f) {
 		// 回転方向に合わせる
 		Matrix4x4 matRotate = Matrix4x4::MakeRotateYMatrix(viewProjection_->rotate_.y);
@@ -186,6 +208,11 @@ void Player::GetOperate()
 	// 移動
 	velocity = move;
 
+	if (isJumpEnable_ && joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
+		velocity.y = 0.7f;
+		isJumpEnable_ = false;
+		isCollision_ = false;
+	}
 	if (isJumpEnable_ && input_->TriggerKey(DIK_SPACE)) {
 		velocity.y = 0.7f;
 		isJumpEnable_ = false;

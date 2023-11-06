@@ -39,6 +39,7 @@ private:
 	float floatingAmplitude_ = 0.1f;
 
 	AABB colliderAABB_;
+	AABB goalAABB_;
 
 	AABB* collisionAABB_ = nullptr;
 	AABB* preCollisionAABB_ = nullptr;
