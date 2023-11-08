@@ -41,103 +41,22 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	//	ゲームで使う変数	//
 	//------------------*/
 
-	std::unique_ptr<FollowCamera> followCamera_;
-	followCamera_.reset(new FollowCamera);
-	followCamera_->Initialize();
+	ViewProjection* vp = new ViewProjection();
+	vp->Initialize();
 
-	ViewProjection* vp = followCamera_->GetViewProjection();
+	std::unique_ptr<Model> modelFence_;
+	modelFence_.reset(Model::CreateOBJ("resources/fence", "fence.obj"));
 
-	std::unique_ptr<Model> modelSkydome_;
-	modelSkydome_.reset(Model::CreateOBJ("resources/skydome", "skydome.obj"));
-
-	std::unique_ptr<Skydome> skydome_;
-	skydome_.reset(new Skydome());
-	skydome_->Initialize(modelSkydome_.get());
-
-	std::unique_ptr<Model> modelPlayerBody_;
-	std::unique_ptr<Model> modelPlayerHead_;
-	std::unique_ptr<Model> modelPlayerL_arm_;
-	std::unique_ptr<Model> modelPlayerR_arm_;
-	std::unique_ptr<Model> modelGoal_;
-
-	modelPlayerBody_.reset(Model::CreateOBJ("resources/player", "player_Body.obj"));
-	modelPlayerHead_.reset(Model::CreateOBJ("resources/player", "player_Head.obj"));
-	modelPlayerL_arm_.reset(Model::CreateOBJ("resources/player", "player_L_arm.obj"));
-	modelPlayerR_arm_.reset(Model::CreateOBJ("resources/player", "player_R_arm.obj"));
-
-	modelGoal_.reset(Model::CreateOBJ("resources/player", "goal.obj"));
-
-	std::vector<Model*> playerModels = {
-		modelPlayerBody_.get(),modelPlayerHead_.get(),
-		modelPlayerL_arm_.get(),modelPlayerR_arm_.get(),
-		modelGoal_.get()
-	};
-
-	std::unique_ptr<Player> player_;
-	player_.reset(new Player);
-	player_->Initialize(playerModels);
-
-	player_->SetViewProjection(vp);
-	followCamera_->SetTarget(player_->GetWorldTransform());
-	
-	std::unique_ptr<Model> modelEnemyBody_;
-	std::unique_ptr<Model> modelEnemyHead_;
-
-	modelEnemyBody_.reset(Model::CreateOBJ("resources/enemy", "enemy_Body.obj"));
-	modelEnemyHead_.reset(Model::CreateOBJ("resources/enemy", "enemy_Head.obj"));
-
-	std::vector<Model*> enemyModels = {
-		modelEnemyBody_.get(),modelEnemyHead_.get(),
-	};
-
-	std::unique_ptr<Enemy> enemy_;
-	enemy_.reset(new Enemy);
-	enemy_->Initialize(enemyModels);
-
-	enemy_->SetViewProjection(vp);
+	WorldTransform wt;
+	wt.Initialize();
+	wt.rotate_.y = 3.14f;
 
 
-	std::unique_ptr<Model> modelFloor0;
-	modelFloor0.reset(Model::CreateOBJ("resources/plane", "plane.obj"));
-	std::unique_ptr<Floor> floor0;
-	floor0.reset(new Floor);
-	floor0->Initialize(modelFloor0.get(), false);
-	floor0->start_ = { 0.0f,0.0f,0.0f };
-	floor0->end_ = { 0.0f,0.0f,0.0f };
-	floor0->isMove_ = false;
+	std::unique_ptr<Model> modelPlane_;
+	modelPlane_.reset(Model::CreateOBJ("resources/plane", "plane.obj"));
 
-	std::unique_ptr<Model> modelFloor1;
-	modelFloor1.reset(Model::CreateOBJ("resources/plane", "plane.obj"));
-	std::unique_ptr<Floor> floor1;
-	floor1.reset(new Floor);
-	floor1->Initialize(modelFloor1.get(), false);
-	floor1->start_ = { 13.0f,0.0f,24.0f };
-	floor1->end_ = { 4.0f,0.0f,57.0f };
-	floor1->isMove_ = true;
-
-	std::unique_ptr<Model> modelFloor2;
-	modelFloor2.reset(Model::CreateOBJ("resources/plane", "plane.obj"));
-	std::unique_ptr<Floor> floor2;
-	floor2.reset(new Floor);
-	floor2->Initialize(modelFloor2.get(), false);
-	floor2->start_ = { -20.0f,0.0f,60.0f };
-	floor2->end_ = { 0.0f,0.0f,0.0f };
-	floor2->isMove_ = false;
-
-
-	// 床をまとめる
-	std::vector<Floor*> floors_;
-	floors_.push_back(floor0.get());
-	floors_.push_back(floor1.get());
-	floors_.push_back(floor2.get());
-	std::vector<AABB*> aabbs_;
-
-	aabbs_.push_back(enemy_->GetAABB());
-
-	for (Floor*& floor : floors_) {
-		floor->SetViewProjection(vp);
-		aabbs_.push_back(&floor->aabb);
-	}
+	WorldTransform wt2;
+	wt2.Initialize();
 
 
 	/*------------------//
@@ -149,7 +68,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	{
 		imguiManager_->Begin();
 
-		input_->Update();
+		//input_->Update();
 
 		/*////////////////////
 		//	ゲーム内の処理		//
@@ -159,25 +78,27 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		//	ImGui	//
 		//----------*/
 
+		ImGui::Begin("DebugCamera");
 
+		ImGui::DragFloat3("rotate1", &vp->rotate_.x, 0.01f);
+		ImGui::DragFloat3("translate1", &vp->translate_.x, 0.05f);
+
+		ImGui::Separator();
+
+		ImGui::DragFloat3("rotate2", &wt.rotate_.x, 0.01f);
+		ImGui::DragFloat3("translate2", &wt.translate_.x, 0.05f);
+
+		ImGui::Separator();
+
+		ImGui::DragFloat3("rotate3", &wt2.rotate_.x, 0.01f);
+		ImGui::DragFloat3("translate3", &wt2.translate_.x, 0.05f);
+
+		ImGui::End();
 
 		/*----------//
 		//	ImGui	//
 		////////////*/
 
-		skydome_->Update();
-
-		for (Floor* floor : floors_) {
-			floor->Update();
-		}
-
-		enemy_->Update();
-		player_->Update(aabbs_);
-
-		followCamera_->Update();
-
-
-		// 当たり判定
 
 
 		/*------------------//
@@ -198,15 +119,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		//	モデル描画	//
 		//--------------*/
 
-		skydome_->Draw(vp);
-
-		for (Floor* floor : floors_) {
-			floor->Draw();
-		}
-
-		enemy_->Draw();
-		player_->Draw();
-
+		modelFence_->Draw(&wt, vp);
+		modelPlane_->Draw(&wt2, vp);
 
 		/*--------------//
 		//	モデル描画	//
@@ -226,8 +140,6 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 		dxCommon_->PostDraw();
 	}
-	aabbs_.clear();
-	floors_.clear();
 
 	imguiManager_->Finalize();
 
