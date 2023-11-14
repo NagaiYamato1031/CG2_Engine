@@ -81,12 +81,18 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		modelPlayerWeapon_.get(),modelGoal_.get()
 	};
 
+	std::unique_ptr<Weapon> weapon_;
+	weapon_.reset(new Weapon);
+
 	std::unique_ptr<Player> player_;
 	player_.reset(new Player);
 	player_->Initialize(playerModels);
 
 	player_->SetViewProjection(vp);
 	followCamera_->SetTarget(player_->GetWorldTransform());
+
+	player_->SetWeapon(weapon_.get());
+	weapon_->SetViewProjection(vp);
 
 	std::unique_ptr<Model> modelEnemyBody_;
 	std::unique_ptr<Model> modelEnemyHead_;
@@ -104,6 +110,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	enemy_->SetViewProjection(vp);
 
+	player_->SetEnemy(enemy_.get());
 
 	std::unique_ptr<Model> modelFloor0;
 	modelFloor0.reset(Model::CreateOBJ("resources/plane", "plane.obj"));
@@ -112,7 +119,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	floor0->Initialize(modelFloor0.get(), false);
 	floor0->start_ = { 0.0f,0.0f,0.0f };
 	floor0->end_ = { 0.0f,0.0f,0.0f };
-	floor0->SetScale({ 50.0f,1.0f,50.0f });
+	floor0->SetScale({ 25.0f,1.0f,25.0f });
 	floor0->isMove_ = false;
 
 	std::unique_ptr<Model> modelFloor1;
@@ -191,14 +198,19 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 		enemy_->Update();
 		player_->Update(aabbs_);
+		weapon_->Update();
 
 		followCamera_->Update();
 
 
 		// 当たり判定
+		if (enemy_->GetIsActive()) {
+			collisionManager_->AddObject(enemy_.get());
+		}
+		if (weapon_->GetIsActive()) {
+			collisionManager_->AddObject(weapon_.get());
+		}
 		collisionManager_->AddObject(player_.get());
-		collisionManager_->AddObject(enemy_.get());
-
 
 		collisionManager_->CheckCollisionAll();
 
@@ -228,7 +240,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 		enemy_->Draw();
 		player_->Draw();
-
+		weapon_->Draw();
 
 		/*--------------//
 		//	モデル描画	//

@@ -86,6 +86,9 @@
     <Filter Include="Engine\Math\Ease">
       <UniqueIdentifier>{1e2e22b0-2dd5-46ab-82f4-0ddf122f8d23}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Object\3D\Weapon">
+      <UniqueIdentifier>{3db788e2-3a3e-4d1f-889e-53bc93bfb3c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -190,6 +193,9 @@
     <ClCompile Include="Engine\Collider\Collider.cpp" />
     <ClCompile Include="Engine\Math\Ease\Ease.cpp">
       <Filter>Engine\Math\Ease</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Object\3D\Weapon\Weapon.cpp">
+      <Filter>Engine\Object\3D\Weapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -309,6 +315,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Math\Ease\Ease.h">
       <Filter>Engine\Math\Ease</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Object\3D\Weapon\Weapon.h">
+      <Filter>Engine\Object\3D\Weapon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

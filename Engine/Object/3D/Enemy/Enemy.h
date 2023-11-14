@@ -43,7 +43,11 @@ public:
 	void Draw() override;
 
 	void DebugGUI() override;
-	
+
+	void OnCollisionEnter() override;
+	void OnCollision() override;
+	void OnCollisionExit() override;
+
 public:
 
 	AABB* GetAABB(){ return &colliderAABB_; }

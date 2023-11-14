@@ -19,6 +19,8 @@ public:
 
 	void DebugGUI();
 
+	void CameraReset();
+
 private:
 	// カメラ
 	ViewProjection viewProjection_;

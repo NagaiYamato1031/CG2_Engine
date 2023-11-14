@@ -14,6 +14,7 @@ void Enemy::Initialize(const std::vector<Model*>& models)
 	colliderAABB_.min_ = { -0.5f,0.0f,-0.5f };
 	colliderAABB_.max_ = { 0.5f,0.7f,0.5f };
 	velocity = { 0.1f,0.0f,0.0f, };
+	isActive_ = true;
 }
 
 void Enemy::Update()
@@ -27,7 +28,8 @@ void Enemy::Update()
 
 void Enemy::Draw()
 {
-	DrawAllModel();
+	if (isActive_)
+		DrawAllModel();
 }
 
 void Enemy::DebugGUI()
@@ -44,6 +46,19 @@ void Enemy::DebugGUI()
 
 #endif // _DEBUG
 
+}
+
+void Enemy::OnCollisionEnter()
+{
+}
+
+void Enemy::OnCollision()
+{
+	isActive_ = false;
+}
+
+void Enemy::OnCollisionExit()
+{
 }
 
 void Enemy::InitializeWorldTransforms()

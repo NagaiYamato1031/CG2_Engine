@@ -12,9 +12,9 @@ public:
 
 	virtual ~Collider() = default;
 
-	virtual void OnCollisionEnter();
+	virtual void OnCollisionEnter() {}
 	virtual void OnCollision() {}
-	virtual void OnCollisionExit();
+	virtual void OnCollisionExit() {}
 
 	virtual Vector3 GetCenterPosition() = 0;
 

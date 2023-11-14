@@ -6,11 +6,14 @@
 #include "../../../Input/Input.h"
 #include "../../../Shape/AABB.h"
 
+#include "../Weapon/Weapon.h"
+#include "../Enemy/Enemy.h"
+
 class Player final : public BaseCharacter
 {
-/// <summary>
-/// サブクラス
-/// </summary>
+	/// <summary>
+	/// サブクラス
+	/// </summary>
 private:
 
 	enum PartsIndex {
@@ -18,8 +21,6 @@ private:
 		kPlayerHead,
 		kPlayerL_arm,
 		kPlayerR_arm,
-
-		kPlayerWeapon,
 
 		kPlayerCount,
 	};
@@ -54,9 +55,9 @@ private:
 	};
 
 
-/// <summary>
-/// プライベートメンバ変数
-/// </summary>
+	/// <summary>
+	/// プライベートメンバ変数
+	/// </summary>
 private:
 
 	// キーボード入力
@@ -97,10 +98,12 @@ private:
 	// アタック変数
 	WorkAttack workAttack_;
 
+	Weapon* weapon_ = nullptr;
+	Enemy* enemy_ = nullptr;
 
-/// <summary>
-/// オーバーライド
-/// </summary>
+	/// <summary>
+	/// オーバーライド
+	/// </summary>
 public:
 
 	void Initialize(const std::vector<Model*>& models) override;
@@ -114,22 +117,25 @@ public:
 	void StorageConfig() override;
 
 	void DebugGUI() override;
-	
+
 	Vector3 GetCenterPosition() override;
 
 	void OnCollisionEnter() override;
 	void OnCollision() override;
 	void OnCollisionExit() override;
 
-/// <summary>
-/// プライベートメンバ関数
-/// </summary>
+	void SetWeapon(Weapon* weapon);
+	void SetEnemy(Enemy* enemy);
+
+	/// <summary>
+	/// プライベートメンバ関数
+	/// </summary>
 private:
 
 	void InitializeWorldTransforms();
 
 
-	void TranslateReset();
+	void Reset();
 
 	// 入力検知
 	void GetOperate();

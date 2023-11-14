@@ -18,6 +18,8 @@ class IObject
 {
 protected:
 
+	bool isActive_ = true;
+
 	WorldTransform transformBase_;
 	std::vector<WorldTransform> transforms_;
 
@@ -56,4 +58,6 @@ public:
 	void SetRotate(const Vector3& rotate) { transformBase_.rotate_ = rotate; }
 	void SetTranslate(const Vector3& translate) { transformBase_.translate_ = translate; }
 
+	bool GetIsActive() const { return isActive_; }
+	void SetIsActive(bool flag) { isActive_ = flag; }
 };

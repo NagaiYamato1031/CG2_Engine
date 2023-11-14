@@ -2,7 +2,7 @@
 
 #include <numbers>
 #include <cmath>
-
+#include "../../../Collider/CollisionManager.h"
 
 void Player::Initialize(const std::vector<Model*>& models)
 {
@@ -27,7 +27,7 @@ void Player::Initialize(const std::vector<Model*>& models)
 	// 当たり判定
 	SetRadius(1.0f);
 
-	workAttack_.collider_ = new Collider();
+	weapon_ = nullptr;
 
 	// 振る舞いテーブル
 	pFunc_[kROOT] = &Player::Root;
@@ -83,7 +83,7 @@ void Player::Update(std::vector<AABB*>& aabbs_)
 		TranslateReset();
 	}*/
 	if (colliderAABB_.IsCollision(&goalAABB_)) {
-		TranslateReset();
+		Reset();
 	}
 	preCollisionAABB_ = collisionAABB_;
 	collisionAABB_ = colliderAABB_.IsCollision(aabbs_.data(), aabbs_.size());
@@ -104,7 +104,7 @@ void Player::Update(std::vector<AABB*>& aabbs_)
 	}
 	// 落ちた時
 	if (transformBase_.translate_.y < -20.0f) {
-		TranslateReset();
+		Reset();
 	}
 
 	UpdateTransform();
@@ -115,9 +115,6 @@ void Player::Draw()
 {
 	for (size_t i = 0; i < transforms_.size(); i++)
 	{
-		if (i == transforms_.size() - 1 && behavior_ != kATTACK) {
-			continue;
-		}
 		models_[i]->Draw(&transforms_[i], viewProjection_);
 	}
 	models_.back()->Draw(&goalAABB_.transform_, viewProjection_);
@@ -167,6 +164,9 @@ void Player::DebugGUI()
 	if (ImGui::Button("ApplyConfig")) {
 		ApplyConfig();
 	}
+	if (ImGui::Button("Reset")) {
+		Reset();
+	}
 
 	ImGui::End();
 
@@ -215,9 +215,6 @@ void Player::InitializeWorldTransforms()
 	//transforms_[kPlayerR_arm].scale_ = { 0.3f,0.3f,0.3f };
 	transforms_[kPlayerR_arm].translate_.x = 1.4f;
 	transforms_[kPlayerR_arm].translate_.y = 2.7f;
-
-	transforms_[kPlayerWeapon].Initialize();
-	transforms_[kPlayerWeapon].SetParent(&transforms_[kPlayerBody]);
 }
 
 void Player::OnCollisionEnter()
@@ -235,7 +232,7 @@ void Player::OnCollisionEnter()
 
 void Player::OnCollision()
 {
-	TranslateReset();
+	Reset();
 }
 
 void Player::OnCollisionExit()
@@ -247,12 +244,26 @@ void Player::OnCollisionExit()
 	isJumpEnable_ = false;
 }
 
-void Player::TranslateReset()
+void Player::SetWeapon(Weapon* weapon)
+{
+	weapon_ = weapon;
+	weapon_->Initialize(std::vector<Model*>({ models_[4] }), &transformBase_);
+}
+
+void Player::SetEnemy(Enemy* enemy)
+{
+	enemy_ = enemy;
+}
+
+void Player::Reset()
 {
 	transformBase_.translate_ = { 0.0f,5.0f,0.0f };
 	velocity = { 0.0f,0.0f,0.0f };
 	transformBase_.SetParent(nullptr);
 	behaviorRequest_ = kROOT;
+
+	enemy_->SetIsActive(true);
+
 }
 
 void Player::GetOperate()
@@ -260,40 +271,58 @@ void Player::GetOperate()
 	// 速さ
 	const float kSpeed = 0.3f;
 	// 移動成分
-	Vector3 move = { 0.0f, velocity.y, 0.0f };
+	Vector3 move = { 0.0f, 0.0f, 0.0f };
+	bool isMove = false;
 
 	XINPUT_STATE joyState;
 	if (input_->GetJoystickState(0, joyState)) {
+		const float deadZone = 0.7f;
+
+
 		move.x = static_cast<float>(joyState.Gamepad.sThumbLX) / SHRT_MAX * kSpeed;
 		move.z = static_cast<float>(joyState.Gamepad.sThumbLY) / SHRT_MAX * kSpeed;
+
+		if (deadZone < Vector3::Length(move)) {
+			isMove = true;
+		}
 	}
 
 	if (input_->PushKey(DIK_W)) {
+		isMove = true;
 		move.z = kSpeed;
 	}
 	if (input_->PushKey(DIK_S)) {
 		move.z = -kSpeed;
+		isMove = true;
 	}
 	if (input_->PushKey(DIK_D)) {
 		move.x = kSpeed;
+		isMove = true;
 	}
 	if (input_->PushKey(DIK_A)) {
 		move.x = -kSpeed;
+		isMove = true;
 	}
 
+	static float destinationRotateY = transformBase_.rotate_.y;
+	destinationRotateY = transformBase_.rotate_.y;
 
-
-	if (move.x != 0.0f || move.z != 0.0f) {
+	if (isMove) {
 		// 回転方向に合わせる
 		Matrix4x4 matRotate = Matrix4x4::MakeRotateYMatrix(viewProjection_->rotate_.y);
 
 		move = Vector3::TransformNormal(move, matRotate);
 		// 進行方向に向けて回転する
-		transformBase_.rotate_.y = std::atan2(move.x, move.z);
+
+		destinationRotateY = std::atan2(move.x, move.z);
 
 	}
 	// 移動
-	velocity = move;
+	velocity.x = move.x;
+	velocity.z = move.z;
+
+	transformBase_.rotate_.y = LerpShortAngle(transformBase_.rotate_.y, destinationRotateY, 0.5f);
+
 
 	if (isJumpEnable_ && joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
 		velocity.y = 0.7f;
@@ -362,8 +391,8 @@ void Player::InitDash()
 void Player::InitAttack()
 {
 	workAttack_.attackParameter_ = 0;
-	transforms_[kPlayerWeapon].rotate_.x = 1.5f;
 	velocity = { 0.0f,0.0f,0.0f };
+	weapon_->Reset();
 }
 
 void Player::Root()
@@ -393,16 +422,13 @@ void Player::Attack()
 
 	float theta = Lerp(0.0f, 1.4f, (workAttack_.attackParameter_ / (float)workAttack_.cFrameOfAttack_));
 	// 武器を振る
-	transforms_[kPlayerWeapon].rotate_.x = theta;
 	transforms_[kPlayerL_arm].rotate_.x = -3.14f + theta;
 	transforms_[kPlayerR_arm].rotate_.x = -3.14f + theta;
-
-	if (workAttack_.cFrameOfAttack_ / 3 < workAttack_.cFrameOfAttack_) {
-
-	}
+	weapon_->Update(theta);
 
 	// 戻す
 	if (workAttack_.cFrameOfAttack_ <= workAttack_.attackParameter_) {
 		behaviorRequest_ = kROOT;
+		weapon_->SetIsActive(false);
 	}
 }

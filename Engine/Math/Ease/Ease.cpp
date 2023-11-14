@@ -23,15 +23,15 @@ float LerpShortAngle(float a, float b, float t)
 	float diff = b - a;
 	float pi = static_cast<float>(std::numbers::pi);
 
-	diff = std::fmodf(diff, pi * 2.0f);
+	diff = std::fmod(diff, pi * 2.0f);
 
-	if (diff < -pi) {
+	if (diff <= -pi) {
 		diff += 2 * pi;
 	}
-	else if (pi < diff) {
+	else if (pi <= diff) {
 		diff -= 2 * pi;
 	}
 
-	return Lerp(a, diff, t);
+	return a + diff * t;
 
 }
