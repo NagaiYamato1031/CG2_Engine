@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../../IObject.h"
+#include "../BaseCharacter.h"
 #include "../../../Input/Input.h"
 #include "../../../Shape/AABB.h"
 
-class Enemy final : public IObject
+class Enemy final : public BaseCharacter
 {
 /// <summary>
 /// サブクラス

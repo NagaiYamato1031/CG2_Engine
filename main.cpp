@@ -4,9 +4,9 @@
 #include "Engine/ImGui/ImGuiManager.h"
 #include "Engine/Resource/Texture/TextureManager.h"
 #include "Engine/Model/Model.h"
-
+#include "Engine/Collider/CollisionManager.h"
 #include "Engine/Object/ViewProjection.h"
-
+#include "Engine/Configs/GlobalConfigs.h"
 #include "Engine/Object/3D/3dObjectList.h"
 
 // Windowsアプリでのエントリーポイント(main関数)
@@ -17,7 +17,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	Input* input_ = nullptr;
 	ImGuiManager* imguiManager_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
-
+	GlobalConfigs* configs_ = nullptr;
 
 
 	winApp_ = WinApp::GetInstance();
@@ -36,6 +36,12 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	textureManager_->Initialize(dxCommon_);
 
 	Model::StaticInitialize(dxCommon_);
+
+	std::unique_ptr<CollisionManager> collisionManager_;
+	collisionManager_.reset(new CollisionManager);
+
+	configs_ = GlobalConfigs::GetInstance();
+	configs_->LoadFiles();
 
 	/*////////////////////
 	//	ゲームで使う変数	//
@@ -58,19 +64,21 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	std::unique_ptr<Model> modelPlayerHead_;
 	std::unique_ptr<Model> modelPlayerL_arm_;
 	std::unique_ptr<Model> modelPlayerR_arm_;
+	std::unique_ptr<Model> modelPlayerWeapon_;
 	std::unique_ptr<Model> modelGoal_;
 
 	modelPlayerBody_.reset(Model::CreateOBJ("resources/player", "player_Body.obj"));
 	modelPlayerHead_.reset(Model::CreateOBJ("resources/player", "player_Head.obj"));
 	modelPlayerL_arm_.reset(Model::CreateOBJ("resources/player", "player_L_arm.obj"));
 	modelPlayerR_arm_.reset(Model::CreateOBJ("resources/player", "player_R_arm.obj"));
+	modelPlayerWeapon_.reset(Model::CreateOBJ("resources/player", "player_Weapon.obj"));
 
 	modelGoal_.reset(Model::CreateOBJ("resources/player", "goal.obj"));
 
 	std::vector<Model*> playerModels = {
 		modelPlayerBody_.get(),modelPlayerHead_.get(),
 		modelPlayerL_arm_.get(),modelPlayerR_arm_.get(),
-		modelGoal_.get()
+		modelPlayerWeapon_.get(),modelGoal_.get()
 	};
 
 	std::unique_ptr<Player> player_;
@@ -79,7 +87,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	player_->SetViewProjection(vp);
 	followCamera_->SetTarget(player_->GetWorldTransform());
-	
+
 	std::unique_ptr<Model> modelEnemyBody_;
 	std::unique_ptr<Model> modelEnemyHead_;
 
@@ -104,6 +112,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	floor0->Initialize(modelFloor0.get(), false);
 	floor0->start_ = { 0.0f,0.0f,0.0f };
 	floor0->end_ = { 0.0f,0.0f,0.0f };
+	floor0->SetScale({ 50.0f,1.0f,50.0f });
 	floor0->isMove_ = false;
 
 	std::unique_ptr<Model> modelFloor1;
@@ -111,8 +120,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	std::unique_ptr<Floor> floor1;
 	floor1.reset(new Floor);
 	floor1->Initialize(modelFloor1.get(), false);
-	floor1->start_ = { 13.0f,0.0f,24.0f };
-	floor1->end_ = { 4.0f,0.0f,57.0f };
+	floor1->start_ = { 18.0f,4.0f,20.0f };
+	floor1->end_ = { 4.0f,7.0f,57.0f };
 	floor1->isMove_ = true;
 
 	std::unique_ptr<Model> modelFloor2;
@@ -120,9 +129,10 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	std::unique_ptr<Floor> floor2;
 	floor2.reset(new Floor);
 	floor2->Initialize(modelFloor2.get(), false);
-	floor2->start_ = { -20.0f,0.0f,60.0f };
+	floor2->start_ = { -20.0f,10.0f,60.0f };
 	floor2->end_ = { 0.0f,0.0f,0.0f };
 	floor2->isMove_ = false;
+
 
 
 	// 床をまとめる
@@ -132,13 +142,16 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	floors_.push_back(floor2.get());
 	std::vector<AABB*> aabbs_;
 
-	aabbs_.push_back(enemy_->GetAABB());
+	//aabbs_.push_back(enemy_->GetAABB());
 
 	for (Floor*& floor : floors_) {
 		floor->SetViewProjection(vp);
 		aabbs_.push_back(&floor->aabb);
 	}
 
+	uint32_t textureWhite_ = TextureManager::Load("white2x2.png");
+	floor1->SetTexture(textureWhite_);
+	floor2->SetTexture(textureWhite_);
 
 	/*------------------//
 	//	ゲームで使う変数	//
@@ -148,6 +161,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	while (!winApp_->ProcessMessage())
 	{
 		imguiManager_->Begin();
+
+		configs_->Update();
 
 		input_->Update();
 
@@ -165,6 +180,9 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		//	ImGui	//
 		////////////*/
 
+		collisionManager_->Reset();
+
+
 		skydome_->Update();
 
 		for (Floor* floor : floors_) {
@@ -178,7 +196,11 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 
 		// 当たり判定
+		collisionManager_->AddObject(player_.get());
+		collisionManager_->AddObject(enemy_.get());
 
+
+		collisionManager_->CheckCollisionAll();
 
 		/*------------------//
 		//	ゲーム内の処理		//

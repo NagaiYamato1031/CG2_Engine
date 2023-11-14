@@ -20,3 +20,8 @@ void BaseCharacter::Draw()
 {
 	DrawAllModel();
 }
+
+Vector3 BaseCharacter::GetCenterPosition()
+{
+	return transformBase_.GetWorldPos();
+}

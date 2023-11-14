@@ -18,6 +18,14 @@ void IObject::Draw()
 	DrawAllModel();
 }
 
+void IObject::ApplyConfig()
+{
+}
+
+void IObject::StorageConfig()
+{
+}
+
 void IObject::UpdateTransform()
 {
 	transformBase_.GetMatrix();
@@ -33,8 +41,8 @@ void IObject::DrawAllModel()
 		models_[i]->Draw(&transforms_[i], viewProjection_);
 	}
 }
-
-Vector3 IObject::GetWorldPosition() const
-{
-	return Vector3();
-}
+//
+//Vector3 IObject::GetWorldPosition() const
+//{
+//	return Vector3();
+//}

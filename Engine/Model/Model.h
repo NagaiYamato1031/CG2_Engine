@@ -81,6 +81,7 @@ public:
 	void Draw(WorldTransform* worldTransform, ViewProjection* viewProjection);
 	void Draw(uint32_t textureHandle);
 
+	void SetTexture(uint32_t texture) { modelData_.material.textureHandle_ = texture; }
 
 private:
 

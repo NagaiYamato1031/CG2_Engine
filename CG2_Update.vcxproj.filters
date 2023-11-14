@@ -77,6 +77,15 @@
     <Filter Include="Engine\Object\3D\Floor">
       <UniqueIdentifier>{ae38bb94-d5dc-4cda-9916-e29721f363ea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Collider">
+      <UniqueIdentifier>{8e067268-0995-4dec-9a72-d22af6482698}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Configs">
+      <UniqueIdentifier>{931dcfe8-460d-4d84-acaf-560d840a724c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Math\Ease">
+      <UniqueIdentifier>{1e2e22b0-2dd5-46ab-82f4-0ddf122f8d23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -171,6 +180,16 @@
     </ClCompile>
     <ClCompile Include="Engine\Object\3D\Enemy\Enemy.cpp">
       <Filter>Engine\Object\3D\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Collider\CollisionManager.cpp">
+      <Filter>Engine\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Configs\GlobalConfigs.cpp">
+      <Filter>Engine\Configs</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Collider\Collider.cpp" />
+    <ClCompile Include="Engine\Math\Ease\Ease.cpp">
+      <Filter>Engine\Math\Ease</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -278,6 +297,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Object\3D\Enemy\Enemy.h">
       <Filter>Engine\Object\3D\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider\Collider.h">
+      <Filter>Engine\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider\CollisionManager.h">
+      <Filter>Engine\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Configs\GlobalConfigs.h">
+      <Filter>Engine\Configs</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Ease\Ease.h">
+      <Filter>Engine\Math\Ease</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

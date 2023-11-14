@@ -1,0 +1,6 @@
+{
+    "Player": {
+        "DashPower": 3.0,
+        "FrameOfDash": 6
+    }
+}

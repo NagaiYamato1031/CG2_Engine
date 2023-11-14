@@ -248,8 +248,11 @@ Matrix4x4 Matrix4x4::MakeIdentity4x4() {
 }
 
 Matrix4x4 Matrix4x4::MakeTranslateMatrix(const Vector3& translate) {
-	Matrix4x4 translateMatrix_ = { 1, 0, 0, 0, 0,           1,           0,           0,
-								  0, 0, 1, 0, translate.x, translate.y, translate.z, 1 };
+	Matrix4x4 translateMatrix_ = 
+	{ 1, 0, 0, 0,
+	  0, 1, 0, 0,
+	  0, 0, 1, 0,
+	translate.x, translate.y, translate.z, 1 };
 	return translateMatrix_;
 }
 
