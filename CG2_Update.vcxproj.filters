@@ -89,6 +89,12 @@
     <Filter Include="Engine\Object\3D\Weapon">
       <UniqueIdentifier>{3db788e2-3a3e-4d1f-889e-53bc93bfb3c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\GameClass">
+      <UniqueIdentifier>{0774d7a7-ee0a-4c97-bf68-f712e3d9b135}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Adapter">
+      <UniqueIdentifier>{dc2844c3-fb62-4d2b-8eaf-78acb66a7895}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -196,6 +202,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Object\3D\Weapon\Weapon.cpp">
       <Filter>Engine\Object\3D\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GameClass\MyGame.cpp">
+      <Filter>Engine\GameClass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -318,6 +327,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Object\3D\Weapon\Weapon.h">
       <Filter>Engine\Object\3D\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GameClass\MyGame.h">
+      <Filter>Engine\GameClass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Adapter\Adapter.h">
+      <Filter>Engine\Adapter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
