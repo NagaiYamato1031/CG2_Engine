@@ -105,6 +105,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
     <ClCompile Include="Engine\Collider\Collider.cpp" />
     <ClCompile Include="Engine\Collider\CollisionManager.cpp" />
     <ClCompile Include="Engine\Configs\GlobalConfigs.cpp" />
+    <ClCompile Include="Engine\GameClass\Framework.cpp" />
     <ClCompile Include="Engine\GameClass\MyGame.cpp" />
     <ClCompile Include="Engine\ImGui\ImGuiManager.cpp" />
     <ClCompile Include="Engine\Input\Input.cpp" />
@@ -145,6 +146,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
     <ClInclude Include="Engine\Collider\Collider.h" />
     <ClInclude Include="Engine\Collider\CollisionManager.h" />
     <ClInclude Include="Engine\Configs\GlobalConfigs.h" />
+    <ClInclude Include="Engine\GameClass\Framework.h" />
     <ClInclude Include="Engine\GameClass\MyGame.h" />
     <ClInclude Include="Engine\ImGui\ImGuiManager.h" />
     <ClInclude Include="Engine\Input\Input.h" />

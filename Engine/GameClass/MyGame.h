@@ -1,34 +1,20 @@
 #pragma once
 
-#include "../Adapter/Adapter.h"
+#include "Framework.h"
 
-class MyGame
+class MyGame : public Framework
 {
-private:
-
-	WinApp* winApp_ = nullptr;
-	DirectXCommon* dxCommon_ = nullptr;
-	Input* input_ = nullptr;
-	ImGuiManager* imguiManager_ = nullptr;
-	TextureManager* textureManager_ = nullptr;
-
-	std::unique_ptr<CollisionManager> collisionManager_;
-
-	GlobalConfigs* configs_ = nullptr;
-
-	bool endRequest_ = false;
-
 public:
 
-	void Initialize();
+	~MyGame() override;
 
-	void Finalize();
+	void Initialize() override;
 
-	void Update();
+	void Finalize() override;
 
-	void Draw();
+	void Update() override;
 
-	bool IsEndRequest() { return endRequest_; }
+	void Draw() override;
 
 private:
 	std::unique_ptr<FollowCamera> followCamera_;

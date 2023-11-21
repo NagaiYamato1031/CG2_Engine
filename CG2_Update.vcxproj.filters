@@ -206,6 +206,9 @@
     <ClCompile Include="Engine\GameClass\MyGame.cpp">
       <Filter>Engine\GameClass</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\GameClass\Framework.cpp">
+      <Filter>Engine\GameClass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -333,6 +336,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Adapter\Adapter.h">
       <Filter>Engine\Adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GameClass\Framework.h">
+      <Filter>Engine\GameClass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

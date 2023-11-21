@@ -3,22 +3,11 @@
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 {
-	MyGame* mygame_ = new MyGame();
+	Framework* mygame_ = new MyGame();
+	
+	mygame_->Run();
 
-	mygame_->Initialize();
-
-	while (true)
-	{
-		mygame_->Update();
-
-		if (mygame_->IsEndRequest()) {
-			break;
-		}
-
-		mygame_->Draw();
-	}
-
-	mygame_->Finalize();
+	delete mygame_;
 
 	return 0;
 

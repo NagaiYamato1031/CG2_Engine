@@ -1,29 +1,12 @@
 #include "MyGame.h"
 
+MyGame::~MyGame()
+{
+}
+
 void MyGame::Initialize()
 {
-	winApp_ = WinApp::GetInstance();
-	winApp_->Initialize("Engine", 1280, 720);
-
-	dxCommon_ = DirectXCommon::GetInstance();
-	dxCommon_->Initialize(winApp_);
-
-	input_ = Input::GetInstance();
-	input_->Initialize(winApp_);
-
-	imguiManager_ = ImGuiManager::GetInstance();
-	imguiManager_->Initialize(winApp_, dxCommon_);
-
-	textureManager_ = TextureManager::GetInstance();
-	textureManager_->Initialize(dxCommon_);
-
-	Model::StaticInitialize(dxCommon_);
-
-	collisionManager_.reset(new CollisionManager);
-
-	configs_ = GlobalConfigs::GetInstance();
-	configs_->LoadFiles();
-
+	Framework::Initialize();
 
 	/*////////////////////
 	//	ゲームで使う変数	//
@@ -128,27 +111,11 @@ void MyGame::Initialize()
 
 void MyGame::Finalize()
 {
-	imguiManager_->Finalize();
-
-	winApp_->Finalize();
+	Framework::Finalize();
 }
 
 void MyGame::Update()
 {
-	if (winApp_->ProcessMessage()) {
-		endRequest_ = true;
-		return;
-	}
-
-
-	imguiManager_->Begin();
-
-	configs_->Update();
-
-	input_->Update();
-	collisionManager_->Reset();
-
-
 	/*////////////////////
 	//	ゲーム内の処理		//
 	//------------------*/
@@ -189,11 +156,6 @@ void MyGame::Update()
 	/*------------------//
 	//	ゲーム内の処理		//
 	////////////////////*/
-	 
-
-	collisionManager_->CheckCollisionAll();
-
-	imguiManager_->End();
 }
 
 void MyGame::Draw()
