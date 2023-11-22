@@ -17,5 +17,4 @@ public:
 	void Draw() override;
 
 private:
-	ViewProjection* vp = nullptr;
 };
