@@ -52,7 +52,7 @@ void Floor::DebugGUI()
 
 }
 
-void Floor::SetTexture(uint32_t texture)
+void Floor::SetTextureHandle(uint32_t texture)
 {
-	models_[0]->SetTexture(texture);
+	models_[0]->SetTextureHandle(texture);
 }

@@ -6,6 +6,7 @@
 #include "../ImGui/ImGuiManager.h"
 #include "../Resource/Texture/TextureManager.h"
 #include "../Model/Model.h"
+#include "../Particle/Particle.h"
 #include "..//Collider/CollisionManager.h"
 #include "../Object/ViewProjection.h"
 #include "../Configs/GlobalConfigs.h"

@@ -29,6 +29,6 @@ public:
 
 	void DebugGUI() override;
 
-	void SetTexture(uint32_t texture);
+	void SetTextureHandle(uint32_t texture);
 
 };

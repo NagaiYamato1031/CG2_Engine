@@ -12,10 +12,16 @@ void MyGame::Initialize()
 	//	ゲームで使う変数	//
 	//------------------*/
 
-
 	vp = new ViewProjection;
 	vp->Initialize();
 
+	particle_.reset(Particle::CreateOBJ("resources", "uvChecker.png", 10));
+
+	for (size_t i = 0; i < kNumIndex_; i++)
+	{
+		wt[i].Initialize();
+		wt[i].translate_ = { i * 0.1f,i * 0.1f,i * 0.1f };
+	}
 
 	/*------------------//
 	//	ゲームで使う変数	//
@@ -78,6 +84,20 @@ void MyGame::Draw()
 	////////////////*/
 
 	Model::PostDraw();
+
+	Particle::PreDraw();
+
+	/*////////////////////
+	//	パーティクル描画	//
+	//------------------*/
+
+	particle_->Draw(wt, vp);
+
+	/*------------------//
+	//	パーティクル描画	//
+	////////////////////*/
+
+	Particle::PostDraw();
 
 	imguiManager_->Draw();
 

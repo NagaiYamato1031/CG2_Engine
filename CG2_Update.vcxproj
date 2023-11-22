@@ -126,6 +126,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
     <ClCompile Include="Engine\Object\IObject.cpp" />
     <ClCompile Include="Engine\Object\ViewProjection.cpp" />
     <ClCompile Include="Engine\Object\WorldTransform.cpp" />
+    <ClCompile Include="Engine\Particle\Particle.cpp" />
+    <ClCompile Include="Engine\Particle\ParticleManager.cpp" />
     <ClCompile Include="Engine\Resource\Texture\TextureManager.cpp" />
     <ClCompile Include="Engine\Utility\MyUtility.cpp" />
     <ClCompile Include="externals\imgui\imgui.cpp" />
@@ -170,6 +172,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
     <ClInclude Include="Engine\Object\IObject.h" />
     <ClInclude Include="Engine\Object\ViewProjection.h" />
     <ClInclude Include="Engine\Object\WorldTransform.h" />
+    <ClInclude Include="Engine\Particle\Particle.h" />
+    <ClInclude Include="Engine\Particle\ParticleManager.h" />
     <ClInclude Include="Engine\Resource\Texture\TextureManager.h" />
     <ClInclude Include="Engine\Shape\AABB.h" />
     <ClInclude Include="Engine\Utility\MyUtility.h" />
@@ -192,6 +196,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\Object3d.hlsli" />
+    <None Include="resources\shaders\Particle.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\Object3d.PS.hlsl">
@@ -200,6 +208,16 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
     <None Include="resources\shaders\Object3d.VS.hlsl">
       <FileType>Document</FileType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="resources\shaders\Particle.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="resources\shaders\Particle.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

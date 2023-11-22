@@ -95,6 +95,12 @@
     <Filter Include="Engine\Adapter">
       <UniqueIdentifier>{dc2844c3-fb62-4d2b-8eaf-78acb66a7895}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Resource\Shader\Particle">
+      <UniqueIdentifier>{3cba919a-24f0-4f02-99d1-cddc89ca990d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Particle">
+      <UniqueIdentifier>{e9a7394d-50af-4e23-ad1e-771f59e4272a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -196,7 +202,6 @@
     <ClCompile Include="Engine\Configs\GlobalConfigs.cpp">
       <Filter>Engine\Configs</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Collider\Collider.cpp" />
     <ClCompile Include="Engine\Math\Ease\Ease.cpp">
       <Filter>Engine\Math\Ease</Filter>
     </ClCompile>
@@ -208,6 +213,15 @@
     </ClCompile>
     <ClCompile Include="Engine\GameClass\Framework.cpp">
       <Filter>Engine\GameClass</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Collider\Collider.cpp">
+      <Filter>Engine\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Particle\Particle.cpp">
+      <Filter>Engine\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Particle\ParticleManager.cpp">
+      <Filter>Engine\Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -340,6 +354,12 @@
     <ClInclude Include="Engine\GameClass\Framework.h">
       <Filter>Engine\GameClass</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Particle\Particle.h">
+      <Filter>Engine\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Particle\ParticleManager.h">
+      <Filter>Engine\Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">
@@ -356,5 +376,16 @@
     <None Include="resources\shaders\Object3d.PS.hlsl">
       <Filter>Engine\Resource\Shader\Object3d</Filter>
     </None>
+    <None Include="resources\shaders\Particle.hlsli">
+      <Filter>Engine\Resource\Shader\Particle</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="resources\shaders\Particle.PS.hlsl">
+      <Filter>Engine\Resource\Shader\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="resources\shaders\Particle.VS.hlsl">
+      <Filter>Engine\Resource\Shader\Particle</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

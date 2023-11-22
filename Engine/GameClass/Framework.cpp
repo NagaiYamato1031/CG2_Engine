@@ -1,5 +1,7 @@
 #include "Framework.h"
 
+#include "../Utility/MyUtility.h"
+
 void Framework::Run()
 {
 	Initialize();
@@ -32,12 +34,14 @@ void Framework::Initialize()
 	textureManager_->Initialize(dxCommon_);
 
 	Model::StaticInitialize(dxCommon_);
+	Particle::StaticInitialize(dxCommon_);
 
 	collisionManager_.reset(new CollisionManager);
 
 	configs_ = GlobalConfigs::GetInstance();
 	configs_->LoadFiles();
 
+	MyUtility::Log("\nStartup MyEngine.\n\n");
 }
 
 void Framework::Finalize()

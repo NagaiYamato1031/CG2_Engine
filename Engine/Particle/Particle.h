@@ -14,7 +14,7 @@ class DirectXCommon;
 class PSO;
 
 
-class Model
+class Particle
 {
 public:
 
@@ -47,7 +47,7 @@ public:
 
 	static void StaticInitialize(DirectXCommon* dxCommon);
 
-	static Model* CreateOBJ(const std::string& directoryPath, const std::string& fileName);
+	static Particle* CreateOBJ(const std::string& directoryPath, const std::string& fileName ,uint32_t numInstancing);
 
 	static void PreDraw();
 
@@ -109,6 +109,8 @@ private:
 	TransformaionMatrix* transformData_ = nullptr;
 
 	ModelData modelData_;
+
+	uint32_t numInstancing_ = 10;
 
 };
 
