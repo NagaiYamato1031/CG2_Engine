@@ -54,6 +54,16 @@ private:
 		Collider* collider_;
 	};
 
+	struct ConstAttack
+	{
+		uint32_t anticipationTime_;
+		uint32_t chargeTime_;
+		uint32_t swingTIme_;
+		uint32_t recoveryTime_;
+		float anticipationSpeed;
+		float chargeSpeed;
+		float swingSpeed;
+	};
 
 	/// <summary>
 	/// プライベートメンバ変数

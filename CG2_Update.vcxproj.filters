@@ -196,7 +196,6 @@
     <ClCompile Include="Engine\Configs\GlobalConfigs.cpp">
       <Filter>Engine\Configs</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Collider\Collider.cpp" />
     <ClCompile Include="Engine\Math\Ease\Ease.cpp">
       <Filter>Engine\Math\Ease</Filter>
     </ClCompile>
@@ -208,6 +207,9 @@
     </ClCompile>
     <ClCompile Include="Engine\GameClass\Framework.cpp">
       <Filter>Engine\GameClass</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Collider\Collider.cpp">
+      <Filter>Engine\Collider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
