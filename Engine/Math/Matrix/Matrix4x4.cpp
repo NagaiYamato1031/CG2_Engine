@@ -42,6 +42,16 @@ Matrix4x4 Matrix4x4::operator*(float scalar) const {
 	return result;
 }
 
+Matrix4x4 operator*(float scalar, const Matrix4x4& obj) {
+	Matrix4x4 result;
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			result.m[i][j] = obj.m[i][j] * scalar;
+		}
+	}
+	return result;
+}
+
 const Matrix4x4& Matrix4x4::operator+=(const Matrix4x4& obj) {
 	*this = *this + obj;
 	return *this;
@@ -248,7 +258,7 @@ Matrix4x4 Matrix4x4::MakeIdentity4x4() {
 }
 
 Matrix4x4 Matrix4x4::MakeTranslateMatrix(const Vector3& translate) {
-	Matrix4x4 translateMatrix_ = 
+	Matrix4x4 translateMatrix_ =
 	{ 1, 0, 0, 0,
 	  0, 1, 0, 0,
 	  0, 0, 1, 0,
@@ -315,8 +325,41 @@ Matrix4x4 Matrix4x4::MakeRotateXYZMatrix(const Vector3& radian) {
 	return Multiply(Multiply(rotX_, rotY_), rotZ_);
 }
 
-Matrix4x4
-Matrix4x4::MakeAffineMatrix(const Vector3& scale, const Vector3& rot, const Vector3& translate) {
+Matrix4x4 Matrix4x4::MakeRotateAxisMatrix(const Vector3& axis, float angle) {
+	Matrix4x4 result = MakeIdentity4x4();
+
+	float cosTheta = std::cosf(angle);
+	Matrix3x3 matS = { cosTheta,0,0,0,cosTheta,0,0,0,cosTheta };
+
+	Matrix3x3 matP = {
+		axis.x * axis.x,axis.x * axis.y,axis.x * axis.z,
+		axis.x * axis.y,axis.y * axis.y,axis.y * axis.z,
+		axis.x * axis.z,axis.y * axis.z,axis.z * axis.z
+	};
+	matP = (1 - cosTheta) * matP;
+
+	Matrix3x3 matC = {
+		0,-axis.z,axis.y,
+		axis.z,0,-axis.x,
+		-axis.y,axis.x,0
+	};
+	matC = -std::sinf(angle) * matC;
+
+	Matrix3x3 matR = matS + matP + matC;
+
+	for (size_t i = 0; i < 3; i++)
+	{
+		for (size_t j = 0; j < 3; j++)
+		{
+
+			result.m[i][j] = matR.m[i][j];
+		}
+	}
+
+	return result;
+}
+
+Matrix4x4 Matrix4x4::MakeAffineMatrix(const Vector3& scale, const Vector3& rot, const Vector3& translate) {
 
 	Matrix4x4 scaleMatrix_ = MakeScaleMatrix(scale);
 

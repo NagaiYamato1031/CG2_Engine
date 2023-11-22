@@ -13,8 +13,6 @@ void MyGame::Initialize()
 	//------------------*/
 
 
-	vp = new ViewProjection;
-	vp->Initialize();
 
 
 	/*------------------//
@@ -35,19 +33,23 @@ void MyGame::Update()
 	//	ゲーム内の処理		//
 	//------------------*/
 
+	// 任意軸回転
+	Vector3 axis = Vector3::Normalize({ 1.0f,1.0f,1.0f });
+	float angle = 0.44f;
+	Matrix4x4 rotateMatrix = Matrix4x4::MakeRotateAxisMatrix(axis,angle);
+
+
 	/*////////////
 	//	ImGui	//
 	//----------*/
 
 	ImGui::Begin("DebugConsole");
 
-	if (ImGui::TreeNode("Camera")) {
-		ImGui::DragFloat3("rotate", &vp->rotate_.x, 0.002f);
-		ImGui::DragFloat3("translate", &vp->translate_.x, 0.01f);
-
-		ImGui::TreePop();
-	}
-
+	ImGui::Text("rotateMatrix");
+	ImGui::Text("%.3f\t%.3f\t%.3f\t%.3f", rotateMatrix.m[0][0], rotateMatrix.m[0][1], rotateMatrix.m[0][2], rotateMatrix.m[0][3]);
+	ImGui::Text("%.3f\t%.3f\t%.3f\t%.3f", rotateMatrix.m[1][0], rotateMatrix.m[1][1], rotateMatrix.m[1][2], rotateMatrix.m[1][3]);
+	ImGui::Text("%.3f\t%.3f\t%.3f\t%.3f", rotateMatrix.m[2][0], rotateMatrix.m[2][1], rotateMatrix.m[2][2], rotateMatrix.m[2][3]);
+	ImGui::Text("%.3f\t%.3f\t%.3f\t%.3f", rotateMatrix.m[3][0], rotateMatrix.m[3][1], rotateMatrix.m[3][2], rotateMatrix.m[3][3]);
 
 	ImGui::End();
 

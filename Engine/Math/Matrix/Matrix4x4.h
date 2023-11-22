@@ -18,6 +18,7 @@ public:	///	演算子オーバーロード
 	Matrix4x4 operator-(const Matrix4x4& obj) const;
 	Matrix4x4 operator*(const Matrix4x4& obj) const;
 	Matrix4x4 operator*(float scalar) const;
+	friend Matrix4x4 operator*(float scalar, const Matrix4x4& obj);
 
 	const Matrix4x4& operator+=(const Matrix4x4& obj);
 	const Matrix4x4& operator-=(const Matrix4x4& obj);
@@ -108,6 +109,14 @@ public:	///	演算子オーバーロード
 	/// <param name="radian">XYZ の回転角</param>
 	/// <returns>回転行列</returns>
 	static Matrix4x4 MakeRotateXYZMatrix(const Vector3& radian);
+
+	/// <summary>
+	/// 任意軸回転行列
+	/// </summary>
+	/// <param name="axis">軸</param>
+	/// <param name="angle">回転角</param>
+	/// <returns>任意軸回転行列</returns>
+	static Matrix4x4 MakeRotateAxisMatrix(const Vector3& axis, float angle);
 
 	/// <summary>
 	/// 4x4 アフィン行列
