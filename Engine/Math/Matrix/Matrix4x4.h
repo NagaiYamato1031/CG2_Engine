@@ -118,6 +118,16 @@ public:	///	演算子オーバーロード
 	/// <returns>任意軸回転行列</returns>
 	static Matrix4x4 MakeRotateAxisMatrix(const Vector3& axis, float angle);
 
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="from"></param>
+	/// <param name="to"></param>
+	/// <returns></returns>
+	static Matrix4x4 DirectionToDirection(const Vector3& from, const Vector3& to);
+
+
 	/// <summary>
 	/// 4x4 アフィン行列
 	/// </summary>
