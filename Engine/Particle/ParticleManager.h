@@ -5,12 +5,13 @@
 #include <wrl.h>
 #include <d3d12.h>
 #include "Particle.h"
+#include "../Base/PSO/PSO.h"
 
 class ParticleManager final
 {
 public:
 
-	static const size_t kDescriptorSize = 256;
+	static const size_t kParticleCategorySize = 16;
 
 public:
 
@@ -32,18 +33,28 @@ public:
 
 private:
 
+	void CreatePSO();
+	
+	void CreateRootSignature();
+	
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC CreatePipelineStateDesc();
+
+	D3D12_BLEND_DESC CreateBlendDesc();
+
+	D3D12_RASTERIZER_DESC CreateRasterizerDesc();
+
+	D3D12_DEPTH_STENCIL_DESC CreateDepthStencilDesc();
 
 private:
 
-	std::array<Particle*, kDescriptorSize> textures_;
+	std::array<Particle*, kParticleCategorySize> textures_;
 
-	uint32_t cIncrementSize_ = 0u;
-
-	uint32_t indexNextDescriptorHeap_ = 0u;
+	uint32_t indexNextParticleCategory_ = 0u;
 
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
 
 	DirectXCommon* dxCommon_ = nullptr;
 
+	std::unique_ptr<PSO> pso_;
 
 };
