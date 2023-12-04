@@ -16,7 +16,20 @@
 /// </summary>
 class IObject
 {
+public:
+
+	enum class ObjectGroup
+	{
+		NONE,		// 初期値
+		PLAYER,		// 操作するもの
+		ENEMY,		// 敵
+		OTHER,		// その他
+
+		MAX,		// 使用不可
+	};
+
 protected:
+	std::string name_ = "";
 
 	bool isActive_ = true;
 
@@ -31,7 +44,7 @@ protected:
 
 public:
 
-	virtual void Initialize(const std::vector<Model*>& models);
+	virtual void Initialize(const std::vector<Model*>& models, std::string name);
 	virtual void Update();
 	virtual void Draw();
 	virtual void DebugGUI() = 0;

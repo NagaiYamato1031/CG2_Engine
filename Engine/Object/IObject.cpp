@@ -1,11 +1,13 @@
 #include "IObject.h"
 
 
-void IObject::Initialize(const std::vector<Model*>& models)
+void IObject::Initialize(const std::vector<Model*>& models, std::string name)
 {
 	models_ = models;
 	transformBase_.Initialize();
 	transforms_.clear();
+
+
 }
 
 void IObject::Update()
@@ -29,7 +31,8 @@ void IObject::StorageConfig()
 void IObject::UpdateTransform()
 {
 	transformBase_.GetMatrix();
-	for (WorldTransform& wt : transforms_) {
+	for (WorldTransform& wt : transforms_)
+	{
 		wt.GetMatrix();
 	}
 }

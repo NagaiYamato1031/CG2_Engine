@@ -124,6 +124,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
     <ClCompile Include="Engine\Object\3D\Skydome\Skydome.cpp" />
     <ClCompile Include="Engine\Object\3D\Weapon\Weapon.cpp" />
     <ClCompile Include="Engine\Object\IObject.cpp" />
+    <ClCompile Include="Engine\Object\ObjectManager.cpp" />
     <ClCompile Include="Engine\Object\ViewProjection.cpp" />
     <ClCompile Include="Engine\Object\WorldTransform.cpp" />
     <ClCompile Include="Engine\Resource\Texture\TextureManager.cpp" />
@@ -168,6 +169,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
     <ClInclude Include="Engine\Object\3D\Skydome\Skydome.h" />
     <ClInclude Include="Engine\Object\3D\Weapon\Weapon.h" />
     <ClInclude Include="Engine\Object\IObject.h" />
+    <ClInclude Include="Engine\Object\ObjectManager.h" />
     <ClInclude Include="Engine\Object\ViewProjection.h" />
     <ClInclude Include="Engine\Object\WorldTransform.h" />
     <ClInclude Include="Engine\Resource\Texture\TextureManager.h" />

@@ -211,6 +211,9 @@
     <ClCompile Include="Engine\Collider\Collider.cpp">
       <Filter>Engine\Collider</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Object\ObjectManager.cpp">
+      <Filter>Engine\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -341,6 +344,9 @@
     </ClInclude>
     <ClInclude Include="Engine\GameClass\Framework.h">
       <Filter>Engine\GameClass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Object\ObjectManager.h">
+      <Filter>Engine\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
