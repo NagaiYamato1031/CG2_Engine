@@ -178,9 +178,6 @@
     <ClCompile Include="Engine\Object\3D\BaseCharacter.cpp">
       <Filter>Engine\Object\3D</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Object\3D\FollowCamera\Camera.cpp">
-      <Filter>Engine\Object\3D\Camera</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Object\3D\Skydome\Skydome.cpp">
       <Filter>Engine\Object\3D\Skydome</Filter>
     </ClCompile>
@@ -213,6 +210,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Object\ObjectManager.cpp">
       <Filter>Engine\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Object\3D\Camera\Camera.cpp">
+      <Filter>Engine\Object\3D\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -306,9 +306,6 @@
     <ClInclude Include="Engine\Object\3D\BaseCharacter.h">
       <Filter>Engine\Object\3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Object\3D\FollowCamera\Camera.h">
-      <Filter>Engine\Object\3D\Camera</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Object\3D\Skydome\Skydome.h">
       <Filter>Engine\Object\3D\Skydome</Filter>
     </ClInclude>
@@ -347,6 +344,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Object\ObjectManager.h">
       <Filter>Engine\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Object\3D\Camera\Camera.h">
+      <Filter>Engine\Object\3D\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
