@@ -17,9 +17,15 @@ void Enemy::Initialize(const std::vector<Model*>& models)
 	isActive_ = true;
 }
 
+void Enemy::Reset()
+{
+	isActive_ = true;
+	transformBase_.translate_ = kPopPosition;
+}
+
 void Enemy::Update()
 {
-	DebugGUI();
+	//DebugGUI();
 
 	UpdateMovement();
 

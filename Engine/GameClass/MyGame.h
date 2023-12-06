@@ -9,6 +9,7 @@ public:
 	~MyGame() override;
 
 	void Initialize() override;
+	void Reset();
 
 	void Finalize() override;
 
@@ -17,7 +18,7 @@ public:
 	void Draw() override;
 
 private:
-	std::unique_ptr<FollowCamera> followCamera_;
+	std::unique_ptr<Camera> camera_;
 
 	ViewProjection* vp = nullptr;
 	std::unique_ptr<Model> modelSkydome_;
@@ -31,9 +32,9 @@ private:
 	std::unique_ptr<Model> modelGoal_;
 	std::unique_ptr<Weapon> weapon_;
 	std::unique_ptr<Player> player_;
-	std::unique_ptr<Model> modelEnemyBody_;
-	std::unique_ptr<Model> modelEnemyHead_;
-	std::unique_ptr<Enemy> enemy_;
+	std::vector<std::unique_ptr<Model>> modelEnemyBodys_;
+	std::vector<std::unique_ptr<Model>> modelEnemyHeads_;
+	std::vector<std::unique_ptr<Enemy>> enemys_;
 	std::unique_ptr<Model> modelFloor0;
 	std::unique_ptr<Floor> floor0;
 	std::unique_ptr<Model> modelFloor1;

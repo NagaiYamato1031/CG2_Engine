@@ -1,7 +1,7 @@
 #include "IObject.h"
 
 
-void IObject::Initialize(const std::vector<Model*>& models, std::string name)
+void IObject::Initialize(const std::vector<Model*>& models)
 {
 	models_ = models;
 	transformBase_.Initialize();

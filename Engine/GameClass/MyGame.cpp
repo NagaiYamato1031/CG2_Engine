@@ -12,10 +12,10 @@ void MyGame::Initialize()
 	//	ゲームで使う変数	//
 	//------------------*/
 
-	followCamera_.reset(new FollowCamera);
-	followCamera_->Initialize();
+	camera_.reset(new Camera);
+	camera_->Initialize();
 
-	vp = followCamera_->GetViewProjection();
+	vp = camera_->GetViewProjection();
 
 	modelSkydome_.reset(Model::CreateOBJ("resources/skydome", "skydome.obj"));
 
@@ -43,24 +43,33 @@ void MyGame::Initialize()
 	player_->Initialize(playerModels);
 
 	player_->SetViewProjection(vp);
-	followCamera_->SetTarget(player_->GetWorldTransform());
+	camera_->SetTarget(player_->GetWorldTransform());
 
 	player_->SetWeapon(weapon_.get());
 	weapon_->SetViewProjection(vp);
 
-	modelEnemyBody_.reset(Model::CreateOBJ("resources/enemy", "enemy_Body.obj"));
-	modelEnemyHead_.reset(Model::CreateOBJ("resources/enemy", "enemy_Head.obj"));
+	player_->SetMyGame(this);
 
-	std::vector<Model*> enemyModels = {
-		modelEnemyBody_.get(),modelEnemyHead_.get(),
-	};
+	for (size_t i = 0; i < 5; i++)
+	{
+		enemys_.emplace_back(new Enemy);
+	}
+	for (size_t i = 0; i < 5; i++)
+	{
+		modelEnemyBodys_.emplace_back(Model::CreateOBJ("resources/enemy", "enemy_Body.obj"));
+		modelEnemyHeads_.emplace_back(Model::CreateOBJ("resources/enemy", "enemy_Head.obj"));
+	}
+	for (int i = 0; i < 5; i++)
+	{
+		std::vector<Model*> enemyModels = {
+			modelEnemyBodys_[i].get(),modelEnemyHeads_[i].get(),
+		};
 
-	enemy_.reset(new Enemy);
-	enemy_->Initialize(enemyModels);
-
-	enemy_->SetViewProjection(vp);
-
-	player_->SetEnemy(enemy_.get());
+		enemys_[i]->Initialize(enemyModels);
+		enemys_[i]->SetViewProjection(vp);
+		enemys_[i]->SetPopPosition({ 4.0f + (3 - i) * 8.0f,0.0f, 4.0f + i * 6.0f });
+		enemys_[i]->Reset();
+	}
 
 	modelFloor0.reset(Model::CreateOBJ("resources/plane", "plane.obj"));
 	floor0.reset(new Floor);
@@ -93,7 +102,8 @@ void MyGame::Initialize()
 
 	//aabbs_.push_back(enemy_->GetAABB());
 
-	for (Floor*& floor : floors_) {
+	for (Floor*& floor : floors_)
+	{
 		floor->SetViewProjection(vp);
 		aabbs_.push_back(&floor->aabb);
 	}
@@ -107,6 +117,14 @@ void MyGame::Initialize()
 	////////////////////*/
 
 
+}
+
+void MyGame::Reset()
+{
+	for (size_t i = 0; i < enemys_.size(); i++)
+	{
+		enemys_[i]->Reset();
+	}
 }
 
 void MyGame::Finalize()
@@ -133,22 +151,31 @@ void MyGame::Update()
 
 	skydome_->Update();
 
-	for (Floor* floor : floors_) {
+	for (Floor* floor : floors_)
+	{
 		floor->Update();
 	}
 
-	enemy_->Update();
+	for (size_t i = 0; i < enemys_.size(); i++)
+	{
+		enemys_[i]->Update();
+	}
+
 	player_->Update(aabbs_);
 	weapon_->Update();
 
-	followCamera_->Update();
+	camera_->Update();
 
-
-	// 当たり判定
-	if (enemy_->GetIsActive()) {
-		collisionManager_->AddObject(enemy_.get());
+	for (size_t i = 0; i < enemys_.size(); i++)
+	{
+		// 当たり判定
+		if (enemys_[i]->GetIsActive())
+		{
+			collisionManager_->AddObject(enemys_[i].get());
+		}
 	}
-	if (weapon_->GetIsActive()) {
+	if (weapon_->GetIsActive())
+	{
 		collisionManager_->AddObject(weapon_.get());
 	}
 	collisionManager_->AddObject(player_.get());
@@ -170,11 +197,15 @@ void MyGame::Draw()
 
 	skydome_->Draw(vp);
 
-	for (Floor* floor : floors_) {
+	for (Floor* floor : floors_)
+	{
 		floor->Draw();
 	}
 
-	enemy_->Draw();
+	for (size_t i = 0; i < enemys_.size(); i++)
+	{
+		enemys_[i]->Draw();
+	}
 	player_->Draw();
 	weapon_->Draw();
 

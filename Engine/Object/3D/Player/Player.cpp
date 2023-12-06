@@ -4,6 +4,8 @@
 #include <cmath>
 #include "../../../Collider/CollisionManager.h"
 
+#include "../../../GameClass/MyGame.h"
+
 void Player::Initialize(const std::vector<Model*>& models)
 {
 	models_ = models;
@@ -51,7 +53,8 @@ void Player::Update(std::vector<AABB*>& aabbs_)
 {
 	DebugGUI();
 
-	if (behaviorRequest_) {
+	if (behaviorRequest_)
+	{
 		behavior_ = behaviorRequest_.value();
 		switch (behavior_)
 		{
@@ -82,28 +85,34 @@ void Player::Update(std::vector<AABB*>& aabbs_)
 	/*if (colliderAABB_.IsCollision(aabbs_[0])) {
 		TranslateReset();
 	}*/
-	if (colliderAABB_.IsCollision(&goalAABB_)) {
+	if (colliderAABB_.IsCollision(&goalAABB_))
+	{
 		Reset();
 	}
 	preCollisionAABB_ = collisionAABB_;
 	collisionAABB_ = colliderAABB_.IsCollision(aabbs_.data(), aabbs_.size());
-	if (collisionAABB_) {
-		if (!preCollisionAABB_) {
+	if (collisionAABB_)
+	{
+		if (!preCollisionAABB_)
+		{
 			OnCollisionEnter();
 		}
 		/*else {
 			OnCollision();
 		}*/
 	}
-	else if (preCollisionAABB_) {
+	else if (preCollisionAABB_)
+	{
 		OnCollisionExit();
 	}
-	else {
+	else
+	{
 		velocity.y -= 0.05f;
 		isJumpEnable_ = false;
 	}
 	// 落ちた時
-	if (transformBase_.translate_.y < -20.0f) {
+	if (transformBase_.translate_.y < -20.0f)
+	{
 		Reset();
 	}
 
@@ -161,10 +170,12 @@ void Player::DebugGUI()
 
 	ImGui::Separator();
 
-	if (ImGui::Button("ApplyConfig")) {
+	if (ImGui::Button("ApplyConfig"))
+	{
 		ApplyConfig();
 	}
-	if (ImGui::Button("Reset")) {
+	if (ImGui::Button("Reset"))
+	{
 		Reset();
 	}
 
@@ -184,7 +195,8 @@ Vector3 Player::GetCenterPosition()
 
 void Player::InitializeWorldTransforms()
 {
-	for (size_t i = 0; i < kPlayerCount; i++) {
+	for (size_t i = 0; i < kPlayerCount; i++)
+	{
 		WorldTransform wt = WorldTransform();
 		transforms_.push_back(wt);
 	}
@@ -222,7 +234,8 @@ void Player::OnCollisionEnter()
 	Vector3 temp = transformBase_.GetWorldPos() - collisionAABB_->transform_.GetWorldPos();
 	transformBase_.translate_ = temp;
 	transformBase_.SetParent(&collisionAABB_->transform_, 0b001);
-	if (velocity.y < 0) {
+	if (velocity.y < 0)
+	{
 		velocity.y = 0.0f;
 		transformBase_.translate_.y = 0.0f;
 	}
@@ -250,11 +263,6 @@ void Player::SetWeapon(Weapon* weapon)
 	weapon_->Initialize(std::vector<Model*>({ models_[4] }), &transformBase_);
 }
 
-void Player::SetEnemy(Enemy* enemy)
-{
-	enemy_ = enemy;
-}
-
 void Player::Reset()
 {
 	transformBase_.translate_ = { 0.0f,5.0f,0.0f };
@@ -262,8 +270,8 @@ void Player::Reset()
 	transformBase_.SetParent(nullptr);
 	behaviorRequest_ = kROOT;
 
-	enemy_->SetIsActive(true);
-
+	weapon_->SetIsActive(false);
+	myGame_->Reset();
 }
 
 void Player::GetOperate()
@@ -275,39 +283,56 @@ void Player::GetOperate()
 	bool isMove = false;
 
 	XINPUT_STATE joyState;
-	if (input_->GetJoystickState(0, joyState)) {
+	if (input_->GetJoystickState(0, joyState))
+	{
 		const float deadZone = 0.7f;
 
 
 		move.x = static_cast<float>(joyState.Gamepad.sThumbLX) / SHRT_MAX * kSpeed;
 		move.z = static_cast<float>(joyState.Gamepad.sThumbLY) / SHRT_MAX * kSpeed;
 
-		if (deadZone < Vector3::Length(move)) {
+		if (deadZone < Vector3::Length(move))
+		{
 			isMove = true;
 		}
+
+		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_B)
+		{
+			behaviorRequest_ = kATTACK;
+		}
+		if (joyState.Gamepad.wButtons & XINPUT_GAMEPAD_X)
+		{
+			behaviorRequest_ = kDASH;
+		}
+
 	}
 
-	if (input_->PushKey(DIK_W)) {
+	if (input_->PushKey(DIK_W))
+	{
 		isMove = true;
 		move.z = kSpeed;
 	}
-	if (input_->PushKey(DIK_S)) {
+	if (input_->PushKey(DIK_S))
+	{
 		move.z = -kSpeed;
 		isMove = true;
 	}
-	if (input_->PushKey(DIK_D)) {
+	if (input_->PushKey(DIK_D))
+	{
 		move.x = kSpeed;
 		isMove = true;
 	}
-	if (input_->PushKey(DIK_A)) {
+	if (input_->PushKey(DIK_A))
+	{
 		move.x = -kSpeed;
 		isMove = true;
 	}
 
-	static float destinationRotateY = transformBase_.rotate_.y;
+	static float destinationRotateY;
 	destinationRotateY = transformBase_.rotate_.y;
 
-	if (isMove) {
+	if (isMove)
+	{
 		// 回転方向に合わせる
 		Matrix4x4 matRotate = Matrix4x4::MakeRotateYMatrix(viewProjection_->rotate_.y);
 
@@ -324,21 +349,25 @@ void Player::GetOperate()
 	transformBase_.rotate_.y = LerpShortAngle(transformBase_.rotate_.y, destinationRotateY, 0.5f);
 
 
-	if (isJumpEnable_ && joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
+	if (isJumpEnable_ && joyState.Gamepad.wButtons & XINPUT_GAMEPAD_A)
+	{
 		velocity.y = 0.7f;
 		isJumpEnable_ = false;
 		isCollision_ = false;
 	}
-	if (isJumpEnable_ && input_->TriggerKey(DIK_SPACE)) {
+	if (isJumpEnable_ && input_->TriggerKey(DIK_SPACE))
+	{
 		velocity.y = 0.7f;
 		isJumpEnable_ = false;
 		isCollision_ = false;
 	}
 
-	if (input_->TriggerKey(DIK_Q)) {
+	if (input_->TriggerKey(DIK_Q))
+	{
 		behaviorRequest_ = kATTACK;
 	}
-	if (input_->TriggerKey(DIK_E)) {
+	if (input_->TriggerKey(DIK_E))
+	{
 		behaviorRequest_ = kDASH;
 	}
 
@@ -410,7 +439,8 @@ void Player::Dash()
 	velocity = workDash_.velocity_;
 
 	// ルートに戻る
-	if (workDash_.cFrameOfDash_ <= workDash_.dashParameter_) {
+	if (workDash_.cFrameOfDash_ <= workDash_.dashParameter_)
+	{
 		behaviorRequest_ = kROOT;
 	}
 }
@@ -427,7 +457,8 @@ void Player::Attack()
 	weapon_->Update(theta);
 
 	// 戻す
-	if (workAttack_.cFrameOfAttack_ <= workAttack_.attackParameter_) {
+	if (workAttack_.cFrameOfAttack_ <= workAttack_.attackParameter_)
+	{
 		behaviorRequest_ = kROOT;
 		weapon_->SetIsActive(false);
 	}

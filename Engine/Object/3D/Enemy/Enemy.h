@@ -6,12 +6,13 @@
 
 class Enemy final : public BaseCharacter
 {
-/// <summary>
-/// サブクラス
-/// </summary>
+	/// <summary>
+	/// サブクラス
+	/// </summary>
 private:
 
-	enum PartsIndex {
+	enum PartsIndex
+	{
 		kEnemyBody,
 		kEnemyHead,
 
@@ -19,24 +20,25 @@ private:
 	};
 
 
-/// <summary>
-/// プライベートメンバ変数
-/// </summary>
+	/// <summary>
+	/// プライベートメンバ変数
+	/// </summary>
 private:
 
 	const Vector3 kMovementRange = { 3.0f,0.0f,0.0f };
-	const Vector3 kPopPosition = { 4.0f,0.0f,4.0f };
+	Vector3 kPopPosition = { 4.0f,0.0f,4.0f };
 
 	AABB colliderAABB_;
 
 	Vector3 velocity;
 
-/// <summary>
-/// オーバーライド
-/// </summary>
+	/// <summary>
+	/// オーバーライド
+	/// </summary>
 public:
 
 	void Initialize(const std::vector<Model*>& models) override;
+	void Reset();
 
 	void Update() override;
 
@@ -50,11 +52,12 @@ public:
 
 public:
 
-	AABB* GetAABB(){ return &colliderAABB_; }
+	AABB* GetAABB() { return &colliderAABB_; }
+	void SetPopPosition(const Vector3& pos) { kPopPosition = pos; }
 
-/// <summary>
-/// プライベートメンバ関数
-/// </summary>
+	/// <summary>
+	/// プライベートメンバ関数
+	/// </summary>
 private:
 
 	void InitializeWorldTransforms();

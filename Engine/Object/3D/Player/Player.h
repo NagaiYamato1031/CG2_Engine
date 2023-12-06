@@ -7,7 +7,8 @@
 #include "../../../Shape/AABB.h"
 
 #include "../Weapon/Weapon.h"
-#include "../Enemy/Enemy.h"
+
+class MyGame;
 
 class Player final : public BaseCharacter
 {
@@ -70,6 +71,8 @@ private:
 	/// </summary>
 private:
 
+	MyGame* myGame_ = nullptr;
+
 	// キーボード入力
 	Input* input_ = nullptr;
 
@@ -109,7 +112,6 @@ private:
 	WorkAttack workAttack_;
 
 	Weapon* weapon_ = nullptr;
-	Enemy* enemy_ = nullptr;
 
 	/// <summary>
 	/// オーバーライド
@@ -135,7 +137,8 @@ public:
 	void OnCollisionExit() override;
 
 	void SetWeapon(Weapon* weapon);
-	void SetEnemy(Enemy* enemy);
+
+	void SetMyGame(MyGame* myGame) { myGame_ = myGame; }
 
 	/// <summary>
 	/// プライベートメンバ関数

@@ -29,7 +29,6 @@ public:
 	};
 
 protected:
-	std::string name_ = "";
 
 	bool isActive_ = true;
 
@@ -44,7 +43,7 @@ protected:
 
 public:
 
-	virtual void Initialize(const std::vector<Model*>& models, std::string name);
+	virtual void Initialize(const std::vector<Model*>& models);
 	virtual void Update();
 	virtual void Draw();
 	virtual void DebugGUI() = 0;

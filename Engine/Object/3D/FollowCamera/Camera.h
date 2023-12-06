@@ -3,7 +3,8 @@
 #include "../../IObject.h"
 #include "../../../Math/Math.h"
 
-class FollowCamera {
+class Camera
+{
 public:
 	void Initialize();
 
@@ -22,14 +23,25 @@ public:
 	void CameraReset();
 
 private:
+
+	void Follow();
+	void LockOn();
+
+private:
 	// カメラ
 	ViewProjection viewProjection_;
 	// 追従対象
 	WorldTransform* target_ = nullptr;
+
+	// ターゲットカメラ
+	WorldTransform* cameraTarget_ = nullptr;
 
 	Vector3 interTarget_;
 
 	float destinationAngleY_ = 0.0f;
 
 	float cLerpRate_ = 0.3f;
+
+	// ふぉよーカメラ
+	bool isFollow_ = true;
 };
