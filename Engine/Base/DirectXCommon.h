@@ -139,7 +139,7 @@ private: // 非公開のメンバ関数
 	/// <summary>
 	/// リソースバリアの実態を作る関数
 	/// </summary>
-	D3D12_RESOURCE_BARRIER MakeResourceBarrier(ID3D12Resource*, D3D12_RESOURCE_STATES, D3D12_RESOURCE_STATES);
+	D3D12_RESOURCE_BARRIER CreateResourceBarrier(ID3D12Resource*, D3D12_RESOURCE_STATES, D3D12_RESOURCE_STATES);
 
 	/// <summary>
 	/// FPS 固定初期化

@@ -54,7 +54,7 @@ void DirectXCommon::PreDraw() {
 	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
 
 	// TransitionBarrierの設定
-	D3D12_RESOURCE_BARRIER barrier = MakeResourceBarrier(
+	D3D12_RESOURCE_BARRIER barrier = CreateResourceBarrier(
 		backBuffers_[backBufferIndex].Get(),
 		D3D12_RESOURCE_STATE_PRESENT,
 		D3D12_RESOURCE_STATE_RENDER_TARGET
@@ -105,7 +105,7 @@ void DirectXCommon::PostDraw() {
 	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
 
 	// TransitionBarrierの設定
-	D3D12_RESOURCE_BARRIER barrier = MakeResourceBarrier(
+	D3D12_RESOURCE_BARRIER barrier = CreateResourceBarrier(
 		backBuffers_[backBufferIndex].Get(),
 		D3D12_RESOURCE_STATE_RENDER_TARGET,
 		D3D12_RESOURCE_STATE_PRESENT
@@ -454,7 +454,7 @@ D3D12_CPU_DESCRIPTOR_HANDLE DirectXCommon::GetDescriptorHandleIncrementSize(cons
 	return handle;
 }
 
-D3D12_RESOURCE_BARRIER DirectXCommon::MakeResourceBarrier(ID3D12Resource* pResource, D3D12_RESOURCE_STATES stateBefore, D3D12_RESOURCE_STATES stateAfter) {
+D3D12_RESOURCE_BARRIER DirectXCommon::CreateResourceBarrier(ID3D12Resource* pResource, D3D12_RESOURCE_STATES stateBefore, D3D12_RESOURCE_STATES stateAfter) {
 
 	// TransitionBarrierの設定
 	D3D12_RESOURCE_BARRIER barrier{};

@@ -7,6 +7,11 @@
 #include "Particle.h"
 #include "../Base/PSO/PSO.h"
 
+// パーティクルをどう扱うか考える
+// ・設置するだけのものを一回作る
+// ・
+//
+
 class ParticleManager final
 {
 public:
