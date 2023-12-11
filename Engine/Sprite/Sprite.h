@@ -1,7 +1,7 @@
 #pragma once
 #include "../Base/DirectXCommon.h"
 #include "../math/Math.h"
-#include "../Base/DXC/DXC.h"
+#include "../Base/PSO/PSO.h"
 
 #include <d3d12.h>
 #include <string>
@@ -33,14 +33,13 @@ public:// 静的なメンバ関数
 	/// <summary>
 	/// 静的初期化関数
 	/// </summary>
-	/// <param name="device">DXGIデバイス</param>
-	static void StaticInitialize(ID3D12Device* device, int windowWidth, int windowHeight);
+	static void StaticInitialize(DirectXCommon* dxCommon, int windowWidth, int windowHeight);
 
 	/// <summary>
 	/// 描画前処理
 	/// </summary>
 	/// <param name="cmdList">描画コマンドリスト</param>
-	static void PreDraw(ID3D12GraphicsCommandList* cmdList);
+	static void PreDraw();
 
 	/// <summary>
 	/// 描画後処理
@@ -61,55 +60,29 @@ public:// 静的なメンバ関数
 		Vector2 anchorPoint = { 0.0f, 0.0f }
 	);
 
-	/// <summary>
-	/// DXCの初期化関数
-	/// </summary>
-	static void InitializeDXC();
+private:
 
-	/// <summary>
-	/// シェーダーのコンパイルを行う関数
-	/// </summary>
-	/// <param name="filePath">compilerするSharderファイルへのパス</param>
-	/// <param name="profile">compilerに使用するprofile</param>
-	/// <param name="dxcUtils">dxcUtils</param>
-	/// <param name="dxcCompiler">dxcCompiler</param>
-	/// <param name="includeHandler">includeHandler</param>
-	/// <returns>コンパイル済みシェーダー</returns>
-	//static IDxcBlob* CompileShader(
-	//	const std::wstring& filePath,
-	//	const wchar_t* profile);
+	static void CreatePSO();
 
-	/// <summary>
-	/// バッファリソース作成関数
-	/// </summary>
-	/// <param name="device">作成に使用するデバイス</param>
-	/// <param name="sizeInBytes">サイズ</param>
-	/// <returns></returns>
-	static Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(ID3D12Device* device, size_t sizeInBytes);
+	static D3D12_GRAPHICS_PIPELINE_STATE_DESC CreatePipelineStateDesc();
+
+	static void CreateRootSignature();
+
+	static D3D12_BLEND_DESC CreateBlendDesc();
+
+	static D3D12_RASTERIZER_DESC CreateRasterizerDesc();
+
+	static D3D12_DEPTH_STENCIL_DESC CreateDepthStencilDesc();
 
 private: // 静的なメンバ変数
 
 	// 頂点数
 	static const int kVertexNum = 4;
-	// デバイス
-	static ID3D12Device* sDevice_;
 
 	// コマンドリスト
-	static ID3D12GraphicsCommandList* sCommandList_;
-	// ルートシグネチャ
-	static Microsoft::WRL::ComPtr<ID3D12RootSignature> sRootSignature_;
-	// パイプラインステートオブジェクト
-	static Microsoft::WRL::ComPtr<ID3D12PipelineState> sPipelineStates_;
-
-	// dxcUtils
-	//static Microsoft::WRL::ComPtr<IDxcUtils> dxcUtils_;
-	// dxcコンパイラ
-	//static Microsoft::WRL::ComPtr<IDxcCompiler3> dxcCompiler_;
-	// InludeHandler
-	//static Microsoft::WRL::ComPtr<IDxcIncludeHandler> dxcIncludeHandler_;
+	static DirectXCommon* sDXCommon_;
 	
-	// DXC
-	static DXC* dxc_;
+	static std::unique_ptr<PSO> sPSO_;
 
 	// 正射影行列
 	static Matrix4x4 sMatProjection_;

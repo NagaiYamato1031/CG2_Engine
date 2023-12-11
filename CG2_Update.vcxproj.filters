@@ -98,6 +98,12 @@
     <Filter Include="Engine\Math\Quaternion">
       <UniqueIdentifier>{fcd9b4d6-5b1b-442e-8228-7b45f0d45104}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sprite">
+      <UniqueIdentifier>{880e94b2-b534-4d00-8932-c205d33db282}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Resource\Shader\Sprite">
+      <UniqueIdentifier>{b6d3a9be-f77c-4c25-b3c2-a8c27d84ac44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -214,6 +220,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Math\Quaternion\Quaternion.cpp">
       <Filter>Engine\Math\Quaternion</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Sprite\Sprite.cpp">
+      <Filter>Sprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -349,6 +358,9 @@
     <ClInclude Include="Engine\Math\Quaternion\Quaternion.h">
       <Filter>Engine\Math\Quaternion</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Sprite\Sprite.h">
+      <Filter>Sprite</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">
@@ -364,6 +376,15 @@
     </None>
     <None Include="resources\shaders\Object3d.PS.hlsl">
       <Filter>Engine\Resource\Shader\Object3d</Filter>
+    </None>
+    <None Include="resources\shaders\Sprite.hlsli">
+      <Filter>Engine\Resource\Shader\Sprite</Filter>
+    </None>
+    <None Include="resources\shaders\Sprite.VS.hlsl">
+      <Filter>Engine\Resource\Shader\Sprite</Filter>
+    </None>
+    <None Include="resources\shaders\Sprite.PS.hlsl">
+      <Filter>Engine\Resource\Shader\Sprite</Filter>
     </None>
   </ItemGroup>
 </Project>

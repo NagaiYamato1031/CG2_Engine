@@ -31,6 +31,8 @@ void Framework::Initialize()
 	textureManager_ = TextureManager::GetInstance();
 	textureManager_->Initialize(dxCommon_);
 
+	Sprite::StaticInitialize(dxCommon_, 1280, 720);
+	
 	Model::StaticInitialize(dxCommon_);
 
 	collisionManager_.reset(new CollisionManager);
