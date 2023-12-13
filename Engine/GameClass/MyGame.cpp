@@ -52,7 +52,7 @@ void MyGame::Update()
 	ImGui::Text("rotation        : %.2f,%.2f,%.2f,%.2f", rotation.x, rotation.y, rotation.z, rotation.w);
 	
 	ImGui::Text("rotateMatrix");
-	ImGui::Text("[%.3f],%.3f,%.3f,%.3f", rotateMatrix.m[0][0], rotateMatrix.m[0][1], rotateMatrix.m[0][2], rotateMatrix.m[0][3]);
+	ImGui::Text("%.3f,%.3f,%.3f,%.3f", rotateMatrix.m[0][0], rotateMatrix.m[0][1], rotateMatrix.m[0][2], rotateMatrix.m[0][3]);
 	ImGui::Text("%.3f,%.3f,%.3f,%.3f", rotateMatrix.m[1][0], rotateMatrix.m[1][1], rotateMatrix.m[1][2], rotateMatrix.m[1][3]);
 	ImGui::Text("%.3f,%.3f,%.3f,%.3f", rotateMatrix.m[2][0], rotateMatrix.m[2][1], rotateMatrix.m[2][2], rotateMatrix.m[2][3]);
 	ImGui::Text("%.3f,%.3f,%.3f,%.3f", rotateMatrix.m[3][0], rotateMatrix.m[3][1], rotateMatrix.m[3][2], rotateMatrix.m[3][3]);
