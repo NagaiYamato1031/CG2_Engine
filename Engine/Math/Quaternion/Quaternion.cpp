@@ -3,6 +3,14 @@
 #include <cmath>
 #include "../Math.h"
 
+Quaternion::Quaternion()
+{
+	x = 0.0f;
+	y = 0.0f;
+	z = 0.0f;
+	w = 0.0f;
+}
+
 Quaternion::Quaternion(float x, float y, float z, float w) : x(x), y(y), z(z), w(w)
 {
 }
@@ -13,6 +21,11 @@ Quaternion::Quaternion(const Vector3& vector, float scalar)
 	y = vector.y;
 	z = vector.z;
 	w = scalar;
+}
+
+Quaternion Quaternion::operator*(const Quaternion& obj) const
+{
+	return Multiply(*this, obj);
 }
 
 Vector3 Quaternion::GetVector()const
@@ -69,3 +82,28 @@ Quaternion Quaternion::Inverse(const Quaternion& q)
 	norm *= norm;
 	return Quaternion(conjugation.GetVector() / norm, conjugation.GetScalar() / norm);
 }
+
+Quaternion Quaternion::MakeRotateAxisAngleQuaternion(const Vector3& axis, float angle)
+{
+	return Quaternion(axis * std::sinf(angle / 2.0f), std::cosf(angle / 2.0f));
+}
+
+Vector3 Quaternion::RotateVector(const Vector3& vector, const Quaternion& q)
+{
+	Quaternion result;
+	result = q * Quaternion(vector, 0.0f) * Normalize(Inverse(q));
+	return Vector3(result.x, result.y, result.z);
+}
+
+Matrix4x4 Quaternion::MakeRotateMatrix(const Quaternion& q)
+{
+	float x = q.x, y = q.y, z = q.z, w = q.w;
+	float xx = x * x, yy = y * y, zz = z * z, ww = w * w;
+	return {
+		ww + xx - yy - zz,2.0f * (x * y + w * z),2.0f * (x * z - w * y),0,
+		2.0f * (x * y - w * z) ,ww - xx + yy - zz,2.0f * (y * z + w * x),0,
+		2.0f * (x * z + w * y),2.0f * (y * z - w * x),ww - xx - yy + zz,0,
+		0,0,0,1
+	};
+}
+

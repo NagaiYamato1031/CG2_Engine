@@ -1,6 +1,7 @@
 #pragma once
 
 class Vector3;
+class Matrix4x4;
 
 class Quaternion final
 {
@@ -12,8 +13,11 @@ public:	///	メンバ変数
 
 public:
 
+	Quaternion();
 	Quaternion(float x, float y, float z, float w);
 	Quaternion(const Vector3& vector, float scalar);
+
+	Quaternion operator*(const Quaternion& obj)const;
 
 	/// <summary>
 	/// ベクトル部を取得
@@ -52,6 +56,24 @@ public:
 	/// 逆 Quaternion
 	/// </summary>
 	static Quaternion Inverse(const Quaternion& q);
-
-
+	/// <summary>
+	/// 任意軸回転を表す Quaternion
+	/// </summary>
+	/// <param name="axis">軸</param>
+	/// <param name="angle">角度</param>
+	/// <returns></returns>
+	static Quaternion MakeRotateAxisAngleQuaternion(const Vector3& axis, float angle);
+	/// <summary>
+	/// ベクトルを Quaternion で回転させた結果のベクトル
+	/// </summary>
+	/// <param name="vector">ベクトル</param>
+	/// <param name="q">Quaternion</param>
+	/// <returns></returns>
+	static Vector3 RotateVector(const Vector3& vector, const Quaternion& q);
+	/// <summary>
+	/// Quaternion から回転行列を得る
+	/// </summary>
+	/// <param name="q"></param>
+	/// <returns></returns>
+	static Matrix4x4 MakeRotateMatrix(const Quaternion& q);
 };
