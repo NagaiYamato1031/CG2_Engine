@@ -65,8 +65,6 @@ private:
 
 	static void CreateRootSignature();
 
-	//static D3D12_INPUT_LAYOUT_DESC CreateInputLayoutDesc();
-
 	static D3D12_BLEND_DESC CreateBlendDesc();
 
 	static D3D12_RASTERIZER_DESC CreateRasterizerDesc();
@@ -101,6 +99,9 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> transformResource_;
 
 	D3D12_VERTEX_BUFFER_VIEW vbView_;
+
+	D3D12_CPU_DESCRIPTOR_HANDLE instancingSRVHandleCPU;
+	D3D12_GPU_DESCRIPTOR_HANDLE instancingSRVHandleGPU;
 
 	//D3D12_INDEX_BUFFER_VIEW ibView_;
 

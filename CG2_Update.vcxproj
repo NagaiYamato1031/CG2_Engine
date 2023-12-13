@@ -187,6 +187,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
     <ClInclude Include="externals\imgui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Engine\memo.txt" />
     <Text Include="externals\imgui\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>

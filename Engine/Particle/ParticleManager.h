@@ -16,6 +16,9 @@ class ParticleManager final
 {
 public:
 
+	// パーティクルのトランスフォーム最大数
+	static const size_t kDescriptorSize_ = 65535;
+
 	static const size_t kParticleCategorySize = 16;
 
 public:
@@ -52,14 +55,17 @@ private:
 
 private:
 
-	std::array<Particle*, kParticleCategorySize> textures_;
-
-	uint32_t indexNextParticleCategory_ = 0u;
-
+	// SRV 用の Heap
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
 
 	DirectXCommon* dxCommon_ = nullptr;
 
 	std::unique_ptr<PSO> pso_;
+
+	std::array<Particle*, kParticleCategorySize> textures_;
+
+	uint32_t indexNextParticleCategory_ = 0u;
+
+
 
 };

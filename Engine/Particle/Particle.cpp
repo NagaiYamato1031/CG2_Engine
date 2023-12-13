@@ -209,10 +209,19 @@ void Particle::CreateRootSignature()
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameters[0].DescriptorTable.pDescriptorRanges = descriptorRange;
 	rootParameters[0].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
-	
+
+	// ここでインスタンシングの設定
+	// デスクリプタレンジ
+	D3D12_DESCRIPTOR_RANGE SBdescriptorRange[1] = {};
+	SBdescriptorRange[0].BaseShaderRegister = 0;
+	SBdescriptorRange[0].NumDescriptors = 1;
+	SBdescriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	SBdescriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
 	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
 	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	rootParameters[1].Descriptor.ShaderRegister = 0;
+	rootParameters[1].DescriptorTable.pDescriptorRanges = SBdescriptorRange;
+	rootParameters[1].DescriptorTable.NumDescriptorRanges = _countof(SBdescriptorRange);
 
 	descriptionRootSignature.pParameters = rootParameters;
 	descriptionRootSignature.NumParameters = _countof(rootParameters);
@@ -243,28 +252,6 @@ void Particle::CreateRootSignature()
 	assert(SUCCEEDED(hr));
 }
 
-
-//D3D12_INPUT_LAYOUT_DESC Model::CreateInputLayoutDesc()
-//{
-//	D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
-//	inputElementDescs[0].SemanticName = "POSITION";
-//	inputElementDescs[0].SemanticIndex = 0;
-//	inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-//	inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-//	inputElementDescs[1].SemanticName = "TEXCOORD";
-//	inputElementDescs[1].SemanticIndex = 0;
-//	inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
-//	inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-//	inputElementDescs[2].SemanticName = "NORMAL";
-//	inputElementDescs[2].SemanticIndex = 0;
-//	inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-//	inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-//	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
-//	inputLayoutDesc.pInputElementDescs = inputElementDescs;
-//	inputLayoutDesc.NumElements = _countof(inputElementDescs);
-//
-//	return inputLayoutDesc;
-//}
 
 D3D12_BLEND_DESC Particle::CreateBlendDesc()
 {
@@ -403,9 +390,9 @@ void Particle::Draw(WorldTransform* worldTransform, ViewProjection* viewProjecti
 	cmdList->IASetVertexBuffers(0, 1, &vbView_);
 	textureManager->SetGraphicsDescriptorTable(0, modelData_.material.textureHandle_);
 	// ルートパラメータ二番目
-	cmdList->SetGraphicsRootConstantBufferView(1, transformResource_->GetGPUVirtualAddress());
+	cmdList->SetGraphicsRootDescriptorTable(1, transformResource_->GetGPUVirtualAddress());
 
-	cmdList->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	cmdList->DrawInstanced(UINT(modelData_.vertices.size()), numInstancing_, 0, 0);
 }
 
 void Particle::Draw(uint32_t textureHandle)
@@ -443,4 +430,10 @@ void Particle::CreateResource()
 		transformData_[i].matWorld_ = Matrix4x4::MakeIdentity4x4();
 		transformData_[i].matWVP_ = Matrix4x4::MakeIdentity4x4();
 	}
+
+	// SRV の Heap に StructuredBuffer を作らなければいけない
+	// SRV の Heap をどこに持たせるか
+	// マネージャーに持たせる
+	// PSO や RootSigunature の設定も全部
+
 }
