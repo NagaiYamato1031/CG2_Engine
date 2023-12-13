@@ -120,7 +120,7 @@ public:	///	演算子オーバーロード
 
 
 	/// <summary>
-	/// 
+	/// 法線から法線へ向きを変える行列
 	/// </summary>
 	/// <param name="from"></param>
 	/// <param name="to"></param>
