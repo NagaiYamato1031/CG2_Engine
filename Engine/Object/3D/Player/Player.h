@@ -49,27 +49,32 @@ private:
 	struct WorkAttack
 	{
 		int32_t cFrameOfAttack_ = 40;
-
 		int32_t attackParameter_ = 0;
-
 		Collider* collider_;
+		int32_t comboIndex_ = 0;
+		int32_t inComboPhase_ = 0;
+		bool comboNext_ = false;
 	};
 
 	struct ConstAttack
 	{
-		uint32_t anticipationTime_;
-		uint32_t chargeTime_;
-		uint32_t swingTIme_;
-		uint32_t recoveryTime_;
-		float anticipationSpeed;
-		float chargeSpeed;
-		float swingSpeed;
+		int32_t anticipationTime_;
+		int32_t chargeTime_;
+		int32_t swingTime_;
+		int32_t recoveryTime_;
+		float anticipationSpeed_;
+		float chargeSpeed_;
+		float swingSpeed_;
 	};
 
 	/// <summary>
 	/// プライベートメンバ変数
 	/// </summary>
 private:
+
+	static const int kComboNum_ = 3;
+
+	static const std::array<ConstAttack, kComboNum_> kConstAttack_;
 
 	MyGame* myGame_ = nullptr;
 
@@ -168,5 +173,10 @@ private:
 	void Root();
 	void Dash();
 	void Attack();
+
+	// コンボ用の関数
+	void Combo0(const ConstAttack& constAttack);
+	void Combo1(const ConstAttack& constAttack);
+	void Combo2(const ConstAttack& constAttack);
 
 };

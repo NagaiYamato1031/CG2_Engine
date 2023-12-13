@@ -14,12 +14,14 @@ void Weapon::Initialize(const std::vector<Model*>& models, WorldTransform* wt)
 	transformBase_.SetParent(wt);
 	transforms_.clear();
 	isActive_ = false;
+	isDraw_ = false;
 }
 
 void Weapon::Reset()
 {
-	transformBase_.rotate_.x = 1.5f;
-	isActive_ = true;
+	transformBase_.rotate_ = { 0.0f,0.0f,0.0f };
+	//isActive_ = true;
+	isDraw_ = true;
 }
 
 void Weapon::Update()
@@ -27,14 +29,14 @@ void Weapon::Update()
 	DebugGUI();
 }
 
-void Weapon::Update(float theta)
+void Weapon::Update(Vector3 theta)
 {
-	transformBase_.rotate_.x = theta;
+	transformBase_.rotate_ = theta;
 }
 
 void Weapon::Draw()
 {
-	if (isActive_)
+	if (isDraw_)
 		models_[0]->Draw(&transformBase_, viewProjection_);
 }
 

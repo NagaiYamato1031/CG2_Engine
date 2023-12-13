@@ -6,6 +6,15 @@
 
 #include "../../../GameClass/MyGame.h"
 
+const std::array<Player::ConstAttack, Player::kComboNum_> Player::kConstAttack_ = {
+	{
+		// 振りかぶり、攻撃前硬直、攻撃振り時間、硬直、移動速度x3
+		{0,0,20,0,0.0f,0.0f,0.15f},
+		{15,10,15,0,2.0f,0.0f,0.0f},
+		{15,10,15,30,0.2f,0.0f,0.0f},
+	}
+};
+
 void Player::Initialize(const std::vector<Model*>& models)
 {
 	models_ = models;
@@ -179,6 +188,11 @@ void Player::DebugGUI()
 		Reset();
 	}
 
+	ImGui::Separator();
+
+	ImGui::Text("ComboIndex  :%d", workAttack_.comboIndex_);
+	ImGui::Text("inComboPhase:%d", workAttack_.inComboPhase_);
+
 	ImGui::End();
 
 #endif // _DEBUG
@@ -271,6 +285,7 @@ void Player::Reset()
 	behaviorRequest_ = kROOT;
 
 	weapon_->SetIsActive(false);
+	weapon_->SetIsDraw(false);
 	myGame_->Reset();
 }
 
@@ -420,6 +435,8 @@ void Player::InitDash()
 void Player::InitAttack()
 {
 	workAttack_.attackParameter_ = 0;
+	workAttack_.comboIndex_ = 0;
+	workAttack_.inComboPhase_ = 0;
 	velocity = { 0.0f,0.0f,0.0f };
 	weapon_->Reset();
 }
@@ -447,19 +464,219 @@ void Player::Dash()
 
 void Player::Attack()
 {
+
+	if (workAttack_.comboIndex_ < kComboNum_)
+	{
+		XINPUT_STATE state;
+		static bool sIsPress_ = false;
+		if (input_->GetJoystickState(0, state))
+		{
+			if (state.Gamepad.wButtons & XINPUT_GAMEPAD_B)
+			{
+				sIsPress_ = true;
+				workAttack_.comboNext_ = true;
+			}
+			else
+			{
+				sIsPress_ = false;
+			}
+		}
+		else if (input_->TriggerKey(DIK_Q))
+		{
+			sIsPress_ = true;
+			workAttack_.comboNext_ = true;
+		}
+		else
+		{
+			sIsPress_ = false;
+		}
+	}
+
 	// 足す
 	workAttack_.attackParameter_++;
 
-	float theta = Lerp(0.0f, 1.4f, (workAttack_.attackParameter_ / (float)workAttack_.cFrameOfAttack_));
-	// 武器を振る
-	transforms_[kPlayerL_arm].rotate_.x = -3.14f + theta;
-	transforms_[kPlayerR_arm].rotate_.x = -3.14f + theta;
-	weapon_->Update(theta);
+	const ConstAttack& constAttack = kConstAttack_[workAttack_.comboIndex_];
+	int32_t actionTime = constAttack.anticipationTime_ + constAttack.chargeTime_ + constAttack.swingTime_ + constAttack.recoveryTime_;
 
-	// 戻す
-	if (workAttack_.cFrameOfAttack_ <= workAttack_.attackParameter_)
+	if (actionTime <= workAttack_.attackParameter_)
 	{
-		behaviorRequest_ = kROOT;
-		weapon_->SetIsActive(false);
+		if (workAttack_.comboNext_)
+		{
+			workAttack_.comboNext_ = false;
+			workAttack_.comboIndex_++;
+			workAttack_.inComboPhase_ = 0;
+			velocity = { 0.0f,0.0f,0.0f };
+
+			// パーツの角度を初期化
+			weapon_->Reset();
+		}
+		else
+		{
+			behaviorRequest_ = kROOT;
+			workAttack_.comboIndex_ = 0;
+			workAttack_.inComboPhase_ = 0;
+			weapon_->SetIsActive(false);
+			weapon_->SetIsDraw(false);
+		}
+		if (workAttack_.comboIndex_ == kComboNum_)
+		{
+			behaviorRequest_ = kROOT;
+			workAttack_.comboIndex_ = 0;
+			workAttack_.inComboPhase_ = 0;
+			weapon_->SetIsActive(false);
+			weapon_->SetIsDraw(false);
+		}
+	}
+
+	// コンボ段階によってモーションを分岐
+	switch (workAttack_.comboIndex_)
+	{
+	case 0:
+		Combo0(constAttack);
+		break;
+	case 1:
+		Combo1(constAttack);
+		break;
+	case 2:
+		Combo2(constAttack);
+		break;
+	default:
+		break;
+	}
+}
+
+void Player::Combo0(const ConstAttack& cAttack)
+{
+	Vector3 theta{ 0.0f,0.0f,0.0f };
+	switch (workAttack_.inComboPhase_)
+	{
+		// 振りかぶり
+	case 0:
+		if (cAttack.anticipationTime_ <= workAttack_.attackParameter_)
+		{
+			workAttack_.inComboPhase_++;
+		}
+		break;
+		// 攻撃前硬直
+	case 1:
+		if (cAttack.anticipationTime_ + cAttack.chargeTime_ <= workAttack_.attackParameter_)
+		{
+			workAttack_.inComboPhase_++;
+			weapon_->SetIsActive(true);
+		}
+		break;
+		// 攻撃中
+	case 2:
+		theta.x = OutExpo(0.0f, 1.4f, ((float)workAttack_.attackParameter_ / (float)cAttack.swingTime_));
+		// 武器を振る
+		transforms_[kPlayerL_arm].rotate_.x = -3.14f + theta.x;
+		transforms_[kPlayerR_arm].rotate_.x = -3.14f + theta.x;
+		weapon_->Update(theta);
+
+		if (cAttack.anticipationTime_ + cAttack.chargeTime_ + cAttack.swingTime_ <= workAttack_.attackParameter_)
+		{
+			workAttack_.inComboPhase_++;
+		}
+		break;
+		// 攻撃後
+	case 3:
+		if (cAttack.anticipationTime_ + cAttack.chargeTime_ + cAttack.swingTime_ + cAttack.recoveryTime_ <= workAttack_.attackParameter_)
+		{
+			workAttack_.inComboPhase_++;
+		}
+		break;
+	default:
+		break;
+	}
+
+}
+
+void Player::Combo1(const ConstAttack& cAttack)
+{
+	Vector3 theta{ 0.0f,0.0f,0.0f };
+	switch (workAttack_.inComboPhase_)
+	{
+		// 振りかぶり
+	case 0:
+		if (cAttack.anticipationTime_ <= workAttack_.attackParameter_)
+		{
+			workAttack_.inComboPhase_++;
+		}
+		break;
+		// 攻撃前硬直
+	case 1:
+		if (cAttack.anticipationTime_ + cAttack.chargeTime_ <= workAttack_.attackParameter_)
+		{
+			workAttack_.inComboPhase_++;
+			weapon_->SetIsActive(true);
+		}
+		break;
+		// 攻撃中
+	case 2:
+		theta.x = OutExpo(0.0f, 1.4f, ((float)workAttack_.attackParameter_ / (float)cAttack.swingTime_));
+		// 武器を振る
+		transforms_[kPlayerL_arm].rotate_.x = -3.14f + theta.x;
+		transforms_[kPlayerR_arm].rotate_.x = -3.14f + theta.x;
+		weapon_->Update(theta);
+
+		if (cAttack.anticipationTime_ + cAttack.chargeTime_ + cAttack.swingTime_ <= workAttack_.attackParameter_)
+		{
+			workAttack_.inComboPhase_++;
+		}
+		break;
+		// 攻撃後
+	case 3:
+		if (cAttack.anticipationTime_ + cAttack.chargeTime_ + cAttack.swingTime_ + cAttack.recoveryTime_ <= workAttack_.attackParameter_)
+		{
+			workAttack_.inComboPhase_++;
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+void Player::Combo2(const ConstAttack& cAttack)
+{
+	Vector3 theta{ 0.0f,0.0f,0.0f };
+	switch (workAttack_.inComboPhase_)
+	{
+		// 振りかぶり
+	case 0:
+		if (cAttack.anticipationTime_ <= workAttack_.attackParameter_)
+		{
+			workAttack_.inComboPhase_++;
+		}
+		break;
+		// 攻撃前硬直
+	case 1:
+		if (cAttack.anticipationTime_ + cAttack.chargeTime_ <= workAttack_.attackParameter_)
+		{
+			workAttack_.inComboPhase_++;
+			weapon_->SetIsActive(true);
+		}
+		break;
+		// 攻撃中
+	case 2:
+		theta.x = OutExpo(0.0f, 1.4f, ((float)workAttack_.attackParameter_ / (float)cAttack.swingTime_));
+		// 武器を振る
+		transforms_[kPlayerL_arm].rotate_.x = -3.14f + theta.x;
+		transforms_[kPlayerR_arm].rotate_.x = -3.14f + theta.x;
+		weapon_->Update(theta);
+
+		if (cAttack.anticipationTime_ + cAttack.chargeTime_ + cAttack.swingTime_ <= workAttack_.attackParameter_)
+		{
+			workAttack_.inComboPhase_++;
+		}
+		break;
+		// 攻撃後
+	case 3:
+		if (cAttack.anticipationTime_ + cAttack.chargeTime_ + cAttack.swingTime_ + cAttack.recoveryTime_ <= workAttack_.attackParameter_)
+		{
+			workAttack_.inComboPhase_++;
+		}
+		break;
+	default:
+		break;
 	}
 }

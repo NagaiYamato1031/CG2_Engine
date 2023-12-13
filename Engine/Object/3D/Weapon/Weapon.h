@@ -7,6 +7,7 @@ class Weapon final : public IObject, public Collider
 {
 private:
 
+	bool isDraw_ = false;
 
 	/// <summary>
 	/// オーバーライド
@@ -14,11 +15,11 @@ private:
 public:
 
 	void Initialize(const std::vector<Model*>& models) override;
-	void Initialize(const std::vector<Model*>& models, WorldTransform* wt) ;
+	void Initialize(const std::vector<Model*>& models, WorldTransform* wt);
 
 	void Reset();
 	void Update() override;
-	void Update(float theta);
+	void Update(Vector3 theta);
 
 	void Draw() override;
 
@@ -33,5 +34,6 @@ public:
 	void OnCollision() override;
 	void OnCollisionExit() override;
 
+	void SetIsDraw(bool flag) { isDraw_ = flag; }
 
 };
