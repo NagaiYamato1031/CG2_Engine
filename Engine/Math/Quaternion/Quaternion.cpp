@@ -23,27 +23,48 @@ Quaternion::Quaternion(const Vector3& vector, float scalar)
 	w = scalar;
 }
 
+Quaternion Quaternion::operator+(const Quaternion& q) const
+{
+	return Quaternion(this->xyz() + q.xyz(), this->w + q.w);
+}
+
+Quaternion Quaternion::operator-() const
+{
+	return Quaternion(-this->x, -this->y, -this->z, -this->w);
+}
+
 Quaternion Quaternion::operator*(const Quaternion& obj) const
 {
 	return Multiply(*this, obj);
 }
 
-Vector3 Quaternion::GetVector()const
+Quaternion Quaternion::operator*(float f) const
+{
+	return Quaternion(f * this->xyz(), f * this->w);
+}
+
+Quaternion operator*(float f, const Quaternion& q)
+{
+	return Quaternion(f * q.xyz(), f * q.w);
+}
+
+
+Vector3 Quaternion::xyz()const
 {
 	return Vector3(this->x, this->y, this->z);
 }
 
-float Quaternion::GetScalar()const
+float Quaternion::Dot(const Quaternion& q1, const Quaternion& q2)
 {
-	return this->w;
+	return q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.w * q2.w;
 }
 
 Quaternion Quaternion::Multiply(const Quaternion& q1, const Quaternion& q2)
 {
-	Vector3 qv = q1.GetVector();
-	float qw = q1.GetScalar();
-	Vector3 rv = q2.GetVector();
-	float rw = q2.GetScalar();
+	Vector3 qv = q1.xyz();
+	float qw = q1.w;
+	Vector3 rv = q2.xyz();
+	float rw = q2.w;
 
 	Vector3 vector{};
 	float scalar{};
@@ -61,7 +82,7 @@ Quaternion Quaternion::IdentityQuaternion()
 
 Quaternion Quaternion::Conjugate(const Quaternion& q)
 {
-	return Quaternion(-q.GetVector(), q.GetScalar());
+	return Quaternion(-q.xyz(), q.w);
 }
 
 float Quaternion::Norm(const Quaternion& q)
@@ -72,7 +93,7 @@ float Quaternion::Norm(const Quaternion& q)
 Quaternion Quaternion::Normalize(const Quaternion& q)
 {
 	float norm = Norm(q);
-	return Quaternion(q.GetVector() / norm, q.GetScalar() / norm);
+	return Quaternion(q.xyz() / norm, q.w / norm);
 }
 
 Quaternion Quaternion::Inverse(const Quaternion& q)
@@ -80,7 +101,7 @@ Quaternion Quaternion::Inverse(const Quaternion& q)
 	Quaternion conjugation = Conjugate(q);
 	float norm = Norm(q);
 	norm *= norm;
-	return Quaternion(conjugation.GetVector() / norm, conjugation.GetScalar() / norm);
+	return Quaternion(conjugation.xyz() / norm, conjugation.w / norm);
 }
 
 Quaternion Quaternion::MakeRotateAxisAngleQuaternion(const Vector3& axis, float angle)
@@ -107,3 +128,22 @@ Matrix4x4 Quaternion::MakeRotateMatrix(const Quaternion& q)
 	};
 }
 
+Quaternion Quaternion::Slerp(const Quaternion& q0, const Quaternion& q1, float t)
+{
+	float dot = Quaternion::Dot(q0, q1);
+	Quaternion quat0 = q0;
+	if (dot == 0)
+	{
+		// もう片方の回転を利用
+		quat0 = -q0;
+		// 内積も反転
+		dot = -dot;
+	}
+	// なす角を求める
+	float theta = std::acos(dot);
+	// 補間変数
+	float scale0 = std::sinf((1 - t) * theta) / std::sinf(theta);
+	float scale1 = std::sinf(t * theta) / std::sinf(theta);
+
+	return scale0 * quat0 + scale1 * q1;
+}
