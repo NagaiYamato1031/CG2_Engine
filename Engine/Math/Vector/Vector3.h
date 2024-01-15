@@ -91,7 +91,7 @@ public:	///	演算子オーバーロード
 	/// ベクトル射影
 	/// </summary>
 	/// <param name="v1">ベクトル１</param>
-	/// <param name="v2">ベクトル２</param>
+	/// <param name="v2">法線ベクトル２</param>
 	/// <returns>正射影ベクトル</returns>
 	static Vector3 Project(const Vector3& v1, const Vector3& v2);
 

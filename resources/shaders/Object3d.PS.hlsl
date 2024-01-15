@@ -41,7 +41,10 @@ PixelShaderOutput main(VertexShaderOutput input) {
 	//else {
 		// Lighting しない場合。前回までと同じ演算
 	//output.color = gMaterial.color * textureColor;
-	output.color = textureColor;
 	//}
+	if (textureColor.a == 0.0f) {
+		discard;
+	}
+	output.color = textureColor;
 	return output;
 }
