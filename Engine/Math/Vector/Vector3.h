@@ -20,12 +20,13 @@ public:	///	メンバ変数
 public:	///	演算子オーバーロード
 
 	Vector3 operator+(const Vector3& obj) const;
-	Vector3 operator-(const Vector3& obj);
-	Vector3 operator*(float scalar);
-	friend Vector3 operator*(float scalar , const Vector3& obj);
-	Vector3 operator*(const Matrix3x3& matrix);
+	Vector3 operator-(const Vector3& obj) const;
+	friend Vector3 operator-(const Vector3& obj);
+	Vector3 operator*(float scalar) const;
+	friend Vector3 operator*(float scalar, const Vector3& obj);
+	Vector3 operator*(const Matrix3x3& matrix) const;
 	//friend Vector3 operator*(const Matrix3x3& matrix, const Vector3& obj);
-	Vector3 operator/(float scalar);
+	Vector3 operator/(float scalar) const;
 
 	const Vector3& operator+=(const Vector3& obj);
 	const Vector3& operator-=(const Vector3& obj);
@@ -90,7 +91,7 @@ public:	///	演算子オーバーロード
 	/// ベクトル射影
 	/// </summary>
 	/// <param name="v1">ベクトル１</param>
-	/// <param name="v2">ベクトル２</param>
+	/// <param name="v2">法線ベクトル２</param>
 	/// <returns>正射影ベクトル</returns>
 	static Vector3 Project(const Vector3& v1, const Vector3& v2);
 

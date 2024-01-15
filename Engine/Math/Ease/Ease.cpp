@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <numbers>
+#include "../Math.h"
 
 float Lerp(float posA, float posB, float t)
 {
