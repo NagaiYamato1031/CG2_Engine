@@ -106,7 +106,7 @@ Quaternion Quaternion::Inverse(const Quaternion& q)
 
 Quaternion Quaternion::MakeRotateAxisAngleQuaternion(const Vector3& axis, float angle)
 {
-	return Quaternion(axis * std::sinf(angle / 2.0f), std::cosf(angle / 2.0f));
+	return Normalize(Quaternion(axis * std::sinf(angle / 2.0f), std::cosf(angle / 2.0f)));
 }
 
 Vector3 Quaternion::RotateVector(const Vector3& vector, const Quaternion& q)
@@ -132,6 +132,11 @@ Quaternion Quaternion::Slerp(const Quaternion& q0, const Quaternion& q1, float t
 {
 	float dot = Quaternion::Dot(q0, q1);
 	Quaternion quat0 = q0;
+	if (1.0f - FLT_EPSILON <= dot ||
+		dot <= -1.0f + FLT_EPSILON)
+	{
+		return (1.0f - t) * q0 + t * q1;
+	}
 	if (dot == 0)
 	{
 		// もう片方の回転を利用
@@ -142,7 +147,7 @@ Quaternion Quaternion::Slerp(const Quaternion& q0, const Quaternion& q1, float t
 	// なす角を求める
 	float theta = std::acos(dot);
 	// 補間変数
-	float scale0 = std::sinf((1 - t) * theta) / std::sinf(theta);
+	float scale0 = std::sinf((1.0f - t) * theta) / std::sinf(theta);
 	float scale1 = std::sinf(t * theta) / std::sinf(theta);
 
 	return scale0 * quat0 + scale1 * q1;
