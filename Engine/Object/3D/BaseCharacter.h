@@ -1,8 +1,9 @@
 #pragma once
 
 #include "../IObject.h"
+#include "../../Collider/Collider.h"
 
-class BaseCharacter : public IObject
+class BaseCharacter : public IObject , public Collider
 {
 public:
 
@@ -11,7 +12,9 @@ public:
 	virtual void Draw() override;
 	virtual void DebugGUI() override = 0;
 
+	virtual Vector3 GetCenterPosition() override;
+
 protected:
-	
+
 
 };

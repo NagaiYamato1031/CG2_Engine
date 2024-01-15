@@ -6,3 +6,5 @@
 #include "./Matrix/Matrix3x3.h"
 #include "./Matrix/Matrix4x4.h"
 #include "./MyConst.h"
+#include "./Ease/Ease.h"
+#include "./Quaternion/Quaternion.h"

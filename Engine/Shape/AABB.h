@@ -16,15 +16,15 @@ public:
 		AABB aabb = *this;
 		Vector3 position = transform_.GetWorldPos();
 		Vector3 scale = transform_.GetScale();
-		aabb.min_ = this->min_ + position;
-		//aabb.min_ = { this->min_.x * scale.x,this->min_.y * scale.y,this->min_.z * scale.z };
-		aabb.max_ = this->max_ + position;
-		//aabb.max_ = { this->max_.x * scale.x,this->max_.y * scale.y,this->max_.z * scale.z };
+		aabb.min_ = { this->min_.x * scale.x,this->min_.y * scale.y,this->min_.z * scale.z };
+		aabb.min_ = aabb.min_ + position;
+		aabb.max_ = { this->max_.x * scale.x,this->max_.y * scale.y,this->max_.z * scale.z };
+		aabb.max_ = aabb.max_ + position;
 		return aabb;
 	}
 
 	bool IsCollision(AABB* a) {
-		AABB aabb1 = GetAABB();
+		AABB aabb1 = this->GetAABB();
 		AABB aabb2 = a->GetAABB();
 
 		if ((aabb1.min_.x <= aabb2.max_.x && aabb1.max_.x >= aabb2.min_.x) && // x 軸

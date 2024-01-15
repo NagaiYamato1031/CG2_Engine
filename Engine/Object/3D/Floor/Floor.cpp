@@ -48,24 +48,11 @@ void Floor::DebugGUI()
 {
 #ifdef _DEBUG
 
-	ImGui::Begin("floor");
-	ImGui::Separator();
-
-	ImGui::DragFloat3("translate", &transformBase_.translate_.x, 1.0f);
-	ImGui::DragFloat3("min", &aabb.min_.x, 1.0f);
-	ImGui::DragFloat3("max", &aabb.max_.x, 1.0f);
-	
-	AABB temp = aabb.GetAABB();
-	ImGui::DragFloat3("aabb_trans", &temp.transform_.translate_.x, 1.0f);
-	ImGui::DragFloat3("aabb_min", &temp.min_.x, 1.0f);
-	ImGui::DragFloat3("aabb_max", &temp.max_.x, 1.0f);
-
-
-	ImGui::Separator();
-
-
-	ImGui::End();
-
 #endif // _DEBUG
 
+}
+
+void Floor::SetTexture(uint32_t texture)
+{
+	models_[0]->SetTexture(texture);
 }

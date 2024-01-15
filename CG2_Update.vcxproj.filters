@@ -77,6 +77,27 @@
     <Filter Include="Engine\Object\3D\Floor">
       <UniqueIdentifier>{ae38bb94-d5dc-4cda-9916-e29721f363ea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Collider">
+      <UniqueIdentifier>{8e067268-0995-4dec-9a72-d22af6482698}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Configs">
+      <UniqueIdentifier>{931dcfe8-460d-4d84-acaf-560d840a724c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Math\Ease">
+      <UniqueIdentifier>{1e2e22b0-2dd5-46ab-82f4-0ddf122f8d23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Object\3D\Weapon">
+      <UniqueIdentifier>{3db788e2-3a3e-4d1f-889e-53bc93bfb3c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GameClass">
+      <UniqueIdentifier>{0774d7a7-ee0a-4c97-bf68-f712e3d9b135}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Adapter">
+      <UniqueIdentifier>{dc2844c3-fb62-4d2b-8eaf-78acb66a7895}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Math\Quaternion">
+      <UniqueIdentifier>{fcd9b4d6-5b1b-442e-8228-7b45f0d45104}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -171,6 +192,28 @@
     </ClCompile>
     <ClCompile Include="Engine\Object\3D\Enemy\Enemy.cpp">
       <Filter>Engine\Object\3D\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Collider\CollisionManager.cpp">
+      <Filter>Engine\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Configs\GlobalConfigs.cpp">
+      <Filter>Engine\Configs</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Collider\Collider.cpp" />
+    <ClCompile Include="Engine\Math\Ease\Ease.cpp">
+      <Filter>Engine\Math\Ease</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Object\3D\Weapon\Weapon.cpp">
+      <Filter>Engine\Object\3D\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GameClass\MyGame.cpp">
+      <Filter>Engine\GameClass</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\GameClass\Framework.cpp">
+      <Filter>Engine\GameClass</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Math\Quaternion\Quaternion.cpp">
+      <Filter>Engine\Math\Quaternion</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -278,6 +321,33 @@
     </ClInclude>
     <ClInclude Include="Engine\Object\3D\Enemy\Enemy.h">
       <Filter>Engine\Object\3D\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider\Collider.h">
+      <Filter>Engine\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collider\CollisionManager.h">
+      <Filter>Engine\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Configs\GlobalConfigs.h">
+      <Filter>Engine\Configs</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Ease\Ease.h">
+      <Filter>Engine\Math\Ease</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Object\3D\Weapon\Weapon.h">
+      <Filter>Engine\Object\3D\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GameClass\MyGame.h">
+      <Filter>Engine\GameClass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Adapter\Adapter.h">
+      <Filter>Engine\Adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GameClass\Framework.h">
+      <Filter>Engine\GameClass</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Quaternion\Quaternion.h">
+      <Filter>Engine\Math\Quaternion</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

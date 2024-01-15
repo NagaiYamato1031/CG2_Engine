@@ -9,11 +9,15 @@ Vector3 Vector3::operator+(const Vector3& obj) const {
 	Vector3 result = { this->x + obj.x, this->y + obj.y, this->z + obj.z };
 	return result;
 }
-Vector3 Vector3::operator-(const Vector3& obj) {
+Vector3 Vector3::operator-(const Vector3& obj) const {
 	Vector3 result = { this->x - obj.x,this->y - obj.y, this->z - obj.z };
 	return result;
 }
-Vector3 Vector3::operator*(float scalar) {
+Vector3 operator-(const Vector3& obj)
+{
+	return { -obj.x,-obj.y,-obj.z };
+}
+Vector3 Vector3::operator*(float scalar) const {
 	Vector3 result = { this->x * scalar,this->y * scalar, this->z * scalar };
 	return result;
 }
@@ -21,10 +25,10 @@ Vector3 operator*(float scalar, const Vector3& obj) {
 	Vector3 result = { obj.x * scalar, obj.y * scalar, obj.z * scalar };
 	return result;
 }
-Vector3 Vector3::operator*(const Matrix3x3& matrix) {
+Vector3 Vector3::operator*(const Matrix3x3& matrix) const {
 	return Multiply(*this, matrix);
 }
-Vector3 Vector3::operator/(float scalar) {
+Vector3 Vector3::operator/(float scalar) const {
 	Vector3 result = { this->x / scalar,this->y / scalar, this->z / scalar };
 	return result;
 }

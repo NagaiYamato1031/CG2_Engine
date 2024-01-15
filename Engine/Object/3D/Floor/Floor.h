@@ -29,4 +29,6 @@ public:
 
 	void DebugGUI() override;
 
+	void SetTexture(uint32_t texture);
+
 };

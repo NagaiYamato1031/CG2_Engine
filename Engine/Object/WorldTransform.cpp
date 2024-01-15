@@ -28,6 +28,10 @@ const Matrix4x4& WorldTransform::GetMatrix()
 Matrix4x4 WorldTransform::GetMatrix(uint8_t flag)
 {
 	Matrix4x4 matFlags = Matrix4x4::MakeIdentity4x4();
+	if (flag == 0b000) {
+		return matFlags;
+	}
+
 	if (flag & 0b100) {
 		matFlags = matFlags * Matrix4x4::MakeScaleMatrix(scale_);
 	}if (flag & 0b010) {
@@ -37,7 +41,7 @@ Matrix4x4 WorldTransform::GetMatrix(uint8_t flag)
 	}
 	// 親がある場合
 	if (parent_) {
-		matFlags =matFlags * parent_->GetMatrix(flag);
+		matFlags = matFlags * parent_->GetMatrix(flag & parentFlag_);
 	}
 
 	return matFlags;

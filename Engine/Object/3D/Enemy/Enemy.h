@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../../IObject.h"
+#include "../BaseCharacter.h"
 #include "../../../Input/Input.h"
 #include "../../../Shape/AABB.h"
 
-class Enemy final : public IObject
+class Enemy final : public BaseCharacter
 {
 /// <summary>
 /// サブクラス
@@ -43,7 +43,11 @@ public:
 	void Draw() override;
 
 	void DebugGUI() override;
-	
+
+	void OnCollisionEnter() override;
+	void OnCollision() override;
+	void OnCollisionExit() override;
+
 public:
 
 	AABB* GetAABB(){ return &colliderAABB_; }

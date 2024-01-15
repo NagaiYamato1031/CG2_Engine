@@ -23,7 +23,20 @@ public:
 
 public:
 
+	/// <summary>
+	/// テクスチャを読み込む
+	/// "Resources/" : "*.png"
+	/// </summary>
+	/// <param name="fileName">*.{png,jpg}</param>
+	/// <returns></returns>
 	static uint32_t Load(const std::string& fileName);
+	/// <summary>
+	/// テクスチャを読み込む
+	/// "*/" : "*.png"
+	/// </summary>
+	/// <param name="directoryPath"></param>
+	/// <param name="fileName"></param>
+	/// <returns></returns>
 	static uint32_t Load(const std::string& directoryPath, const std::string& fileName);
 
 	static TextureManager* GetInstance();
