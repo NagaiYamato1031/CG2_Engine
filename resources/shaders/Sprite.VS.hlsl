@@ -4,7 +4,8 @@ VertexShaderOutput main(VertexShaderInput input)
 {
     VertexShaderOutput output;
 
-    output.position = mul(input.position, mat);
+    //output = input;
+    output.position = mul(input.position, gMaterial.mat);
     output.texcoord = input.texcoord;
 
     return output;

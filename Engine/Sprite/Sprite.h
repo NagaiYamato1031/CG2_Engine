@@ -15,7 +15,8 @@ private: // サブクラス
 	/// <summary>
 	/// 頂点データ構造体
 	/// </summary>
-	struct VertexData {
+	struct VertexData
+	{
 		Vector4 position;
 		Vector2 uv;
 	};
@@ -23,7 +24,8 @@ private: // サブクラス
 	/// <summary>
 	/// 定数バッファデータ構造体
 	/// </summary>
-	struct MaterialData {
+	struct MaterialData
+	{
 		Vector4 color;
 		Matrix4x4 mat;
 	};
@@ -33,7 +35,7 @@ public:// 静的なメンバ関数
 	/// <summary>
 	/// 静的初期化関数
 	/// </summary>
-	static void StaticInitialize(DirectXCommon* dxCommon, int windowWidth, int windowHeight);
+	static void StaticInitialize(WinApp* winApp, DirectXCommon* dxCommon);
 
 	/// <summary>
 	/// 描画前処理
@@ -56,8 +58,9 @@ public:// 静的なメンバ関数
 	/// <param name="anchorPoint">アンカーポイント</param>
 	/// <returns>生成されたスプライト</returns>
 	static Sprite* Create(
-		uint32_t textureHandle, Vector2* position, Vector2* size, Vector4* color,
-		Vector2 anchorPoint = { 0.0f, 0.0f }
+		uint32_t textureHandle, const Vector2& position = { 0.0f,0.0f },
+		const Vector2& size = { 1.0f,1.0f }, const Vector4& color = { 1.0f,1.0f,1.0f,1.0f },
+		const Vector2& anchorPoint = { 0.0f, 0.0f }
 	);
 
 private:
@@ -78,10 +81,11 @@ private: // 静的なメンバ変数
 
 	// 頂点数
 	static const int kVertexNum = 4;
+	static const int kIndexNum = 6;
 
 	// コマンドリスト
 	static DirectXCommon* sDXCommon_;
-	
+
 	static std::unique_ptr<PSO> sPSO_;
 
 	// 正射影行列
@@ -96,8 +100,8 @@ public: // メンバ関数
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	Sprite(uint32_t textureHandle, Vector2* position, Vector2* size,
-		Vector4* color, Vector2 anchorPoint);
+	Sprite(uint32_t textureHandle, const Vector2& position, const Vector2& size,
+		const Vector4& color, const Vector2& anchorPoint = { 0.0f,0.0f });
 
 	/// <summary>
 	/// 初期化
@@ -114,7 +118,13 @@ public: // メンバ関数
 	/// スプライト中心座標のゲッター
 	/// </summary>
 	/// <returns>中心座標</returns>
-	Vector2 GetPosition() { return *position_; }
+	const Vector2& GetPosition() { return position_; }
+
+	/// <summary>
+	/// スプライトのアンカーポイント
+	/// </summary>
+	/// <returns>アンカーポイント</returns>
+	const Vector2& GetAnchorpoint() { return anchorPoint_; }
 
 	/// <summary>
 	/// 回転角のゲッター
@@ -126,8 +136,9 @@ public: // メンバ関数
 	/// サイズのゲッター
 	/// </summary>
 	/// <returns>サイズ</returns>
-	Vector2 GetSize() {
-		return *size_;
+	const Vector2& GetSize()
+	{
+		return scale_;
 	}
 
 	/// <summary>
@@ -135,7 +146,8 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="start">開始左上座標</param>
 	/// <param name="end">終了右下座標</param>
-	void SetTextureRect(Vector2 start, Vector2 end) {
+	void SetTextureRect(Vector2 start, Vector2 end)
+	{
 		texBase_ = start;
 		texSize_ = end;
 	}
@@ -143,7 +155,8 @@ public: // メンバ関数
 	/// <summary>
 	/// テクスチャ描画範囲リセット
 	/// </summary>
-	void ResetTextureRect() {
+	void ResetTextureRect()
+	{
 		texBase_ = { 0.0f, 0.0f };
 		texSize_ = { (float)resourceDesc_.Width, (float)resourceDesc_.Height };
 	}
@@ -152,7 +165,8 @@ public: // メンバ関数
 	/// テクスチャの元サイズ取得
 	/// </summary>
 	/// <returns>テクスチャサイズ</returns>
-	Vector2 GetTextureSize() {
+	Vector2 GetTextureSize()
+	{
 		Vector2 result = { (float)resourceDesc_.Width, (float)resourceDesc_.Height };
 		return result;
 	}
@@ -161,7 +175,7 @@ public: // メンバ関数
 	/// 色のゲッター
 	/// </summary>
 	/// <returns>色</returns>
-	Vector4 GetColor() { return *color_; }
+	const Vector4& GetColor() { return color_; }
 
 	/// <summary>
 	/// テクスチャハンドルの設定
@@ -172,14 +186,16 @@ public: // メンバ関数
 public: // パブリックなメンバ変数
 
 	// スプライト起点座標
-	Vector2* position_;
+	Vector2 position_ = { 0.0f,0.0f };
 	// スプライトの幅と高さ
-	Vector2* size_;
+	Vector2 scale_ = { 1.0f,1.0f };
 	// 回転角
-	float rotation_;
+	float rotation_ = 0.0f;
 
+	// アンカーポイント
+	Vector2 anchorPoint_ = { 0, 0 };
 	// 色
-	Vector4* color_ = nullptr;
+	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
 
 private: // メンバ変数
 
@@ -187,6 +203,9 @@ private: // メンバ変数
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertBuff_;
 	// 定数バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff_;
+	// 頂点インデックス
+	Microsoft::WRL::ComPtr<ID3D12Resource> indexBuff_;
+
 	// 頂点バッファマップ
 	VertexData* vertMap_ = nullptr;
 	// 定数バッファマップ
@@ -194,9 +213,9 @@ private: // メンバ変数
 
 	// 頂点バッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vbView_{};
+	// 頂点インデックスビュー
+	D3D12_INDEX_BUFFER_VIEW ibView_{};
 
-	// アンカーポイント
-	Vector2 anchorPoint_ = { 0, 0 };
 	// ワールド行列
 	Matrix4x4 matWorld_{};
 
@@ -211,6 +230,11 @@ private: // メンバ変数
 	D3D12_RESOURCE_DESC resourceDesc_;
 
 private: // メンバ関数
+
+	/// <summary>
+	/// バッファの生成	
+	/// </summary>
+	void CreateResources();
 
 	/// <summary>
 	/// 頂点データ転送関数

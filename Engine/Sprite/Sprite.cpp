@@ -3,9 +3,10 @@
 #include "../Utility/MyUtility.h"
 
 #include <cassert>
-#include <d3dcompiler.h>
 
-#pragma comment(lib, "d3dCompiler.lib")
+//#include <d3dcompiler.h>
+
+//#pragma comment(lib, "d3dCompiler.lib")
 
 using namespace Microsoft::WRL;
 
@@ -19,16 +20,17 @@ std::unique_ptr<PSO> Sprite::sPSO_;
 // 正射影行列
 Matrix4x4 Sprite::sMatProjection_;
 
-void Sprite::StaticInitialize(DirectXCommon* dxCommon, int windowWidth, int windowHeight)
+void Sprite::StaticInitialize(WinApp* winApp, DirectXCommon* dxCommon)
 {
 	// 引数のNULLチェック
+	assert(winApp);
 	assert(dxCommon);
 
 	sDXCommon_ = dxCommon;
 
 	CreatePSO();
 
-	sMatProjection_ = Matrix4x4::MakeOrthographicMatrix(0.0f, 0.0f, (float)windowWidth, (float)windowHeight, 0.0f, 100.0f);
+	sMatProjection_ = Matrix4x4::MakeOrthographicMatrix(0.0f, 0.0f, (float)winApp->GetClientWidth(), (float)winApp->GetClientHeight(), 0.0f, 100.0f);
 
 }
 
@@ -59,7 +61,7 @@ void Sprite::PostDraw()
 {
 }
 
-Sprite* Sprite::Create(uint32_t textureHandle, Vector2* position, Vector2* size, Vector4* color, Vector2 anchorPoint)
+Sprite* Sprite::Create(uint32_t textureHandle, const Vector2& position, const Vector2& size, const Vector4& color, const Vector2& anchorPoint)
 {
 	// スプライトのインスタンスを生成する
 	Sprite* sprite =
@@ -83,6 +85,7 @@ Sprite* Sprite::Create(uint32_t textureHandle, Vector2* position, Vector2* size,
 	// スプライトを返す
 	return sprite;
 }
+
 
 void Sprite::CreatePSO()
 {
@@ -269,7 +272,7 @@ D3D12_RASTERIZER_DESC Sprite::CreateRasterizerDesc()
 	// ラスタライザステートの設定を行う
 	D3D12_RASTERIZER_DESC rasterrizerDesc{};
 	// 背面カリング
-	rasterrizerDesc.CullMode = D3D12_CULL_MODE_BACK;
+	rasterrizerDesc.CullMode = D3D12_CULL_MODE_NONE;
 	// 三角形の中を塗りつぶす
 	rasterrizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
@@ -283,55 +286,29 @@ D3D12_DEPTH_STENCIL_DESC Sprite::CreateDepthStencilDesc()
 
 Sprite::Sprite() {}
 
-Sprite::Sprite(uint32_t textureHandle, Vector2* position, Vector2* size, Vector4* color, Vector2 anchorPoint)
+Sprite::Sprite(uint32_t textureHandle, const Vector2& position, const Vector2& size, const Vector4& color, const Vector2& anchorPoint)
 {
 	// 引数の値をメンバ変数に代入する
 	position_ = position;
-	size_ = size;
+	scale_ = size;
 	anchorPoint_ = anchorPoint;
 	matWorld_ = Matrix4x4::MakeIdentity4x4();
 	color_ = color;
 	textureHandle_ = textureHandle;
 	texBase_ = { 0.0f, 0.0f };
 	// テクスチャの情報を取得
-	const D3D12_RESOURCE_DESC& resDesc =
-		TextureManager::GetInstance()->GetResourceDesc(textureHandle);
+	resourceDesc_ = TextureManager::GetInstance()->GetResourceDesc(textureHandle);
 	// 三角形のサイズをテクスチャサイズに設定
-	Vector2 texSize = { (float)resDesc.Width, (float)resDesc.Height };
-	texSize_ = texSize;
+	texSize_ = { (float)resourceDesc_.Width,(float)resourceDesc_.Height };
 }
 
 bool Sprite::Initialize()
 {
-	// 結果確認用
-	HRESULT result = S_FALSE;
-
-	// テクスチャのリソース情報を取得
-	resourceDesc_ = TextureManager::GetInstance()->GetResourceDesc(textureHandle_);
-
-	// 頂点バッファリソース生成
-	vertBuff_ = sDXCommon_->CreateBufferResource(sizeof(VertexData) * kVertexNum);
-	// 頂点バッファのマッピングを行う
-	result = vertBuff_->Map(0, nullptr, reinterpret_cast<void**>(&vertMap_));
-	// マッピング出来ているかを確認する
-	assert(SUCCEEDED(result));
+	// リソースの作成
+	CreateResources();
 
 	// 頂点バッファへのデータ転送
 	TransferVertices();
-
-	// リソースの先頭のアドレスから使う
-	vbView_.BufferLocation = vertBuff_->GetGPUVirtualAddress();
-	// 使用するリソースのサイズを設定する
-	vbView_.SizeInBytes = sizeof(VertexData) * kVertexNum;
-	// 1頂点アドレスを設定する
-	vbView_.StrideInBytes = sizeof(VertexData);
-
-	// 定数バッファリソース作成
-	constBuff_ = sDXCommon_->CreateBufferResource(sizeof(MaterialData));
-	// 定数バッファのマッピングを行う
-	result = constBuff_->Map(0, nullptr, reinterpret_cast<void**>(&constMap_));
-	// マッピングできているかを確認する
-	assert(SUCCEEDED(result));
 
 	// 初期化が完了したらTrueを返す
 	return true;
@@ -344,18 +321,19 @@ void Sprite::Draw()
 	// 頂点更新
 	TransferVertices();
 
-	matWorld_ = Matrix4x4::MakeIdentity4x4();
+	matWorld_ = Matrix4x4::MakeScaleMatrix({ scale_.x,scale_.y,1.0f });
 	matWorld_ = matWorld_ * Matrix4x4::MakeRotateZMatrix(rotation_);
-	matWorld_ = matWorld_ * Matrix4x4::MakeTranslateMatrix({ position_->x, position_->y, 0.0f });
+	matWorld_ = matWorld_ * Matrix4x4::MakeTranslateMatrix({ position_.x, position_.y, 0.0f });
 
 	// 色を設定
-	constMap_->color = *color_;
+	constMap_->color = color_;
 	// 行列を設定
-	constMap_->mat = matWorld_ * sMatProjection_;
-	//constMap_->mat = matWorld_;
+	//constMap_->mat = matWorld_ * sMatProjection_;
+	constMap_->mat = matWorld_;
 
 	// 頂点バッファの設定
 	cmdList->IASetVertexBuffers(0, 1, &vbView_);
+	cmdList->IASetIndexBuffer(&ibView_);
 	// 定数バッファの設定
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuff_->GetGPUVirtualAddress());
 
@@ -363,13 +341,62 @@ void Sprite::Draw()
 	TextureManager::GetInstance()->SetGraphicsDescriptorTable(1, textureHandle_);
 
 	// 描画コマンド
-	cmdList->DrawInstanced(kVertexNum, 1, 0, 0);
+	//cmdList->DrawInstanced(kVertexNum, 1, 0, 0);
+	cmdList->DrawIndexedInstanced(kIndexNum, 1, 0, 0, 0);
 }
 
 void Sprite::SetTextureHandle(uint32_t textureHandle)
 {
 	textureHandle_ = textureHandle;
 	resourceDesc_ = TextureManager::GetInstance()->GetResourceDesc(textureHandle_);
+}
+
+void Sprite::CreateResources()
+{
+	// 結果確認用
+	HRESULT result = S_FALSE;
+
+	// 初期化済み
+	// テクスチャのリソース情報を取得
+	//resourceDesc_ = TextureManager::GetInstance()->GetResourceDesc(textureHandle_);
+
+	// 頂点バッファリソース生成
+	vertBuff_ = sDXCommon_->CreateBufferResource(sizeof(VertexData) * kVertexNum);
+	indexBuff_ = sDXCommon_->CreateBufferResource(sizeof(uint32_t) * kIndexNum);
+	// 頂点バッファのマッピングを行う
+	result = vertBuff_->Map(0, nullptr, reinterpret_cast<void**>(&vertMap_));
+	// マッピング出来ているかを確認する
+	assert(SUCCEEDED(result));
+
+
+	// リソースの先頭のアドレスから使う
+	vbView_.BufferLocation = vertBuff_->GetGPUVirtualAddress();
+	// 使用するリソースのサイズを設定する
+	vbView_.SizeInBytes = sizeof(VertexData) * kVertexNum;
+	// 1頂点アドレスを設定する
+	vbView_.StrideInBytes = sizeof(VertexData);
+
+	// リソースの先頭アドレス
+	ibView_.BufferLocation = indexBuff_->GetGPUVirtualAddress();
+	// 使用するリソースのサイズはインデックス６つ分
+	ibView_.SizeInBytes = sizeof(uint32_t) * kIndexNum;
+	// uint32_t
+	ibView_.Format = DXGI_FORMAT_R32_UINT;
+	// インスタンス作成
+	uint32_t* ibData = nullptr;
+	result = indexBuff_->Map(0, nullptr, reinterpret_cast<void**>(&ibData));
+	// マッピング確認
+	assert(SUCCEEDED(result));
+	// データを書き込む
+	ibData[0] = 0; ibData[1] = 1; ibData[2] = 2;
+	ibData[3] = 1; ibData[4] = 3; ibData[5] = 2;
+
+	// 定数バッファリソース作成
+	constBuff_ = sDXCommon_->CreateBufferResource(sizeof(MaterialData));
+	// 定数バッファのマッピングを行う
+	result = constBuff_->Map(0, nullptr, reinterpret_cast<void**>(&constMap_));
+	// マッピングできているかを確認する
+	assert(SUCCEEDED(result));
 }
 
 void Sprite::TransferVertices()
@@ -383,11 +410,13 @@ void Sprite::TransferVertices()
 		RT	// 右上
 	};
 
+	// スクリーン座標へ戻す
+	float anchorY = (1.0f - anchorPoint_.y);
 	// 4頂点の座標を設定
-	float left = (0.0f - anchorPoint_.x) * size_->x;
-	float right = (1.0f - anchorPoint_.x) * size_->x;
-	float top = (0.0f - anchorPoint_.y) * size_->y;
-	float bottom = (1.0f - anchorPoint_.y) * size_->y;
+	float left = (0.0f - anchorPoint_.x) * scale_.x;
+	float right = (1.0f - anchorPoint_.x) * scale_.x;
+	float top = (0.0f - anchorY) * scale_.y;
+	float bottom = (1.0f - anchorY) * scale_.y;
 
 	// 頂点データ
 	VertexData vertices[kVertexNum];

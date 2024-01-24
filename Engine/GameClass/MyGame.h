@@ -17,4 +17,7 @@ public:
 	void Draw() override;
 
 private:
+
+	std::unique_ptr<Sprite> sprite_;
+
 };
