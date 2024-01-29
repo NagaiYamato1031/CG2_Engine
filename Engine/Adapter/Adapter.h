@@ -5,6 +5,7 @@
 #include "../Input/Input.h"
 #include "../ImGui/ImGuiManager.h"
 #include "../Resource/Texture/TextureManager.h"
+#include "../Sprite/Sprite.h"
 #include "../Model/Model.h"
 #include "../Particle/Particle.h"
 #include "..//Collider/CollisionManager.h"

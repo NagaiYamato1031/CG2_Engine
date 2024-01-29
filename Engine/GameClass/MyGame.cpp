@@ -12,9 +12,12 @@ void MyGame::Initialize()
 	//	ゲームで使う変数	//
 	//------------------*/
 
+	uint32_t textureHandle = textureManager_->Load("uvChecker.png");
 	vp = new ViewProjection;
 	vp->Initialize();
 
+	sprite_.reset(Sprite::Create(textureHandle));
+	//sprite_->Initialize();
 	particle_.reset(Particle::CreateOBJ("resources", "uvChecker.png", 10));
 
 	for (size_t i = 0; i < kNumIndex_; i++)
@@ -44,6 +47,8 @@ void MyGame::Update()
 
 
 
+
+
 	/*////////////
 	//	ImGui	//
 	//----------*/
@@ -53,6 +58,7 @@ void MyGame::Update()
 	ImGui::Begin("DebugConsole");
 
 	ImGui::End();
+
 
 #endif // _DEBUG
 
@@ -83,6 +89,23 @@ void MyGame::Draw()
 	////////////////*/
 
 	Model::PostDraw();
+	
+	Sprite::PreDraw();
+
+	/*////////////////////
+	//	スプライト描画		//
+	//------------------*/
+
+	sprite_->Draw();
+
+	/*------------------//
+	//	スプライト描画		//
+	////////////////////*/
+
+	Sprite::PostDraw();
+
+
+
 
 	Particle::PreDraw();
 
@@ -90,7 +113,7 @@ void MyGame::Draw()
 	//	パーティクル描画	//
 	//------------------*/
 
-	particle_->Draw(wt, vp);
+	///particle_->Draw(wt, vp);
 
 	/*------------------//
 	//	パーティクル描画	//

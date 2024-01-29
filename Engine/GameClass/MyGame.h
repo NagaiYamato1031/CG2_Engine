@@ -17,6 +17,9 @@ public:
 	void Draw() override;
 
 private:
+
+	std::unique_ptr<Sprite> sprite_;
+
 	ViewProjection* vp = nullptr;
 
 	static const uint32_t kNumIndex_ = 10;
