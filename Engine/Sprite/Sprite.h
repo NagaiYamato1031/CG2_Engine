@@ -104,12 +104,6 @@ public: // メンバ関数
 		const Vector4& color, const Vector2& anchorPoint = { 0.0f,0.0f });
 
 	/// <summary>
-	/// 初期化
-	/// </summary>
-	/// <returns>初期化出来ているか</returns>
-	bool Initialize();
-
-	/// <summary>
 	/// 描画関数
 	/// </summary>
 	void Draw();
@@ -230,6 +224,12 @@ private: // メンバ変数
 	D3D12_RESOURCE_DESC resourceDesc_;
 
 private: // メンバ関数
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <returns>初期化出来ているか</returns>
+	bool Initialize();
 
 	/// <summary>
 	/// バッファの生成	

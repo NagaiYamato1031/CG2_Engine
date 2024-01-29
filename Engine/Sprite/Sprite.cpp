@@ -328,15 +328,15 @@ void Sprite::Draw()
 	// 色を設定
 	constMap_->color = color_;
 	// 行列を設定
-	//constMap_->mat = matWorld_ * sMatProjection_;
-	constMap_->mat = matWorld_;
+	constMap_->mat = matWorld_ * sMatProjection_;
+	//constMap_->mat = matWorld_;
 
 	// 頂点バッファの設定
 	cmdList->IASetVertexBuffers(0, 1, &vbView_);
 	cmdList->IASetIndexBuffer(&ibView_);
 	// 定数バッファの設定
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuff_->GetGPUVirtualAddress());
-
+	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	// シェーダリソースビューをセット
 	TextureManager::GetInstance()->SetGraphicsDescriptorTable(1, textureHandle_);
 
@@ -411,12 +411,14 @@ void Sprite::TransferVertices()
 	};
 
 	// スクリーン座標へ戻す
-	float anchorY = (1.0f - anchorPoint_.y);
+	//float anchorY = (1.0f - anchorPoint_.y);
 	// 4頂点の座標を設定
-	float left = (0.0f - anchorPoint_.x) * scale_.x;
-	float right = (1.0f - anchorPoint_.x) * scale_.x;
-	float top = (0.0f - anchorY) * scale_.y;
-	float bottom = (1.0f - anchorY) * scale_.y;
+	float left = (0.0f - anchorPoint_.x) * resourceDesc_.Width * scale_.x;
+	float right = (1.0f - anchorPoint_.x) * resourceDesc_.Width * scale_.x;
+	//float top = (0.0f - anchorY) * scale_.y;
+	float top = (0.0f - anchorPoint_.y) * resourceDesc_.Height * scale_.y;
+	//float bottom = (1.0f - anchorY) * scale_.y;
+	float bottom = (1.0f - anchorPoint_.y) * resourceDesc_.Height * scale_.y;
 
 	// 頂点データ
 	VertexData vertices[kVertexNum];
