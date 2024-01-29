@@ -12,7 +12,10 @@ void MyGame::Initialize()
 	//	ゲームで使う変数	//
 	//------------------*/
 
+	uint32_t textureHandle = textureManager_->Load("uvChecker.png");
 
+	sprite_.reset(Sprite::Create(textureHandle));
+	//sprite_->Initialize();
 
 
 	/*------------------//
@@ -33,15 +36,9 @@ void MyGame::Update()
 	//	ゲーム内の処理		//
 	//------------------*/
 
-	// 任意軸回転
-	Quaternion rotation0 = Quaternion::MakeRotateAxisAngleQuaternion(Vector3::Normalize({ 0.71f,0.71f,0.0f }), 0.3f);
-	Quaternion rotation1 = -rotation0;
 
-	Quaternion interpolate0 = Quaternion::Slerp(rotation0, rotation1, 0.0f);
-	Quaternion interpolate1 = Quaternion::Slerp(rotation0, rotation1, 0.3f);
-	Quaternion interpolate2 = Quaternion::Slerp(rotation0, rotation1, 0.5f);
-	Quaternion interpolate3 = Quaternion::Slerp(rotation0, rotation1, 0.7f);
-	Quaternion interpolate4 = Quaternion::Slerp(rotation0, rotation1, 1.0f);
+
+
 
 	/*////////////
 	//	ImGui	//
@@ -51,16 +48,20 @@ void MyGame::Update()
 
 	ImGui::Begin("DebugConsole");
 
-	ImGui::Text("rotation0		: %.2f,%.2f,%.2f,%.2f", rotation0.x, rotation0.y, rotation0.z, rotation0.w);
-	ImGui::Text("rotation1		: %.2f,%.2f,%.2f,%.2f", rotation1.x, rotation1.y, rotation1.z, rotation1.w);
-	ImGui::Text("");
-	ImGui::Text("interpolate0	: %.2f,%.2f,%.2f,%.2f", interpolate0.x, interpolate0.y, interpolate0.z, interpolate0.w);
-	ImGui::Text("interpolate1	: %.2f,%.2f,%.2f,%.2f", interpolate1.x, interpolate1.y, interpolate1.z, interpolate1.w);
-	ImGui::Text("interpolate2	: %.2f,%.2f,%.2f,%.2f", interpolate2.x, interpolate2.y, interpolate2.z, interpolate2.w);
-	ImGui::Text("interpolate3	: %.2f,%.2f,%.2f,%.2f", interpolate3.x, interpolate3.y, interpolate3.z, interpolate3.w);
-	ImGui::Text("interpolate4	: %.2f,%.2f,%.2f,%.2f", interpolate4.x, interpolate4.y, interpolate4.z, interpolate4.w);
+	if (ImGui::TreeNode("Sprite"))
+	{
 
+		ImGui::DragFloat2("position", &sprite_->position_.x, 1.0f);
+		ImGui::DragFloat2("size", &sprite_->scale_.x, 0.01f);
+		ImGui::DragFloat("rotate", &sprite_->rotation_, 0.002f);
+		ImGui::SliderFloat2("anchorpoint", &sprite_->anchorPoint_.x, 0.0f, 1.0f);
+
+		ImGui::ColorEdit4("color", &sprite_->color_.x);
+
+		ImGui::TreePop();
+	}
 	ImGui::End();
+
 
 #endif // _DEBUG
 
@@ -91,6 +92,22 @@ void MyGame::Draw()
 	////////////////*/
 
 	Model::PostDraw();
+	
+	Sprite::PreDraw();
+
+	/*////////////////////
+	//	スプライト描画		//
+	//------------------*/
+
+	sprite_->Draw();
+
+	/*------------------//
+	//	スプライト描画		//
+	////////////////////*/
+
+	Sprite::PostDraw();
+
+
 
 	imguiManager_->Draw();
 

@@ -6,7 +6,8 @@ void Framework::Run()
 	while (true)
 	{
 		UpddateALL();
-		if (IsEndRequest()) {
+		if (IsEndRequest())
+		{
 			break;
 		}
 		Draw();
@@ -31,6 +32,8 @@ void Framework::Initialize()
 	textureManager_ = TextureManager::GetInstance();
 	textureManager_->Initialize(dxCommon_);
 
+	Sprite::StaticInitialize(winApp_, dxCommon_);
+
 	Model::StaticInitialize(dxCommon_);
 
 	collisionManager_.reset(new CollisionManager);
@@ -49,7 +52,8 @@ void Framework::Finalize()
 
 void Framework::UpddateALL()
 {
-	if (winApp_->ProcessMessage()) {
+	if (winApp_->ProcessMessage())
+	{
 		endRequest_ = true;
 		return;
 	}
