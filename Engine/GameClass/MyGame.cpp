@@ -12,10 +12,6 @@ void MyGame::Initialize()
 	//	ゲームで使う変数	//
 	//------------------*/
 
-	uint32_t textureHandle = textureManager_->Load("uvChecker.png");
-
-	sprite_.reset(Sprite::Create(textureHandle));
-	//sprite_->Initialize();
 
 
 	/*------------------//
@@ -38,8 +34,6 @@ void MyGame::Update()
 
 
 
-
-
 	/*////////////
 	//	ImGui	//
 	//----------*/
@@ -48,18 +42,6 @@ void MyGame::Update()
 
 	ImGui::Begin("DebugConsole");
 
-	if (ImGui::TreeNode("Sprite"))
-	{
-
-		ImGui::DragFloat2("position", &sprite_->position_.x, 1.0f);
-		ImGui::DragFloat2("size", &sprite_->scale_.x, 0.01f);
-		ImGui::DragFloat("rotate", &sprite_->rotation_, 0.002f);
-		ImGui::SliderFloat2("anchorpoint", &sprite_->anchorPoint_.x, 0.0f, 1.0f);
-
-		ImGui::ColorEdit4("color", &sprite_->color_.x);
-
-		ImGui::TreePop();
-	}
 	ImGui::End();
 
 
@@ -99,7 +81,7 @@ void MyGame::Draw()
 	//	スプライト描画		//
 	//------------------*/
 
-	sprite_->Draw();
+
 
 	/*------------------//
 	//	スプライト描画		//

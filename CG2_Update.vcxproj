@@ -118,12 +118,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
     <ClCompile Include="Engine\Math\Vector\Vector4.cpp" />
     <ClCompile Include="Engine\Model\Model.cpp" />
     <ClCompile Include="Engine\Object\3D\BaseCharacter.cpp" />
-    <ClCompile Include="Engine\Object\3D\Enemy\Enemy.cpp" />
-    <ClCompile Include="Engine\Object\3D\Floor\Floor.cpp" />
-    <ClCompile Include="Engine\Object\3D\FollowCamera\FollowCamera.cpp" />
-    <ClCompile Include="Engine\Object\3D\Player\Player.cpp" />
-    <ClCompile Include="Engine\Object\3D\Skydome\Skydome.cpp" />
-    <ClCompile Include="Engine\Object\3D\Weapon\Weapon.cpp" />
     <ClCompile Include="Engine\Object\IObject.cpp" />
     <ClCompile Include="Engine\Object\ViewProjection.cpp" />
     <ClCompile Include="Engine\Object\WorldTransform.cpp" />
@@ -164,12 +158,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
     <ClInclude Include="Engine\Model\Model.h" />
     <ClInclude Include="Engine\Object\3D\3dObjectList.h" />
     <ClInclude Include="Engine\Object\3D\BaseCharacter.h" />
-    <ClInclude Include="Engine\Object\3D\Enemy\Enemy.h" />
-    <ClInclude Include="Engine\Object\3D\Floor\Floor.h" />
-    <ClInclude Include="Engine\Object\3D\FollowCamera\FollowCamera.h" />
-    <ClInclude Include="Engine\Object\3D\Player\Player.h" />
-    <ClInclude Include="Engine\Object\3D\Skydome\Skydome.h" />
-    <ClInclude Include="Engine\Object\3D\Weapon\Weapon.h" />
     <ClInclude Include="Engine\Object\IObject.h" />
     <ClInclude Include="Engine\Object\ViewProjection.h" />
     <ClInclude Include="Engine\Object\WorldTransform.h" />

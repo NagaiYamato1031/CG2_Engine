@@ -59,23 +59,8 @@
     <Filter Include="Engine\ImGui">
       <UniqueIdentifier>{691b02ba-10e6-4ed4-a660-3c8724ea9b54}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Object\3D\Player">
-      <UniqueIdentifier>{0ea88dc8-d5b7-4846-a598-666870d2d347}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Object\3D\Enemy">
-      <UniqueIdentifier>{e29731cb-7025-45e1-87da-566868488f2f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Shape">
       <UniqueIdentifier>{65b5b352-ecb3-417f-943a-8c17baf8e107}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Object\3D\FollowCamera">
-      <UniqueIdentifier>{318430a9-fc6c-416c-aafb-1d4c8b8e4717}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Object\3D\Skydome">
-      <UniqueIdentifier>{07149d7d-e728-4b0d-bfa6-7e7334235088}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Object\3D\Floor">
-      <UniqueIdentifier>{ae38bb94-d5dc-4cda-9916-e29721f363ea}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Collider">
       <UniqueIdentifier>{8e067268-0995-4dec-9a72-d22af6482698}</UniqueIdentifier>
@@ -85,9 +70,6 @@
     </Filter>
     <Filter Include="Engine\Math\Ease">
       <UniqueIdentifier>{1e2e22b0-2dd5-46ab-82f4-0ddf122f8d23}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Object\3D\Weapon">
-      <UniqueIdentifier>{3db788e2-3a3e-4d1f-889e-53bc93bfb3c3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\GameClass">
       <UniqueIdentifier>{0774d7a7-ee0a-4c97-bf68-f712e3d9b135}</UniqueIdentifier>
@@ -101,7 +83,7 @@
     <Filter Include="Engine\Resource\Shader\Sprite">
       <UniqueIdentifier>{b6d3a9be-f77c-4c25-b3c2-a8c27d84ac44}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Sprite">
+    <Filter Include="Engine\Object\2D\Sprite">
       <UniqueIdentifier>{880e94b2-b534-4d00-8932-c205d33db282}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -178,26 +160,11 @@
     <ClCompile Include="Engine\Object\IObject.cpp">
       <Filter>Engine\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Object\3D\Player\Player.cpp">
-      <Filter>Engine\Object\3D\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Object\WorldTransform.cpp">
       <Filter>Engine\Object</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Object\3D\BaseCharacter.cpp">
       <Filter>Engine\Object\3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Object\3D\FollowCamera\FollowCamera.cpp">
-      <Filter>Engine\Object\3D\FollowCamera</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Object\3D\Skydome\Skydome.cpp">
-      <Filter>Engine\Object\3D\Skydome</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Object\3D\Floor\Floor.cpp">
-      <Filter>Engine\Object\3D\Floor</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Object\3D\Enemy\Enemy.cpp">
-      <Filter>Engine\Object\3D\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Collider\CollisionManager.cpp">
       <Filter>Engine\Collider</Filter>
@@ -209,9 +176,6 @@
     <ClCompile Include="Engine\Math\Ease\Ease.cpp">
       <Filter>Engine\Math\Ease</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Object\3D\Weapon\Weapon.cpp">
-      <Filter>Engine\Object\3D\Weapon</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\GameClass\MyGame.cpp">
       <Filter>Engine\GameClass</Filter>
     </ClCompile>
@@ -222,7 +186,7 @@
       <Filter>Engine\Math\Quaternion</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Sprite\Sprite.cpp">
-      <Filter>Engine\Sprite</Filter>
+      <Filter>Engine\Object\2D\Sprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -307,29 +271,14 @@
     <ClInclude Include="Engine\Shape\AABB.h">
       <Filter>Engine\Shape</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Object\3D\Player\Player.h">
-      <Filter>Engine\Object\3D\Player</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Object\WorldTransform.h">
       <Filter>Engine\Object</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Object\3D\BaseCharacter.h">
       <Filter>Engine\Object\3D</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Object\3D\FollowCamera\FollowCamera.h">
-      <Filter>Engine\Object\3D\FollowCamera</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Object\3D\Skydome\Skydome.h">
-      <Filter>Engine\Object\3D\Skydome</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Object\3D\3dObjectList.h">
       <Filter>Engine\Object\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Object\3D\Floor\Floor.h">
-      <Filter>Engine\Object\3D\Floor</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Object\3D\Enemy\Enemy.h">
-      <Filter>Engine\Object\3D\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Collider\Collider.h">
       <Filter>Engine\Collider</Filter>
@@ -342,9 +291,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Math\Ease\Ease.h">
       <Filter>Engine\Math\Ease</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Object\3D\Weapon\Weapon.h">
-      <Filter>Engine\Object\3D\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="Engine\GameClass\MyGame.h">
       <Filter>Engine\GameClass</Filter>
@@ -359,7 +305,7 @@
       <Filter>Engine\Math\Quaternion</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Sprite\Sprite.h">
-      <Filter>Engine\Sprite</Filter>
+      <Filter>Engine\Object\2D\Sprite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
