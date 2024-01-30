@@ -18,12 +18,13 @@ class IObject
 {
 protected:
 
+	std::string name_;
+
 	bool isActive_ = true;
 
-	WorldTransform transformBase_;
-	std::vector<WorldTransform> transforms_;
+	WorldTransform world_;
 
-	std::vector<Model*> models_;
+	std::unique_ptr<Model> model_;
 
 	ViewProjection* viewProjection_ = nullptr;
 
@@ -31,7 +32,7 @@ protected:
 
 public:
 
-	virtual void Initialize(const std::vector<Model*>& models);
+	virtual void Initialize(std::string name);
 	virtual void Update();
 	virtual void Draw();
 	virtual void DebugGUI() = 0;
@@ -44,19 +45,17 @@ public:
 	void UpdateTransform();
 	void DrawAllModel();
 
-	void SetParent(WorldTransform* parent) { transformBase_.SetParent(parent); }
+	void SetParent(WorldTransform* parent) { world_.SetParent(parent); }
 
-	WorldTransform* GetWorldTransform() { return &transformBase_; }
-
-	//Vector3 GetWorldPosition() const;
+	WorldTransform* GetWorldTransform() { return &world_; }
 
 	void SetViewProjection(ViewProjection* viewProjection) {
 		viewProjection_ = viewProjection;
 	}
 
-	void SetScale(const Vector3& scale) { transformBase_.scale_ = scale; }
-	void SetRotate(const Vector3& rotate) { transformBase_.rotate_ = rotate; }
-	void SetTranslate(const Vector3& translate) { transformBase_.translate_ = translate; }
+	void SetScale(const Vector3& scale) { world_.scale_ = scale; }
+	void SetRotate(const Vector3& rotate) { world_.rotate_ = rotate; }
+	void SetTranslate(const Vector3& translate) { world_.translate_ = translate; }
 
 	bool GetIsActive() const { return isActive_; }
 	void SetIsActive(bool flag) { isActive_ = flag; }
