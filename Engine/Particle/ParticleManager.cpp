@@ -201,10 +201,6 @@ D3D12_GRAPHICS_PIPELINE_STATE_DESC ParticleManager::CreatePipelineStateDesc()
 
 	graphicsPipelineStateDesc.pRootSignature = pso_->rootSignature_.Get();
 
-	// 生成時に実体がないとエラーが起きる
-	//graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
-
-
 	IDxcBlob* vsBlob = dxCommon_->GetDXC()->CompileShader(L"Particle.VS.hlsl", L"vs_6_0");
 	IDxcBlob* psBlob = dxCommon_->GetDXC()->CompileShader(L"Particle.PS.hlsl", L"ps_6_0");
 

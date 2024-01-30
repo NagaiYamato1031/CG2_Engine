@@ -18,7 +18,7 @@ void MyGame::Initialize()
 
 	sprite_.reset(Sprite::Create(textureHandle));
 	//sprite_->Initialize();
-	particle_.reset(Particle::CreateOBJ("resources", "uvChecker.png", 10));
+	//particle_.reset(Particle::CreateOBJ("resources", "uvChecker.png", 10));
 
 	for (size_t i = 0; i < kNumIndex_; i++)
 	{
@@ -107,7 +107,7 @@ void MyGame::Draw()
 
 
 
-	Particle::PreDraw();
+	//Particle::PreDraw();
 
 	/*////////////////////
 	//	パーティクル描画	//
@@ -119,7 +119,7 @@ void MyGame::Draw()
 	//	パーティクル描画	//
 	////////////////////*/
 
-	Particle::PostDraw();
+	//Particle::PostDraw();
 
 	imguiManager_->Draw();
 

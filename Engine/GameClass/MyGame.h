@@ -24,6 +24,6 @@ private:
 
 	static const uint32_t kNumIndex_ = 10;
 
-	std::unique_ptr<Particle> particle_;
+	//std::unique_ptr<Particle> particle_;
 	WorldTransform wt[kNumIndex_];
 };

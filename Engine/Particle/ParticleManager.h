@@ -5,6 +5,7 @@
 #include <wrl.h>
 #include <d3d12.h>
 #include "Particle.h"
+#include "../Base/DirectXCommon.h"
 #include "../Base/PSO/PSO.h"
 
 // パーティクルをどう扱うか考える
@@ -17,9 +18,9 @@ class ParticleManager final
 public:
 
 	// パーティクルのトランスフォーム最大数
-	static const size_t kDescriptorSize_ = 65535;
+	static const size_t kTransformMaxSize_ = 65535;
 
-	static const size_t kParticleCategorySize = 16;
+	static const size_t kParticleMaxSize = 128;
 
 public:
 
@@ -62,7 +63,7 @@ private:
 
 	std::unique_ptr<PSO> pso_;
 
-	std::array<Particle*, kParticleCategorySize> textures_;
+	std::array<Particle*, kParticleMaxSize> textures_;
 
 	uint32_t indexNextParticleCategory_ = 0u;
 

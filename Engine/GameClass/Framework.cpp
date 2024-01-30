@@ -37,7 +37,7 @@ void Framework::Initialize()
 	Sprite::StaticInitialize(winApp_, dxCommon_);
 
 	Model::StaticInitialize(dxCommon_);
-	Particle::StaticInitialize(dxCommon_);
+	//Particle::StaticInitialize(dxCommon_);
 
 	collisionManager_.reset(new CollisionManager);
 
