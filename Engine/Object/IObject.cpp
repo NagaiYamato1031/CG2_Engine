@@ -1,21 +1,29 @@
 #include "IObject.h"
 
 
-void IObject::Initialize(std::string name)
+void IObject::Initialize()
 {
-	name_ = name;
-	world_.Initialize();
+	Initialize("obj");
 }
 
-void IObject::Update()
+void IObject::Initialize(std::string tag)
 {
-	UpdateTransform();
+	tag_ = tag;
+	configs_ = GlobalConfigs::GetInstance();
+	isActive_ = true;
+	isDraw_ = true;
+	viewProjection_ = nullptr;
 }
 
-void IObject::Draw()
-{
-	DrawAllModel();
-}
+//void IObject::Update()
+//{
+//	UpdateTransform();
+//}
+//
+//void IObject::Draw()
+//{
+//	DrawAllModel();
+//}
 
 void IObject::ApplyConfig()
 {
@@ -23,14 +31,4 @@ void IObject::ApplyConfig()
 
 void IObject::StorageConfig()
 {
-}
-
-void IObject::UpdateTransform()
-{
-	world_.GetMatrix();
-}
-
-void IObject::DrawAllModel()
-{
-	model_->Draw(&world_, viewProjection_);
 }

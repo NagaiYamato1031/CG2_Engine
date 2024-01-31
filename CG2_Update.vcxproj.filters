@@ -86,6 +86,15 @@
     <Filter Include="Engine\Object\2D\Sprite">
       <UniqueIdentifier>{880e94b2-b534-4d00-8932-c205d33db282}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Object\3D\Player">
+      <UniqueIdentifier>{9abe2301-67a9-41bb-b1f3-810e0645bf5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Scene">
+      <UniqueIdentifier>{f2f39674-7d6a-49d9-bd66-8b0d18fcc8e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Scene\user">
+      <UniqueIdentifier>{0c7c31e8-113e-4019-974c-67052975bdd7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -184,6 +193,21 @@
     </ClCompile>
     <ClCompile Include="Engine\Sprite\Sprite.cpp">
       <Filter>Engine\Object\2D\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Object\3D\Player.cpp">
+      <Filter>Engine\Object\3D\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\IScene.cpp">
+      <Filter>Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\SceneManager.cpp">
+      <Filter>Engine\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\user\TitleScene.cpp">
+      <Filter>Engine\Scene\user</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scene\user\GameScene.cpp">
+      <Filter>Engine\Scene\user</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -300,6 +324,27 @@
     </ClInclude>
     <ClInclude Include="Engine\Sprite\Sprite.h">
       <Filter>Engine\Object\2D\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Object\3D\Player.h">
+      <Filter>Engine\Object\3D\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\IScene.h">
+      <Filter>Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\SceneManager.h">
+      <Filter>Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\Scenes.h">
+      <Filter>Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\SceneList.h">
+      <Filter>Engine\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\user\TitleScene.h">
+      <Filter>Engine\Scene\user</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scene\user\GameScene.h">
+      <Filter>Engine\Scene\user</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
