@@ -54,28 +54,29 @@ void ParticleManager::Initialize(DirectXCommon* dxCommon)
 
 	CreatePSO();
 
-	Reset();
-}
-
-void ParticleManager::Reset()
-{
 	HRESULT hr = S_FALSE;
 
 	// ディスクリプタヒープの設定
 	D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
 	descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV; // タイプ設定
 	descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE; // フラッグ
-	descHeapDesc.NumDescriptors = kParticleCategorySize;
+	descHeapDesc.NumDescriptors = kParticleMaxSize;
 	// ディスクリプタヒープの生成
 	hr = dxCommon_->GetDevice()->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descriptorHeap_));
 	// 生成出来ているか確認
 	assert(SUCCEEDED(hr));
 
+	Reset();
+}
+
+void ParticleManager::Reset()
+{
+
 	// 次のディスクリプタヒープの番号を指定
 	indexNextParticleCategory_ = 0;
 
 	// 全てのテクスチャをリセットする
-	for (size_t i = 0; i < kParticleCategorySize; i++)
+	for (size_t i = 0; i < kParticleMaxSize; i++)
 	{
 		//textures_[i].resource_.Reset(); // リソース
 		//textures_[i].cpuDescriptorHandleSRV_.ptr = 0; // ディスクリプタハンドル（CPU）
@@ -125,15 +126,6 @@ void ParticleManager::CreatePSO()
 	HRESULT hr = S_FALSE;
 	hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&pso_->state_));
 	assert(SUCCEEDED(hr));
-
-	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
-	descriptorRange[0].BaseShaderRegister = 0;
-	descriptorRange[0].NumDescriptors = 1;
-	descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	
-
 }
 
 void ParticleManager::CreateRootSignature()
@@ -157,9 +149,17 @@ void ParticleManager::CreateRootSignature()
 	rootParameters[0].DescriptorTable.pDescriptorRanges = descriptorRange;
 	rootParameters[0].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
 
-	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	// デスクリプタレンジ(いんすたんしんぐ)
+	D3D12_DESCRIPTOR_RANGE descriptorRangeIns[1] = {};
+	descriptorRangeIns[0].BaseShaderRegister = 0;
+	descriptorRangeIns[0].NumDescriptors = 1;
+	descriptorRangeIns[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRangeIns[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	rootParameters[1].Descriptor.ShaderRegister = 0;
+	rootParameters[1].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeIns);
 
 	descriptionRootSignature.pParameters = rootParameters;
 	descriptionRootSignature.NumParameters = _countof(rootParameters);
@@ -198,7 +198,6 @@ D3D12_GRAPHICS_PIPELINE_STATE_DESC ParticleManager::CreatePipelineStateDesc()
 
 	CreateRootSignature();
 
-
 	graphicsPipelineStateDesc.pRootSignature = pso_->rootSignature_.Get();
 
 	IDxcBlob* vsBlob = dxCommon_->GetDXC()->CompileShader(L"Particle.VS.hlsl", L"vs_6_0");
@@ -226,15 +225,37 @@ D3D12_GRAPHICS_PIPELINE_STATE_DESC ParticleManager::CreatePipelineStateDesc()
 
 D3D12_BLEND_DESC ParticleManager::CreateBlendDesc()
 {
-	return D3D12_BLEND_DESC();
+	// BlendState の設定
+	D3D12_BLEND_DESC blendDesc{};
+	// すべての色要素を書き込む
+	blendDesc.RenderTarget[0].RenderTargetWriteMask =
+		D3D12_COLOR_WRITE_ENABLE_ALL;
+
+	return blendDesc;
 }
 
 D3D12_RASTERIZER_DESC ParticleManager::CreateRasterizerDesc()
 {
-	return D3D12_RASTERIZER_DESC();
+	// Rasterizerstate の設定
+	D3D12_RASTERIZER_DESC rasterizerDesc{};
+	// 裏面（時計回り）を表示しない
+	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
+	// 三角形の中を塗りつぶす
+	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
+
+	return rasterizerDesc;
 }
 
 D3D12_DEPTH_STENCIL_DESC ParticleManager::CreateDepthStencilDesc()
 {
-	return D3D12_DEPTH_STENCIL_DESC();
+	// DepthStencilState の設定
+	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
+	// Depth の機能を有効化する
+	depthStencilDesc.DepthEnable = true;
+	// 書き込みする
+	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	// 比較関数は LessEqual。つまり、近ければ描画される
+	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+
+	return depthStencilDesc;
 }
