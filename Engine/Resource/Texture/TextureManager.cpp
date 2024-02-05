@@ -28,13 +28,15 @@ TextureManager* TextureManager::GetInstance()
 	return &textureManager;
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE TextureManager::GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index) {
+D3D12_CPU_DESCRIPTOR_HANDLE TextureManager::GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index)
+{
 	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	handleCPU.ptr += static_cast<UINT64>(descriptorSize) * static_cast<UINT64>(index);
 	return handleCPU;
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index) {
+D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index)
+{
 	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap->GetGPUDescriptorHandleForHeapStart();
 	handleGPU.ptr += static_cast<UINT64>(descriptorSize) * static_cast<UINT64>(index);
 	return handleGPU;
@@ -115,7 +117,8 @@ void TextureManager::Reset()
 	indexNextDescriptorHeap_ = 0;
 
 	// 全てのテクスチャをリセットする
-	for (size_t i = 0; i < kDescriptorSize; i++) {
+	for (size_t i = 0; i < kDescriptorSize; i++)
+	{
 		textures_[i].resource_.Reset(); // リソース
 		textures_[i].cpuDescriptorHandleSRV_.ptr = 0; // ディスクリプタハンドル（CPU）
 		textures_[i].gpuDescriptorHandleSRV_.ptr = 0; // ディスクリプタハンドル（GPU）
@@ -125,7 +128,7 @@ void TextureManager::Reset()
 	// 絶対に読み込むテクスチャを読み込む
 	Load("Resources/EngineResource", "uvChecker.png");
 	Load("Resources/EngineResource", "white2x2.png");
-
+	Load("Resources/EngineResource", "circle.png");
 }
 
 DirectX::ScratchImage TextureManager::LoadTexture(const std::string& filePath)
@@ -193,11 +196,13 @@ ID3D12Resource* TextureManager::CreateTextureResource(const DirectX::TexMetadata
 
 }
 
-void TextureManager::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages) {
+void TextureManager::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages)
+{
 	// Meta 情報を取得
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
 	// 全 MipMap について
-	for (size_t mipLevel = 0; mipLevel < metadata.mipLevels; ++mipLevel) {
+	for (size_t mipLevel = 0; mipLevel < metadata.mipLevels; ++mipLevel)
+	{
 		// MipLevel を指定して各 Image を取得
 		const DirectX::Image* img = mipImages.GetImage(mipLevel, 0, 0);
 		// Texture に転送
@@ -250,7 +255,8 @@ uint32_t TextureManager::LoadInternal(const std::string& directoryPath, const st
 		return texture.name == fileName;
 		});
 	// コンテナ内にテクスチャが存在すればそのハンドルを返す
-	if (it != textures_.end()) {
+	if (it != textures_.end())
+	{
 		// テクスチャハンドルを返す
 		handle = static_cast<uint32_t>(std::distance(textures_.begin(), it));
 		return handle;

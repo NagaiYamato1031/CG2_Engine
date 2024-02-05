@@ -40,6 +40,8 @@ void ParticleManager::Initialize(DirectXCommon* dxCommon)
 
 	CreatePSO();
 
+	textureHandle_ = TextureManager::Load(kTextureName_);
+
 	Reset();
 }
 
@@ -73,21 +75,28 @@ void ParticleManager::Update()
 
 void ParticleManager::Draw(ViewProjection* viewProjection)
 {
-	//ID3D12GraphicsCommandList* cmdList = dxCommon_->GetCommandList();
-	//TextureManager* textureManager = TextureManager::GetInstance();
+	ID3D12GraphicsCommandList* cmdList = dxCommon_->GetCommandList();
+	TextureManager* textureManager = TextureManager::GetInstance();
 
+	cmdList->RSSetViewports(1, dxCommon_->GetViewPort());
+	cmdList->RSSetScissorRects(1, dxCommon_->GetScissorRect());
+
+	cmdList->SetGraphicsRootSignature(pso_->rootSignature_.Get());
+	cmdList->SetPipelineState(pso_->state_.Get());
+
+	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	viewProjection;
 	// Vertex は共通して使いたい
 	//cmdList->IASetVertexBuffers(0, 1, &vbView_);
 
 	// 使うテクスチャも共通
-	//textureManager->SetGraphicsDescriptorTable(0, modelData_.material.textureHandle_);
-	
+	textureManager->SetGraphicsDescriptorTable(0, textureHandle_);
+
 	// ワールド行列と WVP 行列
 	// ワールド行列と、VP 渡してシェーダーで計算させる
 	//cmdList->SetGraphicsRootConstantBufferView(1, transformResource_->GetGPUVirtualAddress());
 
-	
+
 	// インデックスを使った描画に変更する
 	//cmdList->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 
@@ -168,6 +177,7 @@ void ParticleManager::CreateRootSignature()
 	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 	rootParameters[1].Descriptor.ShaderRegister = 0;
+	rootParameters[1].DescriptorTable.pDescriptorRanges = descriptorRangeIns;
 	rootParameters[1].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeIns);
 
 	descriptionRootSignature.pParameters = rootParameters;

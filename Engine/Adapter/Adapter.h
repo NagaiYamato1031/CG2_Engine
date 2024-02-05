@@ -7,6 +7,7 @@
 #include "../Resource/Texture/TextureManager.h"
 #include "../Sprite/Sprite.h"
 #include "../Model/Model.h"
+#include "../Particle/ParticleManager.h"
 #include "../Particle/Particle.h"
 #include "..//Collider/CollisionManager.h"
 #include "../Object/ViewProjection.h"

@@ -34,11 +34,13 @@ void Framework::Initialize()
 	textureManager_ = TextureManager::GetInstance();
 	textureManager_->Initialize(dxCommon_);
 
+	particleManager_ = ParticleManager::GetInstance();
+	particleManager_->Initialize(dxCommon_);
+
 	Sprite::StaticInitialize(winApp_, dxCommon_);
 
 	Model::StaticInitialize(dxCommon_);
-	//Particle::StaticInitialize(dxCommon_);
-
+	
 	collisionManager_.reset(new CollisionManager);
 
 	configs_ = GlobalConfigs::GetInstance();
@@ -71,6 +73,8 @@ void Framework::UpddateALL()
 
 	// ゲーム固有の処理
 	Update();
+
+	particleManager_->Update();
 
 	collisionManager_->CheckCollisionAll();
 

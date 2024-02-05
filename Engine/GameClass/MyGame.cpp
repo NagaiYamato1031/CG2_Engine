@@ -113,6 +113,8 @@ void MyGame::Draw()
 	//	パーティクル描画	//
 	//------------------*/
 
+	particleManager_->Draw(vp);
+
 	///particle_->Draw(wt, vp);
 
 	/*------------------//

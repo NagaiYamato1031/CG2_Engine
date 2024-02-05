@@ -24,7 +24,8 @@ public:
 
 	static const size_t kParticleMaxSize = 128;
 
-	const char* kTextureName_ = "Particle.png";
+	// テクスチャマネージャー側でも読み込んでいる
+	const char* kTextureName_ = "circle.png";
 
 public:
 

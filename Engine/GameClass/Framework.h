@@ -6,11 +6,15 @@ class Framework
 {
 protected:
 
+	// 本来はユニークポインタで管理する
+
 	WinApp* winApp_ = nullptr;
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	ImGuiManager* imguiManager_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
+	ParticleManager* particleManager_ = nullptr;
+
 
 	std::unique_ptr<CollisionManager> collisionManager_;
 
