@@ -1,9 +1,12 @@
 #pragma once
 
+#include "../Math/Math.h"
+#include "../Object/WorldTransform.h"
+
 /*	パーティクルの最小単位
-* 
-* 
-* 
+*
+*
+*
 */
 
 
@@ -11,13 +14,17 @@ class Particle
 {
 public:
 
-	enum class Category : size_t
+	struct TransformMatrix
 	{
-		TYPE1 = 0,		// 中心から円状に広がる
-		//TYPE2,
+		Matrix4x4 matWVP;
+		Matrix4x4 matMorld;
+	};
 
-
-		_COUNT,		// enum カウント
+	struct ParticleData
+	{
+		WorldTransform world_;
+		Vector3 velocity_;
+		Vector4 color_;
 	};
 
 private:
@@ -26,5 +33,10 @@ private:
 
 public:
 
+	void Initialize();
+
+	void Update();
+
+	void Draw();
 
 };

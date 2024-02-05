@@ -8,6 +8,7 @@
 
 #include "../../externals/DirectXTex/d3dx12.h"
 #include "../Base/DirectXCommon.h"
+#include "../Resource/Texture/TextureManager.h"
 
 using namespace Microsoft::WRL;
 
@@ -32,27 +33,20 @@ D3D12_GPU_DESCRIPTOR_HANDLE ParticleManager::GetGPUDescriptorHandle(ID3D12Descri
 	return handleGPU;
 }
 
-
-void ParticleManager::SetGraphicsDescriptorTable(uint32_t rootParameterIndex, uint32_t textureHandle)
-{
-	// テクスチャハンドルがテクスチャサイズを超過していないか確認する
-	assert(textureHandle < textures_.size());
-
-	// ディスクリプタヒープを取得
-	ID3D12DescriptorHeap* ppHeaps[] = { descriptorHeap_.Get() };
-	// 取得したディスクリプタヒープをコマンドリストにセット
-	dxCommon_->GetCommandList()->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-
-	rootParameterIndex;
-}
-
-
 void ParticleManager::Initialize(DirectXCommon* dxCommon)
 {
 	assert(dxCommon);
 	dxCommon_ = dxCommon;
 
 	CreatePSO();
+
+	Reset();
+}
+
+void ParticleManager::Reset()
+{
+	// ディスクリプタヒープをリセット
+	descriptorHeap_.Reset();
 
 	HRESULT hr = S_FALSE;
 
@@ -66,23 +60,37 @@ void ParticleManager::Initialize(DirectXCommon* dxCommon)
 	// 生成出来ているか確認
 	assert(SUCCEEDED(hr));
 
-	Reset();
-}
-
-void ParticleManager::Reset()
-{
-
 	// 次のディスクリプタヒープの番号を指定
 	indexNextParticleCategory_ = 0;
 
-	// 全てのテクスチャをリセットする
-	for (size_t i = 0; i < kParticleMaxSize; i++)
-	{
-		//textures_[i].resource_.Reset(); // リソース
-		//textures_[i].cpuDescriptorHandleSRV_.ptr = 0; // ディスクリプタハンドル（CPU）
-		//textures_[i].gpuDescriptorHandleSRV_.ptr = 0; // ディスクリプタハンドル（GPU）
-		//textures_[i].name.clear(); // ファイル名
-	}
+	particles_.clear();
+
+}
+
+void ParticleManager::Update()
+{
+}
+
+void ParticleManager::Draw(ViewProjection* viewProjection)
+{
+	//ID3D12GraphicsCommandList* cmdList = dxCommon_->GetCommandList();
+	//TextureManager* textureManager = TextureManager::GetInstance();
+
+	viewProjection;
+	// Vertex は共通して使いたい
+	//cmdList->IASetVertexBuffers(0, 1, &vbView_);
+
+	// 使うテクスチャも共通
+	//textureManager->SetGraphicsDescriptorTable(0, modelData_.material.textureHandle_);
+	
+	// ワールド行列と WVP 行列
+	// ワールド行列と、VP 渡してシェーダーで計算させる
+	//cmdList->SetGraphicsRootConstantBufferView(1, transformResource_->GetGPUVirtualAddress());
+
+	
+	// インデックスを使った描画に変更する
+	//cmdList->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+
 }
 
 void ParticleManager::CreatePSO()
@@ -143,6 +151,7 @@ void ParticleManager::CreateRootSignature()
 	descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 	// ルートパラメータ
+	// 後でここら辺に色をピクセルシェーダーに送る処理を追加する
 	D3D12_ROOT_PARAMETER rootParameters[2] = {};
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;

@@ -14,8 +14,7 @@ using namespace Microsoft::WRL;
 
 uint32_t TextureManager::Load(const std::string& fileName)
 {
-	return TextureManager::GetInstance()->LoadInternal("Resources", fileName);
-
+	return TextureManager::GetInstance()->LoadInternal("Resources/UserResource", fileName);
 }
 
 uint32_t TextureManager::Load(const std::string& directoryPath, const std::string& fileName)
@@ -122,6 +121,11 @@ void TextureManager::Reset()
 		textures_[i].gpuDescriptorHandleSRV_.ptr = 0; // ディスクリプタハンドル（GPU）
 		textures_[i].name.clear(); // ファイル名
 	}
+
+	// 絶対に読み込むテクスチャを読み込む
+	Load("Resources/EngineResource", "uvChecker.png");
+	Load("Resources/EngineResource", "white2x2.png");
+
 }
 
 DirectX::ScratchImage TextureManager::LoadTexture(const std::string& filePath)

@@ -1,12 +1,14 @@
 #pragma once
 
-#include <array>
+#include <list>
 #include <string>
 #include <wrl.h>
 #include <d3d12.h>
 #include "Particle.h"
 #include "../Base/DirectXCommon.h"
 #include "../Base/PSO/PSO.h"
+
+#include "../Object/ViewProjection.h"
 
 // パーティクルをどう扱うか考える
 // ・設置するだけのものを一回作る
@@ -22,6 +24,8 @@ public:
 
 	static const size_t kParticleMaxSize = 128;
 
+	const char* kTextureName_ = "Particle.png";
+
 public:
 
 	static ParticleManager* GetInstance();
@@ -32,13 +36,15 @@ public:
 
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
-	void SetGraphicsDescriptorTable(uint32_t rootParameterIndex, uint32_t textureHandle);
-
 public:
 
 	void Initialize(DirectXCommon* dxCommon);
 
 	void Reset();
+
+	void Update();
+
+	void Draw(ViewProjection* viewProjection);
 
 private:
 
@@ -63,10 +69,10 @@ private:
 
 	std::unique_ptr<PSO> pso_;
 
-	std::array<Particle*, kParticleMaxSize> textures_;
+	std::list<std::unique_ptr<Particle>> particles_;
 
 	uint32_t indexNextParticleCategory_ = 0u;
 
-
+	uint32_t textureHandle_ = 0u;
 
 };
