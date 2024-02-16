@@ -17,6 +17,31 @@
 
 class ParticleManager final
 {
+private:
+
+
+private:
+
+	// SRV 用の Heap
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
+
+	DirectXCommon* dxCommon_ = nullptr;
+
+	std::unique_ptr<PSO> pso_;
+
+	std::list<std::unique_ptr<Particle>> particles_;
+
+	uint32_t indexNextParticleCategory_ = 0u;
+
+	uint32_t textureHandle_ = 0u;
+
+	// 共通する頂点とインデックス
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertBuff_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> indexBuff_;
+
+	D3D12_VERTEX_BUFFER_VIEW vbView_;
+	D3D12_INDEX_BUFFER_VIEW ibView_;
+
 public:
 
 	// パーティクルのトランスフォーム最大数
@@ -60,20 +85,5 @@ private:
 	D3D12_RASTERIZER_DESC CreateRasterizerDesc();
 
 	D3D12_DEPTH_STENCIL_DESC CreateDepthStencilDesc();
-
-private:
-
-	// SRV 用の Heap
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
-
-	DirectXCommon* dxCommon_ = nullptr;
-
-	std::unique_ptr<PSO> pso_;
-
-	std::list<std::unique_ptr<Particle>> particles_;
-
-	uint32_t indexNextParticleCategory_ = 0u;
-
-	uint32_t textureHandle_ = 0u;
 
 };

@@ -87,7 +87,7 @@ void ParticleManager::Draw(ViewProjection* viewProjection)
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	viewProjection;
 	// Vertex は共通して使いたい
-	//cmdList->IASetVertexBuffers(0, 1, &vbView_);
+	cmdList->IASetVertexBuffers(0, 1, &vbView_);
 
 	// 使うテクスチャも共通
 	textureManager->SetGraphicsDescriptorTable(0, textureHandle_);
