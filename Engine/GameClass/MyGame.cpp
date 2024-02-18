@@ -37,7 +37,22 @@ void MyGame::Update()
 	//------------------*/
 
 
-
+	if (input_->PushKey(DIK_W))
+	{
+		sprite_->position_.y -= 5.0f;
+	}
+	if (input_->PushKey(DIK_S))
+	{
+		sprite_->position_.y += 5.0f;
+	}
+	if (input_->PushKey(DIK_A))
+	{
+		sprite_->position_.x -= 5.0f;
+	}
+	if (input_->PushKey(DIK_D))
+	{
+		sprite_->position_.x += 5.0f;
+	}
 
 
 	/*////////////
@@ -47,6 +62,8 @@ void MyGame::Update()
 #ifdef _DEBUG
 
 	ImGui::Begin("DebugConsole");
+
+	ImGui::Text("WASD : Move Sprite");
 
 	if (ImGui::TreeNode("Sprite"))
 	{
