@@ -23,7 +23,7 @@ private:
 private:
 
 	// SRV 用の Heap
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap_;
 
 	DirectXCommon* dxCommon_ = nullptr;
 

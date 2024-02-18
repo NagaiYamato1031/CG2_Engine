@@ -42,7 +42,7 @@ IDxcBlob* DXC::CompileShader(const std::wstring& filePath, const wchar_t* profil
 	std::wstring fullPath = kDirectoryPath + filePath;
 
 	// これからシェーダーをコンパイルする旨をログに出す
-	MyUtility::Log(MyUtility::ConvertString(std::format(L"Begin CompileShader, path:{}, profile:{}\n", fullPath, profile)));
+	MyUtility::Log(MyUtility::ConvertString(std::format(L"[DXC] Begin Compile: path:\"{}\", profile:{}\n", fullPath, profile)));
 	// hlsl ファイルを読む
 	Microsoft::WRL::ComPtr<IDxcBlobEncoding> shaderSource = nullptr;
 	HRESULT hr = dxcUtils_->LoadFile(fullPath.c_str(), nullptr, shaderSource.GetAddressOf());
@@ -101,7 +101,7 @@ IDxcBlob* DXC::CompileShader(const std::wstring& filePath, const wchar_t* profil
 	hr = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
 	assert(SUCCEEDED(hr));
 	// 成功したログを出す
-	MyUtility::Log(MyUtility::ConvertString(std::format(L"Compile Succeeded, path:{}, profile:{}\n", fullPath, profile)));
+	MyUtility::Log(MyUtility::ConvertString(std::format(L"[DXC] Compile Successed.\n")));// : path:{}, profile:{}\n", fullPath, profile)));
 	// もう使わないリソースを解放
 	//shaderSource->Release();
 	//shaderResult->Release();

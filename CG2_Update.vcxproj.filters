@@ -238,6 +238,9 @@
     <ClCompile Include="Engine\Sprite\Sprite.cpp">
       <Filter>Engine\Sprite</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Particle\Emitter.cpp">
+      <Filter>Engine\Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -379,6 +382,9 @@
       <Filter>Engine\Particle</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Particle\ParticleManager.h">
+      <Filter>Engine\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Particle\Emitter.h">
       <Filter>Engine\Particle</Filter>
     </ClInclude>
   </ItemGroup>

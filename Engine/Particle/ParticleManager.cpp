@@ -48,7 +48,7 @@ void ParticleManager::Initialize(DirectXCommon* dxCommon)
 void ParticleManager::Reset()
 {
 	// ディスクリプタヒープをリセット
-	descriptorHeap_.Reset();
+	srvHeap_.Reset();
 
 	HRESULT hr = S_FALSE;
 
@@ -58,7 +58,7 @@ void ParticleManager::Reset()
 	descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE; // フラッグ
 	descHeapDesc.NumDescriptors = kParticleMaxSize;
 	// ディスクリプタヒープの生成
-	hr = dxCommon_->GetDevice()->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descriptorHeap_));
+	hr = dxCommon_->GetDevice()->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&srvHeap_));
 	// 生成出来ているか確認
 	assert(SUCCEEDED(hr));
 

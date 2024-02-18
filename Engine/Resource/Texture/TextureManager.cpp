@@ -248,6 +248,8 @@ uint32_t TextureManager::LoadInternal(const std::string& directoryPath, const st
 	// 次のディスクリプタヒープ番号の取得
 	uint32_t handle = indexNextDescriptorHeap_;
 
+	MyUtility::Log(std::format("[TextureManager] Load File: path:\"{}\", file:\"{}\"\n",directoryPath, fileName));
+
 	// テクスチャのコンテナ内に目的のテクスチャがあるかを確認する
 	// コンテナ内の最初から最後までに引数のテクスチャがあるかを確認する
 	auto it = std::find_if(textures_.begin(), textures_.end(), [&](const auto& texture) {
@@ -259,6 +261,7 @@ uint32_t TextureManager::LoadInternal(const std::string& directoryPath, const st
 	{
 		// テクスチャハンドルを返す
 		handle = static_cast<uint32_t>(std::distance(textures_.begin(), it));
+		MyUtility::Log(std::format("[TextureManager] Exist: Handle: {}\n", handle));
 		return handle;
 	}
 
@@ -358,6 +361,8 @@ uint32_t TextureManager::LoadInternal(const std::string& directoryPath, const st
 		&srvDesc,
 		texture.cpuDescriptorHandleSRV_
 	);
+
+	MyUtility::Log(std::format("[TextureManager] Generate: Handle: {}\n", handle));
 
 	// 次のディスクリプタヒープ番号を指定
 	indexNextDescriptorHeap_++;

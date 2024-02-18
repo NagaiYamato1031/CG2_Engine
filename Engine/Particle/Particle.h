@@ -22,9 +22,10 @@ public:
 
 	struct ParticleData
 	{
-		WorldTransform world_;
+		Vector3 translate_;
 		Vector3 velocity_;
 		Vector4 color_;
+		uint32_t textureHandle_;
 	};
 
 private:
