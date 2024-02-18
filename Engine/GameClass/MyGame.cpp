@@ -12,11 +12,15 @@ void MyGame::Initialize()
 	//	ゲームで使う変数	//
 	//------------------*/
 
-	uint32_t textureHandle = textureManager_->Load("uvChecker.png");
+	uint32_t textureHandleUV = textureManager_->Load("uvChecker.png");
+	uint32_t textureHandleWHITE = textureManager_->Load("white2x2.png");
 
-	sprite_.reset(Sprite::Create(textureHandle));
-	//sprite_->Initialize();
-
+	spriteUV_.reset(Sprite::Create(textureHandleUV));
+	spriteWHITE_.reset(Sprite::Create(textureHandleWHITE));
+	
+	spriteWHITE_->scale_ = { 10,10 };
+	spriteWHITE_->position_ = { 640,360 };
+	spriteWHITE_->anchorPoint_ = { 0.5f,0.5f };
 
 	/*------------------//
 	//	ゲームで使う変数	//
@@ -39,19 +43,19 @@ void MyGame::Update()
 
 	if (input_->PushKey(DIK_W))
 	{
-		sprite_->position_.y -= 5.0f;
+		spriteUV_->position_.y -= 5.0f;
 	}
 	if (input_->PushKey(DIK_S))
 	{
-		sprite_->position_.y += 5.0f;
+		spriteUV_->position_.y += 5.0f;
 	}
 	if (input_->PushKey(DIK_A))
 	{
-		sprite_->position_.x -= 5.0f;
+		spriteUV_->position_.x -= 5.0f;
 	}
 	if (input_->PushKey(DIK_D))
 	{
-		sprite_->position_.x += 5.0f;
+		spriteUV_->position_.x += 5.0f;
 	}
 
 
@@ -116,7 +120,8 @@ void MyGame::Draw()
 	//	スプライト描画		//
 	//------------------*/
 
-	sprite_->Draw();
+	spriteUV_->Draw();
+	spriteWHITE_->Draw();	
 
 	/*------------------//
 	//	スプライト描画		//
