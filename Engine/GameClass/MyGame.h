@@ -18,6 +18,7 @@ public:
 
 private:
 
-	std::unique_ptr<Sprite> sprite_;
+	std::unique_ptr<Sprite> spriteUV_;
+	std::unique_ptr<Sprite> spriteWHITE_;
 
 };
