@@ -3,6 +3,7 @@
 #include "./DXC/DXC.h"
 
 #include <string>
+#include <thread>
 #include <cassert>
 #include <format>
 

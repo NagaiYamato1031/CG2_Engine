@@ -1,6 +1,7 @@
 #include "Quaternion.h"
 
 #include <cmath>
+#include <cfloat>
 #include "../Math.h"
 
 Quaternion::Quaternion()

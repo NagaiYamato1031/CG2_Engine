@@ -224,6 +224,9 @@
     <ClCompile Include="Engine\Sprite\Sprite.cpp">
       <Filter>Engine\Sprite</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Object\3D\Object3d.cpp">
+      <Filter>Engine\Object\3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -360,6 +363,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Sprite\Sprite.h">
       <Filter>Engine\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Object\3D\Object3d.h">
+      <Filter>Engine\Object\3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
