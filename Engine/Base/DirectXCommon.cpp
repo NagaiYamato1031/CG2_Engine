@@ -310,6 +310,10 @@ ID3D12DescriptorHeap* DirectXCommon::CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_
 	return descriptorHeap;
 }
 
+void DirectXCommon::CreateShaderResourceView(ID3D12Resource* pResource, D3D12_SHADER_RESOURCE_VIEW_DESC* srvDesc,const D3D12_CPU_DESCRIPTOR_HANDLE& cpuHandle)
+{
+	device_->CreateShaderResourceView(pResource,srvDesc,cpuHandle);
+}
 
 void DirectXCommon::InitializeCommand() {
 	HRESULT hr = S_FALSE;

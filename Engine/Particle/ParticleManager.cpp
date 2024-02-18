@@ -43,6 +43,30 @@ void ParticleManager::Initialize(DirectXCommon* dxCommon)
 	textureHandle_ = TextureManager::Load(kTextureName_);
 
 	Reset();
+
+	instancingResource = dxCommon_->CreateBufferResource(sizeof(TransformMatrix) * 10);
+	instancingResource->Map(0, nullptr, reinterpret_cast<void**>(&instancingData));
+
+	for (size_t i = 0; i < 10; i++)
+	{
+		transforms[i].scale_ = { 1.0f,1.0f,1.0f };
+		transforms[i].rotate_ = { 0.0f,0.0f,0.0f };
+		transforms[i].translate_ = { i * 0.1f,i * 0.1f,i * 0.1f };
+		instancingData[i].World = Matrix4x4::MakeIdentity4x4();
+		instancingData[i].WVP = Matrix4x4::MakeIdentity4x4();
+	}
+
+	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSRVDesc{};
+	instancingSRVDesc.Format = DXGI_FORMAT_UNKNOWN;
+	instancingSRVDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	instancingSRVDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+	instancingSRVDesc.Buffer.FirstElement = 0;
+	instancingSRVDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
+	instancingSRVDesc.Buffer.NumElements = 10;
+	instancingSRVDesc.Buffer.StructureByteStride = sizeof(TransformMatrix);
+	instancingSRVHandleCPU = GetCPUDescriptorHandle(srvHeap_.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 0);
+	instancingSRVHandleGPU = GetGPUDescriptorHandle(srvHeap_.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 0);
+	dxCommon_->CreateShaderResourceView(instancingResource.Get(), &instancingSRVDesc, instancingSRVHandleCPU);
 }
 
 void ParticleManager::Reset()
@@ -67,6 +91,32 @@ void ParticleManager::Reset()
 
 	particles_.clear();
 
+	vertBuff_.Reset();
+
+	vertBuff_ = dxCommon_->CreateBufferResource(sizeof(VertexData) * 6);
+	VertexData* vertDate = nullptr;
+	vertBuff_->Map(0, nullptr, reinterpret_cast<void**>(&vertDate));
+	vertDate[0].position = { -0.5f,-0.5f,0.0f,1.0f };	// 左下
+	vertDate[1].position = { -0.5f,0.5f,0.0f,1.0f };	// 左上
+	vertDate[2].position = { 0.5f,-0.5f,0.0f,1.0f };	// 右下
+	vertDate[3].position = { -0.5f,0.5f,0.0f,1.0f };	// 左上
+	vertDate[4].position = { 0.5f,0.5f,0.0f,1.0f };		// 右上
+	vertDate[5].position = { 0.5f,-0.5f,0.0f,1.0f };	// 右下
+
+	vertDate[0].texcoord = { 0.0f,1.0f };
+	vertDate[1].texcoord = { 0.0f,0.0f };
+	vertDate[2].texcoord = { 1.0f,1.0f };
+	vertDate[3].texcoord = { 0.0f,0.0f };
+	vertDate[4].texcoord = { 1.0f,0.0f };
+	vertDate[5].texcoord = { 1.0f,1.0f };
+
+	vertDate[0].normal = { 0.0f,0.0f,1.0f };
+	vertDate[1].normal = { 0.0f,0.0f,1.0f };
+	vertDate[2].normal = { 0.0f,0.0f,1.0f };
+	vertDate[3].normal = { 0.0f,0.0f,1.0f };
+	vertDate[4].normal = { 0.0f,0.0f,1.0f };
+	vertDate[5].normal = { 0.0f,0.0f,1.0f };
+
 }
 
 void ParticleManager::Update()
@@ -78,6 +128,8 @@ void ParticleManager::Draw(ViewProjection* viewProjection)
 	ID3D12GraphicsCommandList* cmdList = dxCommon_->GetCommandList();
 	TextureManager* textureManager = TextureManager::GetInstance();
 
+	// 前準備
+
 	cmdList->RSSetViewports(1, dxCommon_->GetViewPort());
 	cmdList->RSSetScissorRects(1, dxCommon_->GetScissorRect());
 
@@ -85,21 +137,38 @@ void ParticleManager::Draw(ViewProjection* viewProjection)
 	cmdList->SetPipelineState(pso_->state_.Get());
 
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// 行列の計算
+	for (size_t i = 0; i < 10; i++)
+	{
+		Matrix4x4 matWorld = Matrix4x4::MakeAffineMatrix(transforms[i].scale_, transforms[i].rotate_, transforms[i].translate_);
+		Matrix4x4 matWVP = matWorld * viewProjection->GetViewProjectionMatrix();
+		instancingData[i].WVP = matWVP;
+		instancingData[i].World = matWorld;
+	}
+
 	viewProjection;
+
 	// Vertex は共通して使いたい
 	cmdList->IASetVertexBuffers(0, 1, &vbView_);
 
 	// 使うテクスチャも共通
 	textureManager->SetGraphicsDescriptorTable(0, textureHandle_);
 
+	// ディスクリプタヒープを取得
+	ID3D12DescriptorHeap* ppHeaps[] = { srvHeap_.Get() };
+	// 取得したディスクリプタヒープをコマンドリストにセット
+	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+
 	// ワールド行列と WVP 行列
 	// ワールド行列と、VP 渡してシェーダーで計算させる
-	//cmdList->SetGraphicsRootConstantBufferView(1, transformResource_->GetGPUVirtualAddress());
-
+	//cmdList->SetGraphicsRootConstantBufferView(1, vertBuff_->GetGPUVirtualAddress());
+	// これでいけるはず
+	cmdList->SetGraphicsRootDescriptorTable(1, instancingSRVHandleGPU);
 
 	// インデックスを使った描画に変更する
 	//cmdList->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
-
+	cmdList->DrawInstanced(6, 10, 0, 0);
 }
 
 void ParticleManager::CreatePSO()
@@ -153,6 +222,7 @@ void ParticleManager::CreateRootSignature()
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
 	// デスクリプタレンジ
+	// テクスチャ
 	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
 	descriptorRange[0].BaseShaderRegister = 0;
 	descriptorRange[0].NumDescriptors = 1;
@@ -161,6 +231,7 @@ void ParticleManager::CreateRootSignature()
 
 	// ルートパラメータ
 	// 後でここら辺に色をピクセルシェーダーに送る処理を追加する
+	// テクスチャ
 	D3D12_ROOT_PARAMETER rootParameters[2] = {};
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
@@ -176,7 +247,7 @@ void ParticleManager::CreateRootSignature()
 
 	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	rootParameters[1].Descriptor.ShaderRegister = 0;
+	//rootParameters[1].Descriptor.ShaderRegister = 0;
 	rootParameters[1].DescriptorTable.pDescriptorRanges = descriptorRangeIns;
 	rootParameters[1].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeIns);
 

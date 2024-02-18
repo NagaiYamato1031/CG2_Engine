@@ -17,8 +17,23 @@
 
 class ParticleManager final
 {
-private:
+public:
 
+	struct VertexData
+	{
+		Vector4 position;
+		Vector2 texcoord;
+		Vector3 normal;
+	};
+
+	// パーティクルのトランスフォーム最大数
+	static const size_t kTransformMaxSize_ = 65535;
+
+	// エミッターの量?
+	static const size_t kParticleMaxSize = 128;
+
+	// テクスチャマネージャー側でも読み込んでいる
+	const char* kTextureName_ = "circle.png";
 
 private:
 
@@ -42,15 +57,23 @@ private:
 	D3D12_VERTEX_BUFFER_VIEW vbView_;
 	D3D12_INDEX_BUFFER_VIEW ibView_;
 
-public:
+	// めっちゃごり押しに使う変数
+	Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
 
-	// パーティクルのトランスフォーム最大数
-	static const size_t kTransformMaxSize_ = 65535;
+	D3D12_CPU_DESCRIPTOR_HANDLE instancingSRVHandleCPU;
+	D3D12_GPU_DESCRIPTOR_HANDLE instancingSRVHandleGPU;
 
-	static const size_t kParticleMaxSize = 128;
+	WorldTransform transforms[10];
 
-	// テクスチャマネージャー側でも読み込んでいる
-	const char* kTextureName_ = "circle.png";
+	struct TransformMatrix
+	{
+		Matrix4x4 WVP;
+		Matrix4x4 World;
+	};
+
+	TransformMatrix* instancingData = nullptr;
+
+
 
 public:
 

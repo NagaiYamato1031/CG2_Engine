@@ -64,6 +64,8 @@ public: // メンバ関数
 	/// <returns></returns>
 	ID3D12DescriptorHeap* CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescrioptors, bool shaderVisible);
 
+	void CreateShaderResourceView(ID3D12Resource* pResource, D3D12_SHADER_RESOURCE_VIEW_DESC* srvDesc,const D3D12_CPU_DESCRIPTOR_HANDLE& cpuHandle);
+
 private: // メンバ変数
 	// ウィンドウズアプリケーション管理
 	WinApp* winApp_ = nullptr;

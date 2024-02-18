@@ -17,12 +17,12 @@ Emitter::pList Emitter::Emit(const Emitter& emitter)
 	{
 		//particles.push_back();
 	}
-
+	return Emitter::pList();
 }
 
 Particle Emitter::CreateParticle()
 {
-
+	return Particle();
 }
 
 void Emitter::Update()
