@@ -1,0 +1,2 @@
+C:\Users\永井大陸\source\repos\6-1-CG2\externals\DirectXTex\Bin\Desktop_2022_Win10\x64\Release\DirectXTex.lib
+C:\Users\永井大陸\source\repos\6-1-CG2\project\externals\DirectXTex\Bin\Desktop_2022_Win10\x64\Release\DirectXTex.lib
