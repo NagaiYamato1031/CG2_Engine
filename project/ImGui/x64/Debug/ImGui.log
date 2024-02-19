@@ -1,8 +1,0 @@
-﻿  imgui.cpp
-  imgui_demo.cpp
-  imgui_draw.cpp
-  imgui_impl_dx12.cpp
-  imgui_impl_win32.cpp
-  imgui_tables.cpp
-  imgui_widgets.cpp
-  ImGui.vcxproj -> C:\Users\永井大陸\source\repos\6-1-CG2\project\x64\Debug\ImGui.lib
