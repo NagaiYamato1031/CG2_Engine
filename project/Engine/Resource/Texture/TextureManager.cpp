@@ -14,13 +14,13 @@ using namespace Microsoft::WRL;
 
 uint32_t TextureManager::Load(const std::string& fileName)
 {
-	return TextureManager::GetInstance()->LoadInternal("userResources", fileName);
+	return TextureManager::GetInstance()->LoadInternal("userResource", fileName);
 
 }
 
 uint32_t TextureManager::Load(const std::string& directoryPath, const std::string& fileName)
 {
-	return TextureManager::GetInstance()->LoadInternal(directoryPath, fileName);
+	return TextureManager::GetInstance()->LoadInternal("userResource/" + directoryPath, fileName);
 }
 
 TextureManager* TextureManager::GetInstance()
@@ -99,8 +99,8 @@ void TextureManager::Initialize(DirectXCommon* dxCommon)
 	cIncrementSize_ = dxCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	Reset();
 
-	Load("EngineResource", "uvChecker.png");
-	Load("EngineResource", "white2x2.png");
+	Load("../EngineResource", "uvChecker.png");
+	Load("../EngineResource", "white2x2.png");
 }
 
 void TextureManager::Reset()
