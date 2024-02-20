@@ -30,7 +30,7 @@ private: // メンバ変数
 	Microsoft::WRL::ComPtr<IDxcIncludeHandler> dxcIncludeHandler_;
 
 private: // 非公開のメンバ関数
-	const std::wstring kDirectoryPath = L"./resources/shaders/";
+	const std::wstring kDirectoryPath = L"./resources/EngineResource/shaders/";
 
 	DXC(const DXC&) = delete;
 	const DXC& operator=(const DXC&) = delete;

@@ -14,7 +14,7 @@ using namespace Microsoft::WRL;
 
 uint32_t TextureManager::Load(const std::string& fileName)
 {
-	return TextureManager::GetInstance()->LoadInternal("Resources", fileName);
+	return TextureManager::GetInstance()->LoadInternal("userResources", fileName);
 
 }
 
@@ -29,13 +29,15 @@ TextureManager* TextureManager::GetInstance()
 	return &textureManager;
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE TextureManager::GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index) {
+D3D12_CPU_DESCRIPTOR_HANDLE TextureManager::GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index)
+{
 	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	handleCPU.ptr += static_cast<UINT64>(descriptorSize) * static_cast<UINT64>(index);
 	return handleCPU;
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index) {
+D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index)
+{
 	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap->GetGPUDescriptorHandleForHeapStart();
 	handleGPU.ptr += static_cast<UINT64>(descriptorSize) * static_cast<UINT64>(index);
 	return handleGPU;
@@ -96,6 +98,9 @@ void TextureManager::Initialize(DirectXCommon* dxCommon)
 	dxCommon_ = dxCommon;
 	cIncrementSize_ = dxCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	Reset();
+
+	Load("EngineResource", "uvChecker.png");
+	Load("EngineResource", "white2x2.png");
 }
 
 void TextureManager::Reset()
@@ -116,7 +121,8 @@ void TextureManager::Reset()
 	indexNextDescriptorHeap_ = 0;
 
 	// 全てのテクスチャをリセットする
-	for (size_t i = 0; i < kDescriptorSize; i++) {
+	for (size_t i = 0; i < kDescriptorSize; i++)
+	{
 		textures_[i].resource_.Reset(); // リソース
 		textures_[i].cpuDescriptorHandleSRV_.ptr = 0; // ディスクリプタハンドル（CPU）
 		textures_[i].gpuDescriptorHandleSRV_.ptr = 0; // ディスクリプタハンドル（GPU）
@@ -189,11 +195,13 @@ ID3D12Resource* TextureManager::CreateTextureResource(const DirectX::TexMetadata
 
 }
 
-void TextureManager::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages) {
+void TextureManager::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages)
+{
 	// Meta 情報を取得
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
 	// 全 MipMap について
-	for (size_t mipLevel = 0; mipLevel < metadata.mipLevels; ++mipLevel) {
+	for (size_t mipLevel = 0; mipLevel < metadata.mipLevels; ++mipLevel)
+	{
 		// MipLevel を指定して各 Image を取得
 		const DirectX::Image* img = mipImages.GetImage(mipLevel, 0, 0);
 		// Texture に転送
@@ -246,7 +254,8 @@ uint32_t TextureManager::LoadInternal(const std::string& directoryPath, const st
 		return texture.name == fileName;
 		});
 	// コンテナ内にテクスチャが存在すればそのハンドルを返す
-	if (it != textures_.end()) {
+	if (it != textures_.end())
+	{
 		// テクスチャハンドルを返す
 		handle = static_cast<uint32_t>(std::distance(textures_.begin(), it));
 		return handle;
@@ -257,11 +266,13 @@ uint32_t TextureManager::LoadInternal(const std::string& directoryPath, const st
 	texture.name = fileName;
 
 	// 含まれていた場合は .　と / を含めたフルパスを入れる
-	std::string fullPath = directoryPath + "/" + fileName;
+	std::string fullPath = "resources/" + directoryPath + "/" + fileName;
 
 	// ファイルパスをユニコード文字列に変換する
 	wchar_t wfilePath[256];
 	MultiByteToWideChar(CP_ACP, 0, fullPath.c_str(), -1, wfilePath, _countof(wfilePath));
+
+	MyUtility::Log(std::format("[TextureManager] LoadTexture : path:\"{}\"\n", fullPath));
 
 	// テクスチャ
 	DirectX::ScratchImage scratchImg = LoadTexture(fullPath);;
