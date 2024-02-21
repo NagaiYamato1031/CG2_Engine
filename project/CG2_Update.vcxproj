@@ -146,6 +146,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(SolutionDir)
     <ClCompile Include="Engine\Object\IObject.cpp" />
     <ClCompile Include="Engine\Object\ViewProjection.cpp" />
     <ClCompile Include="Engine\Object\WorldTransform.cpp" />
+    <ClCompile Include="Engine\Particle\Emitter.cpp" />
+    <ClCompile Include="Engine\Particle\Particle.cpp" />
+    <ClCompile Include="Engine\Particle\ParticleManager.cpp" />
     <ClCompile Include="Engine\Resource\Texture\TextureManager.cpp" />
     <ClCompile Include="Engine\Scene\BaseScene.cpp" />
     <ClCompile Include="Engine\Scene\SceneManager.cpp" />
@@ -203,6 +206,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(SolutionDir)
     <ClInclude Include="Engine\Object\IObject.h" />
     <ClInclude Include="Engine\Object\ViewProjection.h" />
     <ClInclude Include="Engine\Object\WorldTransform.h" />
+    <ClInclude Include="Engine\Particle\Emitter.h" />
+    <ClInclude Include="Engine\Particle\Particle.h" />
+    <ClInclude Include="Engine\Particle\ParticleManager.h" />
     <ClInclude Include="Engine\Resource\Texture\TextureManager.h" />
     <ClInclude Include="Engine\Scene\AbstractSceneFactory.h" />
     <ClInclude Include="Engine\Scene\BaseScene.h" />
@@ -228,6 +234,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(SolutionDir)
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\EngineResource\shaders\Particle.hlsli" />
     <None Include="resources\shaders\Object3d.hlsli" />
     <None Include="resources\shaders\Sprite.hlsli" />
   </ItemGroup>
@@ -246,6 +253,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(SolutionDir)
     <None Include="resources\shaders\Sprite.VS.hlsl">
       <FileType>Document</FileType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="resources\EngineResource\shaders\Particle.PS.hlsl" />
+    <FxCompile Include="resources\EngineResource\shaders\Particle.VS.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
