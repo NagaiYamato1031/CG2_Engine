@@ -364,7 +364,7 @@ uint32_t TextureManager::LoadInternal(const std::string& directoryPath, const st
 
 	// 次のディスクリプタヒープ番号を指定
 	indexNextDescriptorHeap_++;
-	MyUtility::Log(std::format("[TextureManager] NotFound : file:\"{}\", handle: {}\n", fileName, handle));
+	MyUtility::Log(std::format("[TextureManager] Generate : file:\"{}\", handle: {}\n", fileName, handle));
 
 	// ハンドルを返す
 	return handle;
