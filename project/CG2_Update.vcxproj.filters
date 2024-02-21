@@ -113,6 +113,9 @@
     <Filter Include="Application\Scene">
       <UniqueIdentifier>{8fa439fd-8478-43b7-b0ea-93b5ff753312}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Base\Heaps">
+      <UniqueIdentifier>{7111a046-8752-496c-a9d1-58fc28765b8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -247,6 +250,21 @@
     <ClCompile Include="Engine\Scene\BaseScene.cpp" />
     <ClCompile Include="Application\Scene\GameScene.cpp">
       <Filter>Application\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Base\Heaps\IHeap.cpp">
+      <Filter>Engine\Base\Heaps</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Base\Heaps\SRV.cpp">
+      <Filter>Engine\Base\Heaps</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Base\Heaps\RTV.cpp">
+      <Filter>Engine\Base\Heaps</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Base\Heaps\DSV.cpp">
+      <Filter>Engine\Base\Heaps</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Base\Heaps\HeapManager.cpp">
+      <Filter>Engine\Base\Heaps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -405,6 +423,21 @@
     </ClInclude>
     <ClInclude Include="Application\Scene\GameScene.h">
       <Filter>Application\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\Heaps\IHeap.h">
+      <Filter>Engine\Base\Heaps</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\Heaps\SRV.h">
+      <Filter>Engine\Base\Heaps</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\Heaps\RTV.h">
+      <Filter>Engine\Base\Heaps</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\Heaps\DSV.h">
+      <Filter>Engine\Base\Heaps</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Base\Heaps\HeapManager.h">
+      <Filter>Engine\Base\Heaps</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

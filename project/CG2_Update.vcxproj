@@ -114,6 +114,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(SolutionDir)
     <ClCompile Include="Application\Scene\TitleScene.cpp" />
     <ClCompile Include="Engine\base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\Base\DXC\DXC.cpp" />
+    <ClCompile Include="Engine\Base\Heaps\DSV.cpp" />
+    <ClCompile Include="Engine\Base\Heaps\HeapManager.cpp" />
+    <ClCompile Include="Engine\Base\Heaps\IHeap.cpp" />
+    <ClCompile Include="Engine\Base\Heaps\RTV.cpp" />
+    <ClCompile Include="Engine\Base\Heaps\SRV.cpp" />
     <ClCompile Include="Engine\Base\PSO\PSO.cpp" />
     <ClCompile Include="Engine\base\WinApp.cpp" />
     <ClCompile Include="Engine\Collider\CollisionManager.cpp" />
@@ -162,6 +167,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(SolutionDir)
     <ClInclude Include="Engine\Adapter\Adapter.h" />
     <ClInclude Include="Engine\base\DirectXCommon.h" />
     <ClInclude Include="Engine\Base\DXC\DXC.h" />
+    <ClInclude Include="Engine\Base\Heaps\DSV.h" />
+    <ClInclude Include="Engine\Base\Heaps\HeapManager.h" />
+    <ClInclude Include="Engine\Base\Heaps\IHeap.h" />
+    <ClInclude Include="Engine\Base\Heaps\RTV.h" />
+    <ClInclude Include="Engine\Base\Heaps\SRV.h" />
     <ClInclude Include="Engine\Base\PSO\PSO.h" />
     <ClInclude Include="Engine\base\WinApp.h" />
     <ClInclude Include="Engine\Collider\Collider.h" />

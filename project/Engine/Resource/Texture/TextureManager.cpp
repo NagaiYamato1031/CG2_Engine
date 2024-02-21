@@ -81,7 +81,7 @@ void TextureManager::SetGraphicsDescriptorTable(uint32_t rootParameterIndex, uin
 	assert(textureHandle < textures_.size());
 
 	// ディスクリプタヒープを取得
-	ID3D12DescriptorHeap* ppHeaps[] = { dxCommon_->GetSRVHeap() };
+	ID3D12DescriptorHeap* ppHeaps[] = { dxCommon_->GetSRV()->GetHeap()};
 	// 取得したディスクリプタヒープをコマンドリストにセット
 	dxCommon_->GetCommandList()->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 
@@ -339,12 +339,12 @@ uint32_t TextureManager::LoadInternal(const std::string& directoryPath, const st
 	//	assert(SUCCEEDED(result));
 	//}
 
-	ID3D12DescriptorHeap* srvHeap = dxCommon_->GetSRVHeap();
+	SRV* srvHeap = dxCommon_->GetSRV();
 	// SRVを作成するDescriptorHeapの場所を決める
 	texture.cpuDescriptorHandleSRV_ = GetCPUDescriptorHandle(
-		srvHeap, handle, cIncrementSize_); // CPU
+		srvHeap->GetHeap(), handle, cIncrementSize_); // CPU
 	texture.gpuDescriptorHandleSRV_ = GetGPUDescriptorHandle(
-		srvHeap, handle, cIncrementSize_); // GPU
+		srvHeap->GetHeap(), handle, cIncrementSize_); // GPU
 
 	// テクスチャのリソース設定を取得する
 	D3D12_RESOURCE_DESC resourceDesc = texture.resource_->GetDesc();
@@ -365,6 +365,9 @@ uint32_t TextureManager::LoadInternal(const std::string& directoryPath, const st
 	// 次のディスクリプタヒープ番号を指定
 	indexNextDescriptorHeap_++;
 	MyUtility::Log(std::format("[TextureManager] Generate : file:\"{}\", handle: {}\n", fileName, handle));
+	// カウントを進める
+	MyUtility::Log(std::format("[TextureManager] SRV: Register: {}\n", srvHeap->GetCount()));
+	srvHeap->Increment();
 
 	// ハンドルを返す
 	return handle;

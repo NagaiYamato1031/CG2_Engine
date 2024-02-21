@@ -25,6 +25,12 @@ void MyGame::Finalize()
 void MyGame::Update()
 {
 	sceneManager_->Update();
+	
+	ImGui::Begin("Framerate");
+
+	ImGui::Text("%f", ImGui::GetIO().Framerate);
+
+	ImGui::End();
 }
 
 void MyGame::Draw()

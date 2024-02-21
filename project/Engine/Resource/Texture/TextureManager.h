@@ -25,6 +25,7 @@ private:
 
 	std::array<Texture, kDescriptorSize> textures_;
 
+	// ヒープの一つの大きさ
 	uint32_t cIncrementSize_ = 0u;
 
 	// ImGui が 0 番目を使っているので 1 から
@@ -56,8 +57,11 @@ public:
 
 public:
 
+	// CPU 側のディスクリプタのハンドル
+	// インクリメント用のサイズとインデックスが逆で入れてる可能性大
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
+	// GPU 側のディスクリプタのハンドル
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
 	const std::string& GetTextureName(uint32_t textureHandle);

@@ -7,6 +7,7 @@
 #include <vector>
 #include "./WinApp.h"
 #include "DXC/DXC.h"
+#include "Heaps/HeapManager.h"
 
 class DirectXCommon
 {
@@ -52,18 +53,10 @@ public: // メンバ関数
 	D3D12_VIEWPORT* GetViewPort() { return &viewport_; }
 	D3D12_RECT* GetScissorRect() { return &scissorRect_; }
 	DXC* GetDXC() { return dxc_.get(); }
-	ID3D12DescriptorHeap* GetSRVHeap() { return srvHeap_.Get(); }
+	SRV* GetSRV() { return heaps_->srv(); }
+
 
 	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
-
-	/// <summary>
-	/// ディスクリプタヒープの作成
-	/// </summary>
-	/// <param name="heapType">ヒープのタイプ</param>
-	/// <param name="numDescrioptors">作るディスクリプタの数</param>
-	/// <param name="shaderVisible">シェーダーで触れるか</param>
-	/// <returns></returns>
-	ID3D12DescriptorHeap* CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescrioptors, bool shaderVisible);
 
 private: // メンバ変数
 	// ウィンドウズアプリケーション管理
@@ -78,9 +71,14 @@ private: // メンバ変数
 	Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain_;
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> backBuffers_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> depthBuffer_;
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap_;
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap_;
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap_;
+
+	std::unique_ptr<HeapManager> heaps_;
+
+	//Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap_;
+	//Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap_;
+	//Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap_;
+	
+	
 	Microsoft::WRL::ComPtr<ID3D12Fence> fence_;
 	UINT64 fenceVal_ = 0;
 	int32_t backBufferWidth_ = 0;
@@ -137,11 +135,6 @@ private: // 非公開のメンバ関数
 	/// フェンス生成
 	/// </summary>
 	void CreateFence();
-
-	/// <summary>
-	///　デスクリプタヒープのデスクリプタハンドル増分サイズを返す関数
-	/// </summary>
-	D3D12_CPU_DESCRIPTOR_HANDLE GetDescriptorHandleIncrementSize(const D3D12_CPU_DESCRIPTOR_HANDLE&, int, UINT);
 
 	/// <summary>
 	/// リソースバリアの実態を作る関数

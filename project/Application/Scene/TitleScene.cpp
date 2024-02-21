@@ -69,6 +69,7 @@ void TitleScene::Update()
 
 		ImGui::TreePop();
 	}
+
 	ImGui::End();
 
 
