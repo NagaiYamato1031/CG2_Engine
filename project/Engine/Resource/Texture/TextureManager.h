@@ -12,7 +12,7 @@ class TextureManager
 {
 public:
 
-	static const size_t kDescriptorSize = 64;
+	static const size_t kDescriptorSize = 128;
 
 	struct Texture {
 		Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
