@@ -8,13 +8,16 @@ protected:
 
 	WinApp* winApp_ = nullptr;
 	DirectXCommon* dxCommon_ = nullptr;
-	Input* input_ = nullptr;
 	ImGuiManager* imguiManager_ = nullptr;
+	Input* input_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
 
 	std::unique_ptr<CollisionManager> collisionManager_;
 
 	GlobalConfigs* configs_ = nullptr;
+
+	std::unique_ptr<AbstractSceneFactory> sceneFactory_;
+	std::unique_ptr<SceneManager> sceneManager_;
 
 	bool endRequest_ = false;
 

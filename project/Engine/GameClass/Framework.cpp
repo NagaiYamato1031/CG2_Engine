@@ -46,6 +46,8 @@ void Framework::Initialize(const std::string& title, int width, int height)
 	configs_ = GlobalConfigs::GetInstance();
 	configs_->LoadFiles();
 
+	sceneManager_.reset(new SceneManager);
+
 }
 
 void Framework::Finalize()
