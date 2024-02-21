@@ -17,8 +17,13 @@ void Framework::Run()
 
 void Framework::Initialize()
 {
+	Initialize("Engine");
+}
+
+void Framework::Initialize(const std::string& title, int width, int height)
+{
 	winApp_ = WinApp::GetInstance();
-	winApp_->Initialize("Engine", 1280, 720);
+	winApp_->Initialize(title.c_str(), width, height);
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	dxCommon_->Initialize(winApp_);

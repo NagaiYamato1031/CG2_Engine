@@ -27,6 +27,7 @@ public:
 protected:
 
 	virtual void Initialize();
+	virtual void Initialize(const std::string& title, int width = 1280, int height = 720);
 
 	virtual void Finalize();
 
