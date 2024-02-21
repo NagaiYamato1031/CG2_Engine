@@ -52,6 +52,7 @@ public: // メンバ関数
 	D3D12_VIEWPORT* GetViewPort() { return &viewport_; }
 	D3D12_RECT* GetScissorRect() { return &scissorRect_; }
 	DXC* GetDXC() { return dxc_.get(); }
+	ID3D12DescriptorHeap* GetSRVHeap() { return srvHeap_.Get(); }
 
 	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
 
@@ -78,6 +79,7 @@ private: // メンバ変数
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> backBuffers_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> depthBuffer_;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap_;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap_;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap_;
 	Microsoft::WRL::ComPtr<ID3D12Fence> fence_;
 	UINT64 fenceVal_ = 0;
@@ -120,6 +122,11 @@ private: // 非公開のメンバ関数
 	/// レンダーターゲット生成
 	/// </summary>
 	void CreateFinalRenderTargets();
+
+	/// <summary>
+	/// SRV や CBV のDescriptorHeap 生成
+	/// </summary>
+	void CreateSRVHeap();
 
 	/// <summary>
 	/// 深度バッファ初期化

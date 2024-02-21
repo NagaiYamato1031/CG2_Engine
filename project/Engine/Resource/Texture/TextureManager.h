@@ -21,6 +21,18 @@ public:
 		std::string name;
 	};
 
+private:
+
+	std::array<Texture, kDescriptorSize> textures_;
+
+	uint32_t cIncrementSize_ = 0u;
+
+	uint32_t indexNextDescriptorHeap_ = 0u;
+
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
+
+	DirectXCommon* dxCommon_ = nullptr;
+
 public:
 
 	/// <summary>
@@ -73,16 +85,4 @@ private:
 
 	uint32_t LoadInternal(const std::string& directoryPath, const std::string& fileName);
 
-
-private:
-
-	std::array<Texture, kDescriptorSize> textures_;
-
-	uint32_t cIncrementSize_ = 0u;
-
-	uint32_t indexNextDescriptorHeap_ = 0u;
-
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
-
-	DirectXCommon* dxCommon_ = nullptr;
 };
