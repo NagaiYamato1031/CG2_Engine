@@ -74,7 +74,9 @@
     </Link>
     <PostBuildEvent>
       <Command>copy "$(WIndowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "dxcompiler.dll"
-copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Command>
+copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"
+copy "$(WIndowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(SolutionDir)..\Generated\Outputs\$(Configuration)\dxcompiler.dll"
+copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(SolutionDir)..\Generated\Outputs\$(Configuration)\dxil.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -101,7 +103,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Com
     </Link>
     <PostBuildEvent>
       <Command>copy "$(WIndowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "dxcompiler.dll"
-copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"</Command>
+copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "dxil.dll"
+copy "$(WIndowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(SolutionDir)..\Generated\Outputs\$(Configuration)\dxcompiler.dll"
+copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(SolutionDir)..\Generated\Outputs\$(Configuration)\dxil.dll"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
