@@ -12,7 +12,7 @@ class TextureManager
 {
 public:
 
-	static const size_t kDescriptorSize = 256;
+	static const size_t kDescriptorSize = 64;
 
 	struct Texture {
 		Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
@@ -27,9 +27,10 @@ private:
 
 	uint32_t cIncrementSize_ = 0u;
 
-	uint32_t indexNextDescriptorHeap_ = 0u;
+	// ImGui が 0 番目を使っているので 1 から
+	uint32_t indexNextDescriptorHeap_ = 1u;
 
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
+	//Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
 
 	DirectXCommon* dxCommon_ = nullptr;
 

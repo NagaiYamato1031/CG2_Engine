@@ -81,7 +81,7 @@ void TextureManager::SetGraphicsDescriptorTable(uint32_t rootParameterIndex, uin
 	assert(textureHandle < textures_.size());
 
 	// ディスクリプタヒープを取得
-	ID3D12DescriptorHeap* ppHeaps[] = { descriptorHeap_.Get() };
+	ID3D12DescriptorHeap* ppHeaps[] = { dxCommon_->GetSRVHeap() };
 	// 取得したディスクリプタヒープをコマンドリストにセット
 	dxCommon_->GetCommandList()->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 
@@ -105,20 +105,20 @@ void TextureManager::Initialize(DirectXCommon* dxCommon)
 
 void TextureManager::Reset()
 {
-	HRESULT hr = S_FALSE;
+	//HRESULT hr = S_FALSE;
 
-	// ディスクリプタヒープの設定
-	D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
-	descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV; // タイプ設定
-	descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE; // フラッグ
-	descHeapDesc.NumDescriptors = kDescriptorSize;
-	// ディスクリプタヒープの生成
-	hr = dxCommon_->GetDevice()->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descriptorHeap_));
-	// 生成出来ているか確認
-	assert(SUCCEEDED(hr));
+	//// ディスクリプタヒープの設定
+	//D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
+	//descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV; // タイプ設定
+	//descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE; // フラッグ
+	//descHeapDesc.NumDescriptors = kDescriptorSize;
+	//// ディスクリプタヒープの生成
+	//hr = dxCommon_->GetDevice()->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descriptorHeap_));
+	//// 生成出来ているか確認
+	//assert(SUCCEEDED(hr));
 
 	// 次のディスクリプタヒープの番号を指定
-	indexNextDescriptorHeap_ = 0;
+	indexNextDescriptorHeap_ = 1;
 
 	// 全てのテクスチャをリセットする
 	for (size_t i = 0; i < kDescriptorSize; i++)
@@ -247,6 +247,8 @@ uint32_t TextureManager::LoadInternal(const std::string& directoryPath, const st
 	// 次のディスクリプタヒープ番号の取得
 	uint32_t handle = indexNextDescriptorHeap_;
 
+	MyUtility::Log(std::format("[TextureManager] LoadTexture : file:\"{}\", path:\"{}\"\n", fileName, directoryPath + fileName));
+
 	// テクスチャのコンテナ内に目的のテクスチャがあるかを確認する
 	// コンテナ内の最初から最後までに引数のテクスチャがあるかを確認する
 	auto it = std::find_if(textures_.begin(), textures_.end(), [&](const auto& texture) {
@@ -258,6 +260,7 @@ uint32_t TextureManager::LoadInternal(const std::string& directoryPath, const st
 	{
 		// テクスチャハンドルを返す
 		handle = static_cast<uint32_t>(std::distance(textures_.begin(), it));
+		MyUtility::Log(std::format("[TextureManager] Exist : file:\"{}\", handle: {}\n", fileName, handle));
 		return handle;
 	}
 
@@ -271,8 +274,6 @@ uint32_t TextureManager::LoadInternal(const std::string& directoryPath, const st
 	// ファイルパスをユニコード文字列に変換する
 	wchar_t wfilePath[256];
 	MultiByteToWideChar(CP_ACP, 0, fullPath.c_str(), -1, wfilePath, _countof(wfilePath));
-
-	MyUtility::Log(std::format("[TextureManager] LoadTexture : path:\"{}\"\n", fullPath));
 
 	// テクスチャ
 	DirectX::ScratchImage scratchImg = LoadTexture(fullPath);;
@@ -338,11 +339,12 @@ uint32_t TextureManager::LoadInternal(const std::string& directoryPath, const st
 	//	assert(SUCCEEDED(result));
 	//}
 
+	ID3D12DescriptorHeap* srvHeap = dxCommon_->GetSRVHeap();
 	// SRVを作成するDescriptorHeapの場所を決める
 	texture.cpuDescriptorHandleSRV_ = GetCPUDescriptorHandle(
-		descriptorHeap_.Get(), handle, cIncrementSize_); // CPU
+		srvHeap, handle, cIncrementSize_); // CPU
 	texture.gpuDescriptorHandleSRV_ = GetGPUDescriptorHandle(
-		descriptorHeap_.Get(), handle, cIncrementSize_); // GPU
+		srvHeap, handle, cIncrementSize_); // GPU
 
 	// テクスチャのリソース設定を取得する
 	D3D12_RESOURCE_DESC resourceDesc = texture.resource_->GetDesc();
@@ -362,6 +364,7 @@ uint32_t TextureManager::LoadInternal(const std::string& directoryPath, const st
 
 	// 次のディスクリプタヒープ番号を指定
 	indexNextDescriptorHeap_++;
+	MyUtility::Log(std::format("[TextureManager] NotFound : file:\"{}\", handle: {}\n", fileName, handle));
 
 	// ハンドルを返す
 	return handle;
