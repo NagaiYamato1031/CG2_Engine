@@ -43,6 +43,9 @@ void Framework::Initialize(const std::string& title, int width, int height)
 
 	collisionManager_.reset(new CollisionManager);
 
+	particleManager_ = ParticleManager::GetInstance();
+	particleManager_->Initialize(dxCommon_);
+
 	configs_ = GlobalConfigs::GetInstance();
 	configs_->LoadFiles();
 
@@ -76,6 +79,8 @@ void Framework::UpddateALL()
 	Update();
 
 	collisionManager_->CheckCollisionAll();
+
+	particleManager_->Update();
 
 	imguiManager_->End();
 }

@@ -33,12 +33,12 @@ public:
 	static const size_t kParticleMaxSize = 128;
 
 	// テクスチャマネージャー側でも読み込んでいる
-	const char* kTextureName_ = "circle.png";
+	const char* kTextureName_ = "uvChecker.png";
 
 private:
 
 	// SRV 用の Heap
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap_;
+	//Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap_;
 
 	DirectXCommon* dxCommon_ = nullptr;
 
@@ -56,6 +56,9 @@ private:
 
 	D3D12_VERTEX_BUFFER_VIEW vbView_;
 	D3D12_INDEX_BUFFER_VIEW ibView_;
+
+	// パーティクル生成カウント
+	uint32_t useCount_ = 0u;
 
 	// めっちゃごり押しに使う変数
 	Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;

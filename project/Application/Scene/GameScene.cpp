@@ -7,6 +7,8 @@ void GameScene::Initialize()
 {
 	BaseScene::Init();
 
+	view_.reset(new ViewProjection);
+	view_->Initialize();
 }
 
 void GameScene::Update()
@@ -23,6 +25,8 @@ void GameScene::Update()
 #ifdef _DEBUG
 
 	ImGui::Begin("DebugConsole");
+
+
 
 	ImGui::End();
 
@@ -54,6 +58,10 @@ void GameScene::Draw()
 	////////////////*/
 
 	Model::PostDraw();
+
+	// パーティクル描画
+	ParticleManager::GetInstance()->Draw(view_.get());
+
 
 	Sprite::PreDraw();
 

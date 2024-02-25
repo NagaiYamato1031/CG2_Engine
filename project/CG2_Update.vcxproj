@@ -255,8 +255,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(SolutionDir)
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="resources\EngineResource\shaders\Particle.PS.hlsl" />
-    <FxCompile Include="resources\EngineResource\shaders\Particle.VS.hlsl" />
+    <None Include="resources\EngineResource\shaders\Particle.PS.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="resources\EngineResource\shaders\Particle.VS.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

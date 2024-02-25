@@ -491,13 +491,11 @@
     <None Include="resources\EngineResource\shaders\Particle.hlsli">
       <Filter>Engine\Resource\Shader\Particle</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="resources\EngineResource\shaders\Particle.PS.hlsl">
+    <None Include="resources\EngineResource\shaders\Particle.PS.hlsl">
       <Filter>Engine\Resource\Shader\Particle</Filter>
-    </FxCompile>
-    <FxCompile Include="resources\EngineResource\shaders\Particle.VS.hlsl">
+    </None>
+    <None Include="resources\EngineResource\shaders\Particle.VS.hlsl">
       <Filter>Engine\Resource\Shader\Particle</Filter>
-    </FxCompile>
+    </None>
   </ItemGroup>
 </Project>

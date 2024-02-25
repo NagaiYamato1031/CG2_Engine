@@ -6,9 +6,9 @@
 #include <sstream>
 #include <vector>
 
-#include "../../externals/DirectXTex/d3dx12.h"
-#include "../Base/DirectXCommon.h"
-#include "../Resource/Texture/TextureManager.h"
+#include "externals/DirectXTex/d3dx12.h"
+#include "Base/DirectXCommon.h"
+#include "Resource/Texture/TextureManager.h"
 
 using namespace Microsoft::WRL;
 
@@ -56,6 +56,8 @@ void ParticleManager::Initialize(DirectXCommon* dxCommon)
 		instancingData[i].WVP = Matrix4x4::MakeIdentity4x4();
 	}
 
+	SRV* srvHeap = dxCommon_->GetSRV();
+
 	D3D12_SHADER_RESOURCE_VIEW_DESC instancingSRVDesc{};
 	instancingSRVDesc.Format = DXGI_FORMAT_UNKNOWN;
 	instancingSRVDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -64,14 +66,16 @@ void ParticleManager::Initialize(DirectXCommon* dxCommon)
 	instancingSRVDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
 	instancingSRVDesc.Buffer.NumElements = 10;
 	instancingSRVDesc.Buffer.StructureByteStride = sizeof(TransformMatrix);
-	instancingSRVHandleCPU = GetCPUDescriptorHandle(srvHeap_.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 0);
-	instancingSRVHandleGPU = GetGPUDescriptorHandle(srvHeap_.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 0);
-	dxCommon_->CreateShaderResourceView(instancingResource.Get(), &instancingSRVDesc, instancingSRVHandleCPU);
+	instancingSRVHandleCPU = srvHeap->GetCPUHandle(); GetCPUDescriptorHandle(srvHeap->GetHeap(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 0);
+	instancingSRVHandleGPU = srvHeap->GetGPUHandle(); GetGPUDescriptorHandle(srvHeap->GetHeap(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 0);
+	dxCommon_->GetDevice()->CreateShaderResourceView(instancingResource.Get(), &instancingSRVDesc, instancingSRVHandleCPU);
+	srvHeap->Increment();
 }
 
 void ParticleManager::Reset()
 {
 	// ディスクリプタヒープをリセット
+	/*
 	srvHeap_.Reset();
 
 	HRESULT hr = S_FALSE;
@@ -85,6 +89,7 @@ void ParticleManager::Reset()
 	hr = dxCommon_->GetDevice()->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&srvHeap_));
 	// 生成出来ているか確認
 	assert(SUCCEEDED(hr));
+	*/
 
 	// 次のディスクリプタヒープの番号を指定
 	indexNextParticleCategory_ = 0;
@@ -94,6 +99,9 @@ void ParticleManager::Reset()
 	vertBuff_.Reset();
 
 	vertBuff_ = dxCommon_->CreateBufferResource(sizeof(VertexData) * 6);
+	vbView_.BufferLocation = vertBuff_->GetGPUVirtualAddress();
+	vbView_.SizeInBytes = UINT(sizeof(VertexData) * 6);
+	vbView_.StrideInBytes = sizeof(VertexData);
 	VertexData* vertDate = nullptr;
 	vertBuff_->Map(0, nullptr, reinterpret_cast<void**>(&vertDate));
 	vertDate[0].position = { -0.5f,-0.5f,0.0f,1.0f };	// 左下
@@ -156,7 +164,7 @@ void ParticleManager::Draw(ViewProjection* viewProjection)
 	textureManager->SetGraphicsDescriptorTable(0, textureHandle_);
 
 	// ディスクリプタヒープを取得
-	ID3D12DescriptorHeap* ppHeaps[] = { srvHeap_.Get() };
+	ID3D12DescriptorHeap* ppHeaps[] = { dxCommon_->GetSRV()->GetHeap() };
 	// 取得したディスクリプタヒープをコマンドリストにセット
 	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 

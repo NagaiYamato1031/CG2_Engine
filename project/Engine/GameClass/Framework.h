@@ -13,6 +13,7 @@ protected:
 	TextureManager* textureManager_ = nullptr;
 
 	std::unique_ptr<CollisionManager> collisionManager_;
+	ParticleManager* particleManager_ = nullptr;
 
 	GlobalConfigs* configs_ = nullptr;
 

@@ -7,6 +7,7 @@ class GameScene : public BaseScene
 {
 private:
 
+	std::unique_ptr<ViewProjection> view_;
 
 public:
 

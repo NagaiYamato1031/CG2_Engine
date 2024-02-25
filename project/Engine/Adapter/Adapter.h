@@ -8,6 +8,7 @@
 #include "../Sprite/Sprite.h"
 #include "../Model/Model.h"
 #include "..//Collider/CollisionManager.h"
+#include "Particle/ParticleManager.h"
 #include "../Object/ViewProjection.h"
 #include "../Configs/GlobalConfigs.h"
 #include "../Object/3D/3dObjectList.h"

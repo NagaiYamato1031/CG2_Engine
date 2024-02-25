@@ -101,6 +101,8 @@ void TitleScene::Draw()
 
 	Model::PostDraw();
 
+
+
 	Sprite::PreDraw();
 
 	/*////////////////////

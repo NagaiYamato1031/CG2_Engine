@@ -101,6 +101,7 @@ void TextureManager::Initialize(DirectXCommon* dxCommon)
 
 	Load("../EngineResource", "uvChecker.png");
 	Load("../EngineResource", "white2x2.png");
+	Load("../EngineResource", "circle.png");
 }
 
 void TextureManager::Reset()
