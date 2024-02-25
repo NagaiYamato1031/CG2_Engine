@@ -8,13 +8,13 @@ MyGame::~MyGame()
 
 void MyGame::Initialize()
 {
-	Framework::Initialize();
+	Framework::Initialize("LE2A_15_ナガイ_ヤマト");
 
 	sceneFactory_.reset(new SceneFactory);
 	sceneManager_->Initialize();
 	sceneManager_->SetSceneFactory(sceneFactory_.get());
 
-	sceneManager_->ChangeScene("TITLE");
+	sceneManager_->ChangeScene("GAMEPLAY");
 }
 
 void MyGame::Finalize()
