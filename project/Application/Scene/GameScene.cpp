@@ -60,7 +60,7 @@ void GameScene::Draw()
 	Model::PostDraw();
 
 	// パーティクル描画
-	ParticleManager::GetInstance()->Draw(view_.get());
+	//ParticleManager::GetInstance()->Draw(view_.get());
 
 
 	Sprite::PreDraw();

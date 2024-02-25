@@ -14,7 +14,7 @@ void MyGame::Initialize()
 	sceneManager_->Initialize();
 	sceneManager_->SetSceneFactory(sceneFactory_.get());
 
-	sceneManager_->ChangeScene("GAMEPLAY");
+	sceneManager_->ChangeScene("TITLE");
 }
 
 void MyGame::Finalize()
