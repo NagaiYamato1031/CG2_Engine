@@ -15,7 +15,7 @@ protected:
 	Input* input_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
 
-	CollisionManager* collisionManager_ = nullptr;
+	std::unique_ptr<CollisionManager> collisionManager_;
 
 	GlobalConfigs* configs_ = nullptr;
 
