@@ -7,16 +7,12 @@ void TitleScene::Initialize()
 {
 	BaseScene::Init();
 
-	uint32_t textureHandleUV = textureManager_->Load("uvChecker.png");
-	uint32_t textureHandleWHITE = textureManager_->Load("white2x2.png");
+	uint32_t textureHandleTitle = textureManager_->Load("uvChecker.png");
 
-	spriteUV_.reset(Sprite::Create(textureHandleUV));
-	spriteWHITE_.reset(Sprite::Create(textureHandleWHITE));
+	spriteTItle_.reset(Sprite::Create(textureHandleTitle));
 
-	spriteWHITE_->scale_ = { 10,10 };
-	spriteWHITE_->position_ = { 640,360 };
-	spriteWHITE_->anchorPoint_ = { 0.5f,0.5f };
-
+	spriteTItle_->anchorPoint_ = { 0.5f,0.5f };
+	spriteTItle_->position_ = { 1280.0f * 0.5f,720.0f * 0.5f };
 }
 
 void TitleScene::Update()
@@ -24,23 +20,6 @@ void TitleScene::Update()
 	/*////////////////////
 	//	ゲーム内の処理		//
 	//------------------*/
-
-	if (input_->PushKey(DIK_W))
-	{
-		spriteUV_->position_.y -= 5.0f;
-	}
-	if (input_->PushKey(DIK_S))
-	{
-		spriteUV_->position_.y += 5.0f;
-	}
-	if (input_->PushKey(DIK_A))
-	{
-		spriteUV_->position_.x -= 5.0f;
-	}
-	if (input_->PushKey(DIK_D))
-	{
-		spriteUV_->position_.x += 5.0f;
-	}
 
 	if (input_->TriggerKey(DIK_SPACE))
 	{
@@ -55,17 +34,16 @@ void TitleScene::Update()
 
 	ImGui::Begin("DebugConsole");
 
-	ImGui::Text("WASD : Move Sprite");
-
 	if (ImGui::TreeNode("Sprite"))
 	{
 
-		ImGui::DragFloat2("position", &spriteUV_->position_.x, 1.0f);
-		ImGui::DragFloat2("size", &spriteUV_->scale_.x, 0.01f);
-		ImGui::DragFloat("rotate", &spriteUV_->rotation_, 0.002f);
-		ImGui::SliderFloat2("anchorpoint", &spriteUV_->anchorPoint_.x, 0.0f, 1.0f);
-
-		ImGui::ColorEdit4("color", &spriteUV_->color_.x);
+		ImGui::DragFloat2("position", &spriteTItle_->position_.x, 1.0f);
+		ImGui::DragFloat2("size", &spriteTItle_->scale_.x, 0.01f);
+		ImGui::DragFloat("rotate", &spriteTItle_->rotation_, 0.002f);
+		ImGui::SliderFloat2("anchorpoint", &spriteTItle_->anchorPoint_.x, 0.0f, 1.0f);
+		Vector2 size = spriteTItle_->GetTextureSize();
+		ImGui::Text("TextureSize : %.2f,%.2f", size.x, size.y);
+		ImGui::ColorEdit4("color", &spriteTItle_->color_.x);
 
 		ImGui::TreePop();
 	}
@@ -109,8 +87,7 @@ void TitleScene::Draw()
 	//	スプライト描画		//
 	//------------------*/
 
-	spriteUV_->Draw();
-	spriteWHITE_->Draw();
+	spriteTItle_->Draw();
 
 	/*------------------//
 	//	スプライト描画		//

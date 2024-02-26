@@ -8,8 +8,7 @@ class TitleScene : public BaseScene
 private:
 
 
-	std::unique_ptr<Sprite> spriteUV_;
-	std::unique_ptr<Sprite> spriteWHITE_;
+	std::unique_ptr<Sprite> spriteTItle_;
 
 public:
 
