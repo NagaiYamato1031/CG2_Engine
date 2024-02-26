@@ -69,6 +69,7 @@ void ParticleManager::Initialize(DirectXCommon* dxCommon)
 	instancingSRVHandleCPU = srvHeap->GetCPUHandle(); GetCPUDescriptorHandle(srvHeap->GetHeap(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 0);
 	instancingSRVHandleGPU = srvHeap->GetGPUHandle(); GetGPUDescriptorHandle(srvHeap->GetHeap(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 0);
 	dxCommon_->GetDevice()->CreateShaderResourceView(instancingResource.Get(), &instancingSRVDesc, instancingSRVHandleCPU);
+	MyUtility::Log(std::format("[ParticleManager] SRV : Index: {}\n", srvHeap->GetCount()));
 	srvHeap->Increment();
 }
 

@@ -371,7 +371,7 @@ uint32_t TextureManager::LoadInternal(const std::string& directoryPath, const st
 	indexNextDescriptorHeap_++;
 	MyUtility::Log(std::format("[TextureManager] Generate : file:\"{}\", handle: {}\n", fileName, handle));
 	// カウントを進める
-	MyUtility::Log(std::format("[TextureManager] SRV: Register: {}\n", srvHeap->GetCount()));
+	MyUtility::Log(std::format("[TextureManager] SRV : Index: {}\n", srvHeap->GetCount()));
 	srvHeap->Increment();
 
 	// ハンドルを返す
