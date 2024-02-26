@@ -14,5 +14,6 @@ void BaseScene::Init()
 
 void BaseScene::SetSceneManager(SceneManager* manager)
 {
+	assert(manager);
 	sceneManager_ = manager;
 }
