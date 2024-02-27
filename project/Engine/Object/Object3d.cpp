@@ -1,5 +1,5 @@
 #include "Object3d.h"
-#include "../../Utility/MyUtility.h"
+#include "Utility/MyUtility.h"
 
 #include <assert.h>
 

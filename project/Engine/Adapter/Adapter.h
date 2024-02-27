@@ -11,6 +11,5 @@
 #include "Particle/ParticleManager.h"
 #include "../Object/ViewProjection.h"
 #include "../Configs/GlobalConfigs.h"
-#include "../Object/3D/3dObjectList.h"
 #include "Scene/AbstractSceneFactory.h"
 #include "Scene/SceneManager.h"

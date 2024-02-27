@@ -37,7 +37,7 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
 	std::string line;
 
 	// ファイルを開く
-	std::ifstream file(directoryPath + "/" + filename);
+	std::ifstream file("resources/" + directoryPath + "/" + filename);
 	assert(file.is_open());
 
 	// ファイルを読んで、ModelData を構築
@@ -312,9 +312,10 @@ void Model::Initialize()
 MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename) {
 	// 必要な変数
 	MaterialData materialData;
+	materialData.textureHandle_ = 1;
 	std::string line;
 	// ファイルを開く
-	std::ifstream file(directoryPath + "/" + filename);
+	std::ifstream file("resources/" + directoryPath + "/" + filename);
 	assert(file.is_open());
 	// ファイルを読んで、MaterialData を構築
 	while (std::getline(file, line)) {

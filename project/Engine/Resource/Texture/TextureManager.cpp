@@ -99,8 +99,8 @@ void TextureManager::Initialize(DirectXCommon* dxCommon)
 	cIncrementSize_ = dxCommon_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	Reset();
 
-	Load("../EngineResource", "uvChecker.png");
 	Load("../EngineResource", "white2x2.png");
+	Load("../EngineResource", "uvChecker.png");
 	Load("../EngineResource", "circle.png");
 }
 

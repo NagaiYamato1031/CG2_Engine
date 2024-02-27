@@ -4,11 +4,11 @@
 #include <wrl.h>
 #include <d3d12.h>
 
-#include "../../Math/Math.h"
-#include "../WorldTransform.h"
-#include "../ViewProjection.h"
-#include "../../Base/DirectXCommon.h"
-#include "../../Base/PSO/PSO.h"
+#include "Math/Math.h"
+#include "WorldTransform.h"
+#include "ViewProjection.h"
+#include "Base/DirectXCommon.h"
+#include "Base/PSO/PSO.h"
 
 class Object3d
 {

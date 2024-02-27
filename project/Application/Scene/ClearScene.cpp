@@ -1,25 +1,25 @@
-#include "TitleScene.h"
+#include "ClearScene.h"
 
 #include "Adapter/Adapter.h"
 #include "Scene/SceneManager.h"
 
-void TitleScene::Initialize()
+void ClearScene::Initialize()
 {
 	BaseScene::Init();
 
-	uint32_t textureHandleTitle = textureManager_->Load("Title.png");
+	uint32_t textureHandleClear = textureManager_->Load("Clear.png");
 	uint32_t textureHandleSpace = textureManager_->Load("Space.png");
 
-	spriteTitle_.reset(Sprite::Create(textureHandleTitle));
+	spriteClear_.reset(Sprite::Create(textureHandleClear));
 	spriteSpace_.reset(Sprite::Create(textureHandleSpace));
 
-	spriteTitle_->anchorPoint_ = { 0.5f,0.5f };
+	spriteClear_->anchorPoint_ = { 0.5f,0.5f };
 	spriteSpace_->anchorPoint_ = { 0.5f,0.5f };
-	spriteTitle_->position_ = { 1280.0f * 0.5f,720.0f * 0.5f };
+	spriteClear_->position_ = { 1280.0f * 0.5f,720.0f * 0.5f };
 	spriteSpace_->position_ = { 1280.0f * 0.5f,720.0f * 0.5f };
 }
 
-void TitleScene::Update()
+void ClearScene::Update()
 {
 	/*////////////////////
 	//	ゲーム内の処理		//
@@ -27,7 +27,7 @@ void TitleScene::Update()
 
 	if (input_->TriggerKey(DIK_SPACE))
 	{
-		sceneManager_->ChangeScene("GAMEPLAY");
+		sceneManager_->ChangeScene("TITLE");
 	}
 
 	/*////////////
@@ -38,6 +38,19 @@ void TitleScene::Update()
 
 	ImGui::Begin("DebugConsole");
 
+	if (ImGui::TreeNode("ClearSprite"))
+	{
+
+		ImGui::DragFloat2("position", &spriteClear_->position_.x, 1.0f);
+		ImGui::DragFloat2("size", &spriteClear_->scale_.x, 0.01f);
+		ImGui::DragFloat("rotate", &spriteClear_->rotation_, 0.002f);
+		ImGui::SliderFloat2("anchorpoint", &spriteClear_->anchorPoint_.x, 0.0f, 1.0f);
+		Vector2 size = spriteClear_->GetTextureSize();
+		ImGui::Text("TextureSize : %.2f,%.2f", size.x, size.y);
+		ImGui::ColorEdit4("color", &spriteClear_->color_.x);
+
+		ImGui::TreePop();
+	}
 	if (ImGui::TreeNode("SpaceSprite"))
 	{
 
@@ -68,7 +81,7 @@ void TitleScene::Update()
 	////////////////////*/
 }
 
-void TitleScene::Draw()
+void ClearScene::Draw()
 {
 	Model::PreDraw();
 
@@ -91,7 +104,7 @@ void TitleScene::Draw()
 	//	スプライト描画		//
 	//------------------*/
 
-	spriteTitle_->Draw();
+	spriteClear_->Draw();
 	spriteSpace_->Draw();
 
 	/*------------------//
