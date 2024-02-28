@@ -13,6 +13,7 @@ public:
 		None = 0u,
 		Player,
 		Enemy,
+		Destroy,
 	};
 
 protected:

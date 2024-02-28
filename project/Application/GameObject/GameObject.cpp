@@ -45,5 +45,4 @@ void GameObject::CalcTranslate()
 	pos *= kCUBEDISTANCE_;
 	pos.z = world_.translate_.z;
 	world_.translate_ = pos;
-	prePosition_ = mapPosition_;
 }

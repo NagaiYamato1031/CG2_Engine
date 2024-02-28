@@ -14,8 +14,12 @@ void Player::Initialize()
 
 void Player::Update()
 {
-
 	CalcTranslate();
+}
+
+void Player::PostUpdate()
+{
+	prePosition_ = mapPosition_;
 }
 
 void Player::MoveUp()

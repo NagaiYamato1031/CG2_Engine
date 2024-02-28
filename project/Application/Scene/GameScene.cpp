@@ -46,7 +46,7 @@ void GameScene::Initialize()
 	SetElement(player_.get());
 
 	enemyList_.clear();
-	for (size_t i = 0; i < rand() % 11 + 10; i++)
+	for (size_t i = 0; i < rand() % 6 + 15; i++)
 	{
 		Enemy* data = new Enemy;
 		data->Initialize();
@@ -68,6 +68,7 @@ void GameScene::Initialize()
 
 	spriteMove_->anchorPoint_ = { 0.5f,0.5f };
 	spriteMove_->position_ = { 1280.0f * 0.5f,720.0f * 0.5f };
+
 }
 
 void GameScene::Update()
@@ -94,6 +95,13 @@ void GameScene::Update()
 	ImGui::Text("None : %d", noneList_.size());
 	ImGui::Text("enemy : %d", enemyList_.size());
 
+	Vector2 pos = player_->GetPosition();
+	ImGui::Text("position : %.1f, %.1f", pos.x, pos.y);
+	pos.x += kMAPSIZE_ / 2.0f;
+	pos.y += kMAPSIZE_ / 2.0f;
+	ImGui::Text("cposition : %.1f, %.1f", pos.x, pos.y);
+	ImGui::Text("element : %d", map_[(uint32_t)pos.y][(uint32_t)pos.x]);
+
 	ImGui::End();
 
 
@@ -110,6 +118,15 @@ void GameScene::Update()
 	if (enemyList_.size() == 0)
 	{
 		sceneManager_->ChangeScene("CLEAR");
+	}
+
+	if (input_->TriggerKey(DIK_R))
+	{
+		Initialize();
+	}
+	if (input_->TriggerKey(DIK_ESCAPE))
+	{
+		Escape();
 	}
 
 	preMap_ = map_;
@@ -131,32 +148,40 @@ void GameScene::Update()
 	}
 
 	// 入力
+	Vector2 movePos = player_->GetPosition();
+	movePos.x += kMAPSIZE_ / 2;
+	movePos.y += kMAPSIZE_ / 2;
 
 	if (input_->TriggerKey(DIK_W))
 	{
+		movePos.y += 1;
 		// 範囲内なら
-		if (player_->GetPosition().y + kMAPSIZE_ / 2.0f + 1 < kMAPSIZE_)
+		// 歩ける足場か確認
+		if (movePos.y < kMAPSIZE_ && CheckCanMove(movePos))
 		{
 			player_->MoveUp();
 		}
 	}
 	else if (input_->TriggerKey(DIK_S))
 	{
-		if (0 < player_->GetPosition().y + kMAPSIZE_ / 2.0f - 1)
+		movePos.y -= 1;
+		if (-1 < movePos.y && CheckCanMove(movePos))
 		{
 			player_->MoveDown();
 		}
 	}
 	else if (input_->TriggerKey(DIK_A))
 	{
-		if (0 < player_->GetPosition().x + kMAPSIZE_ / 2.0f - 1)
+		movePos.x -= 1;
+		if (-1 < movePos.x && CheckCanMove(movePos))
 		{
 			player_->MoveLeft();
 		}
 	}
 	else if (input_->TriggerKey(DIK_D))
 	{
-		if (player_->GetPosition().x + kMAPSIZE_ / 2.0f + 1 < kMAPSIZE_)
+		movePos.x += 1;
+		if (movePos.x < kMAPSIZE_ && CheckCanMove(movePos))
 		{
 			player_->MoveRight();
 		}
@@ -165,6 +190,8 @@ void GameScene::Update()
 	player_->Update();
 
 	UpdateMap();
+
+	player_->PostUpdate();
 
 	/*------------------//
 	//	ゲーム内の処理		//
@@ -215,6 +242,11 @@ void GameScene::Draw()
 
 	Sprite::PostDraw();
 
+}
+
+void GameScene::Escape()
+{
+	sceneManager_->ChangeScene("TITLE");
 }
 
 void GameScene::UpdateMap()
@@ -296,13 +328,30 @@ void GameScene::SetElement(GameObject* obj)
 
 void GameScene::MoveElement(GameObject* obj)
 {
-	Vector2 prePos = obj->GetPrePosition();
-	prePos.x += kMAPSIZE_ / 2.0f;
-	prePos.y += kMAPSIZE_ / 2.0f;
-	map_[(uint32_t)prePos.y][(uint32_t)prePos.x] = Element::None;
-	Vector2 pos = obj->GetPosition();
-	pos.x += kMAPSIZE_ / 2.0f;
-	pos.y += kMAPSIZE_ / 2.0f;
-	map_[(uint32_t)pos.y][(uint32_t)pos.x] = obj->GetElement();
 
+	Vector2 prePos = obj->GetPrePosition();
+	Vector2 pos = obj->GetPosition();
+	if (prePos.x == pos.x && prePos.y == pos.y)
+	{
+		return;
+	}
+	prePos.x += kMAPSIZE_ / 2;
+	prePos.y += kMAPSIZE_ / 2;
+	map_[(uint32_t)prePos.y][(uint32_t)prePos.x] = Element::Destroy;
+	// テクスチャを変えたい
+	noneList_[uint32_t(prePos.y * kMAPSIZE_ + prePos.x)]->SetPosition({ 200.0f,200.0f });
+
+
+	pos.x += kMAPSIZE_ / 2;
+	pos.y += kMAPSIZE_ / 2;
+	map_[(uint32_t)pos.y][(uint32_t)pos.x] = obj->GetElement();
+}
+
+bool GameScene::CheckCanMove(const Vector2& movePos)
+{
+	if (map_[(uint32_t)movePos.y][(uint32_t)movePos.x] == Element::Destroy)
+	{
+		return false;
+	}
+	return true;
 }

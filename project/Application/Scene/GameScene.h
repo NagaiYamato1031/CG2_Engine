@@ -20,9 +20,7 @@ private:
 
 	using Element = GameObject::Element;
 	using EnemyList = std::list<std::unique_ptr<Enemy>>;
-	using NoneList = std::list<std::unique_ptr<None>>;
-	
-	
+	using NoneList = std::vector<std::unique_ptr<None>>;
 	
 	std::vector<std::vector<Element>> map_;
 	std::vector<std::vector<Element>> preMap_;
@@ -48,6 +46,8 @@ public:
 
 private:
 
+	void Escape();
+
 	void UpdateMap();
 
 	Vector2 GetPlayerPosition();
@@ -55,4 +55,6 @@ private:
 
 	void SetElement(GameObject* obj);
 	void MoveElement(GameObject* obj);
+
+	bool CheckCanMove(const Vector2& movePos);
 };
